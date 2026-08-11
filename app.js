@@ -233,20 +233,13 @@ function panggilAPI(
 function loginAdmin() {
 
   const pinInput =
-    document.getElementById(
-      "adminPin"
-    );
-
+    document.getElementById("adminPin");
 
   const message =
-    document.getElementById(
-      "loginMessage"
-    );
-
+    document.getElementById("loginMessage");
 
   const pin =
     pinInput.value.trim();
-
 
   if (!pin) {
 
@@ -257,16 +250,13 @@ function loginAdmin() {
     `;
 
     return;
-
   }
-
 
   message.innerHTML = `
     <div class="loading-admin">
-      Memeriksa PIN...
+      ⏳ Memeriksa PIN...
     </div>
   `;
-
 
   panggilAPI(
     {
@@ -276,13 +266,17 @@ function loginAdmin() {
 
     function(result) {
 
+      console.log(
+        "HASIL LOGIN:",
+        result
+      );
+
       if (
         result &&
-        result.sukses
+        result.sukses === true
       ) {
 
         adminSudahLogin = true;
-
 
         message.innerHTML = `
           <div class="admin-message-success">
@@ -290,19 +284,14 @@ function loginAdmin() {
           </div>
         `;
 
-
         setTimeout(
           function() {
-
             tampilkanPanelAdmin();
-
           },
           300
         );
 
-      }
-
-      else {
+      } else {
 
         message.innerHTML = `
           <div class="admin-message-error">
@@ -320,11 +309,9 @@ function loginAdmin() {
       }
 
     }
-
   );
 
 }
-
 
 // ======================================================
 // TAMPILKAN PANEL ADMIN
