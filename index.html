@@ -144,6 +144,166 @@
 
     </main>
 
+    <!-- ==========================================
+     HALAMAN ADMIN
+========================================== -->
+
+<main id="adminPage"
+      class="page hidden">
+
+  <div class="top-bar">
+
+    <button class="back-button"
+            onclick="kembaliHome()">
+      ←
+    </button>
+
+    <div>
+      <h2>ADMIN</h2>
+      <p>Pengelolaan data guru</p>
+    </div>
+
+  </div>
+
+
+  <!-- LOGIN ADMIN -->
+
+  <div id="adminLoginBox"
+       class="login-card">
+
+    <div class="login-icon">
+      🔐
+    </div>
+
+    <h2>
+      Login Admin
+    </h2>
+
+    <p>
+      Masukkan PIN administrator
+    </p>
+
+    <input
+      type="password"
+      id="adminPin"
+      placeholder="PIN Admin"
+      inputmode="numeric"
+      maxlength="20">
+
+    <button
+      class="primary-button"
+      onclick="loginAdmin()">
+
+      MASUK ADMIN
+
+    </button>
+
+    <div id="loginMessage"></div>
+
+  </div>
+
+
+  <!-- PANEL ADMIN -->
+
+  <div id="adminPanel"
+       class="hidden">
+
+
+    <!-- STATISTIK -->
+
+    <div class="admin-stat-grid">
+
+      <div class="admin-stat">
+        <span>👨‍🏫</span>
+        <strong id="totalGuru">0</strong>
+        <small>Total Guru</small>
+      </div>
+
+      <div class="admin-stat">
+        <span>🟢</span>
+        <strong id="guruAktif">0</strong>
+        <small>Guru Aktif</small>
+      </div>
+
+      <div class="admin-stat">
+        <span>🔴</span>
+        <strong id="guruNonaktif">0</strong>
+        <small>Nonaktif</small>
+      </div>
+
+    </div>
+
+
+    <!-- TAMBAH GURU -->
+
+    <div class="admin-card">
+
+      <h3>
+        ➕ Tambah Guru
+      </h3>
+
+      <input
+        type="text"
+        id="guruNip"
+        placeholder="NIP / NIK">
+
+      <input
+        type="text"
+        id="guruNama"
+        placeholder="Nama Guru">
+
+      <input
+        type="text"
+        id="guruJabatan"
+        placeholder="Jabatan">
+
+      <button
+        class="primary-button"
+        onclick="simpanGuru()">
+
+        💾 SIMPAN GURU
+
+      </button>
+
+      <div id="tambahGuruMessage"></div>
+
+    </div>
+
+
+    <!-- DAFTAR GURU -->
+
+    <div class="admin-card">
+
+      <div class="admin-card-header">
+
+        <h3>
+          👨‍🏫 Daftar Guru
+        </h3>
+
+        <button
+          class="refresh-button"
+          onclick="muatDaftarGuru()">
+
+          ↻
+
+        </button>
+
+      </div>
+
+      <div id="daftarGuru">
+
+        <div class="loading-admin">
+          Memuat data guru...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
 
     <!-- HALAMAN GURU -->
     <main id="guruPage"
