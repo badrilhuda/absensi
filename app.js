@@ -283,14 +283,7 @@ function loginAdmin() {
             ✓ Login berhasil.
           </div>
         `;
-
-        setTimeout(
-          function() {
             tampilkanPanelAdmin();
-          },
-          300
-        );
-
       } else {
 
         message.innerHTML = `
@@ -319,22 +312,23 @@ function loginAdmin() {
 
 function tampilkanPanelAdmin() {
 
-  document
-    .getElementById("adminLoginBox")
-    .classList
-    .add("hidden");
+  const loginBox =
+    document.getElementById("adminLoginBox");
 
+  const adminPanel =
+    document.getElementById("adminPanel");
 
-  document
-    .getElementById("adminPanel")
-    .classList
-    .remove("hidden");
+  if (loginBox) {
+    loginBox.classList.add("hidden");
+  }
 
+  if (adminPanel) {
+    adminPanel.classList.remove("hidden");
+  }
 
+  // Muat data guru setelah panel terbuka
   muatDaftarGuru();
-
 }
-
 
 // ======================================================
 // DAFTAR GURU
