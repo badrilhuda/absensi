@@ -380,6 +380,161 @@ input:focus {
   border-color: #087f5b;
 }
 
+/* ==========================================
+   ADMIN
+========================================== */
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 15px;
+}
+
+.admin-stat {
+  background: white;
+  border-radius: 16px;
+  padding: 14px 5px;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,.07);
+}
+
+.admin-stat span {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.admin-stat strong {
+  display: block;
+  font-size: 20px;
+  color: #075c43;
+}
+
+.admin-stat small {
+  display: block;
+  margin-top: 3px;
+  color: #888;
+  font-size: 10px;
+}
+
+.admin-card {
+  background: white;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.07);
+}
+
+.admin-card h3 {
+  margin: 0 0 15px;
+  color: #075c43;
+  font-size: 16px;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-card-header h3 {
+  margin-bottom: 10px;
+}
+
+.refresh-button {
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #e6f5ef;
+  color: #087f5b;
+  font-size: 22px;
+}
+
+.guru-item {
+  border-top: 1px solid #eee;
+  padding: 14px 0;
+}
+
+.guru-item:first-child {
+  border-top: none;
+}
+
+.guru-name {
+  font-weight: bold;
+  color: #075c43;
+  font-size: 15px;
+}
+
+.guru-info {
+  color: #777;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.guru-code {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: #eef7f4;
+  color: #075c43;
+  font-family: monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.guru-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.guru-actions button {
+  flex: 1;
+  border: none;
+  padding: 9px 5px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.qr-button {
+  background: #e7f1ff;
+  color: #075ca8;
+}
+
+.status-button {
+  background: #fff0d9;
+  color: #a56300;
+}
+
+.loading-admin {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 15px;
+}
+
+.admin-message-success {
+  color: #087f5b;
+  background: #e5f7ef;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.admin-message-error {
+  color: #b00020;
+  background: #ffe8e8;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
 /* FOOTER */
 
 footer {
