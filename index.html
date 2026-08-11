@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color"
+        content="#087f5b">
+
+  <title>Absensi Guru - MTs. Badril Huda</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+
+      <div class="school-icon">
+        🕌
+      </div>
+
+      <div>
+        <h1>ABSENSI GURU</h1>
+        <p>MTs. BADRIL HUDA</p>
+      </div>
+
+    </header>
+
+
+    <!-- HALAMAN UTAMA -->
+    <main id="homePage" class="page">
+
+      <div class="welcome">
+
+        <div class="welcome-icon">
+          👋
+        </div>
+
+        <h2>Selamat Datang</h2>
+
+        <p>
+          Sistem Kehadiran Guru
+        </p>
+
+      </div>
+
+
+      <div class="menu-grid">
+
+        <!-- ADMIN -->
+        <button class="menu-card"
+                onclick="bukaAdmin()">
+
+          <div class="menu-icon admin-icon">
+            ⚙️
+          </div>
+
+          <div class="menu-title">
+            ADMIN
+          </div>
+
+          <div class="menu-description">
+            Kelola data guru dan QR
+          </div>
+
+        </button>
+
+
+        <!-- GURU -->
+        <button class="menu-card"
+                onclick="bukaGuru()">
+
+          <div class="menu-icon guru-icon">
+            👨‍🏫
+          </div>
+
+          <div class="menu-title">
+            GURU
+          </div>
+
+          <div class="menu-description">
+            Scan QR untuk absensi
+          </div>
+
+        </button>
+
+
+        <!-- REKAP -->
+        <button class="menu-card"
+                onclick="bukaRekap()">
+
+          <div class="menu-icon rekap-icon">
+            📊
+          </div>
+
+          <div class="menu-title">
+            REKAP
+          </div>
+
+          <div class="menu-description">
+            Laporan kehadiran guru
+          </div>
+
+        </button>
+
+      </div>
+
+
+      <div class="info-card">
+
+        <div class="info-icon">
+          🕐
+        </div>
+
+        <div>
+
+          <strong>
+            Waktu Absensi
+          </strong>
+
+          <p>
+            06.30 - 07.30 WIB
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="connection">
+
+        <span class="online-dot"></span>
+
+        Sistem siap digunakan
+
+      </div>
+
+    </main>
+
+
+    <!-- HALAMAN GURU -->
+    <main id="guruPage"
+          class="page hidden">
+
+      <div class="top-bar">
+
+        <button class="back-button"
+                onclick="kembaliHome()">
+
+          ←
+
+        </button>
+
+        <div>
+
+          <h2>ABSENSI GURU</h2>
+
+          <p>
+            Scan QR Code Anda
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="scan-card">
+
+        <div class="scan-icon">
+          📷
+        </div>
+
+        <h2>
+          Scan QR Guru
+        </h2>
+
+        <p>
+          Arahkan kamera ke QR Code guru
+        </p>
+
+
+        <button class="scan-button"
+                onclick="mulaiScan()">
+
+          📷 SCAN QR
+
+        </button>
+
+
+        <div class="time-info">
+
+          Absensi dibuka
+
+          <strong>
+            06.30 - 07.30 WIB
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- HASIL ABSENSI -->
+
+      <div id="hasilAbsensi"
+           class="result-card hidden">
+
+        <div class="success-icon">
+          ✓
+        </div>
+
+        <h2 id="hasilJudul">
+          ABSENSI BERHASIL
+        </h2>
+
+        <div class="guru-result">
+
+          <strong id="hasilNama">
+            -
+          </strong>
+
+          <span id="hasilJabatan">
+            -
+          </span>
+
+          <span>
+            Jam Masuk:
+            <b id="hasilJam">-</b>
+          </span>
+
+        </div>
+
+        <button onclick="mulaiScan()"
+                class="scan-button">
+
+          SCAN LAGI
+
+        </button>
+
+      </div>
+
+    </main>
+
+
+    <!-- HALAMAN ADMIN -->
+    <main id="adminPage"
+          class="page hidden">
+
+      <div class="top-bar">
+
+        <button class="back-button"
+                onclick="kembaliHome()">
+
+          ←
+
+        </button>
+
+        <div>
+
+          <h2>ADMIN</h2>
+
+          <p>
+            Pengelolaan sistem
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="login-card">
+
+        <div class="login-icon">
+          🔐
+        </div>
+
+        <h2>
+          Login Admin
+        </h2>
+
+        <p>
+          Masukkan PIN administrator
+        </p>
+
+
+        <input type="password"
+               id="adminPin"
+               placeholder="PIN Admin"
+               maxlength="20">
+
+
+        <button class="primary-button"
+                onclick="loginAdmin()">
+
+          MASUK ADMIN
+
+        </button>
+
+
+        <div id="loginMessage"></div>
+
+      </div>
+
+    </main>
+
+
+    <!-- HALAMAN REKAP -->
+    <main id="rekapPage"
+          class="page hidden">
+
+      <div class="top-bar">
+
+        <button class="back-button"
+                onclick="kembaliHome()">
+
+          ←
+
+        </button>
+
+        <div>
+
+          <h2>REKAP</h2>
+
+          <p>
+            Rekap kehadiran guru
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="report-card">
+
+        <div class="report-icon">
+          📊
+        </div>
+
+        <h2>
+          Rekap Absensi
+        </h2>
+
+        <p>
+          Pilih bulan untuk melihat laporan
+        </p>
+
+
+        <input type="month"
+               id="bulanRekap">
+
+
+        <button class="primary-button"
+                onclick="tampilkanRekap()">
+
+          TAMPILKAN REKAP
+
+        </button>
+
+
+        <div id="hasilRekap"></div>
+
+      </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <strong>
+        MTs. BADRIL HUDA
+      </strong>
+
+      <span>
+        Sistem Absensi Guru
+      </span>
+
+    </footer>
+
+  </div>
+
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
