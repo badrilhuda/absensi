@@ -1,204 +1,154 @@
-/* ==========================================================
-   ABSENSI
-========================================================== */
+/* =====================================================
+   ABSENSI GURU
+   MTs. BADRIL HUDA
+===================================================== */
+
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
+
 
 html,
 body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-  background: #edf5f2;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  background: #edf4f1;
   color: #202020;
 }
 
 
-/* ==========================================================
-   UMUM
-========================================================== */
-
-.hidden {
-  display: none !important;
+body {
+  display: flex;
+  justify-content: center;
 }
+
 
 button,
-input,
-select {
+input {
   font-family: inherit;
 }
+
 
 button {
   cursor: pointer;
 }
 
-a {
-  text-decoration: none;
-}
 
-
-/* ==========================================================
-   CONTAINER UTAMA
-========================================================== */
-
-body {
-  display: flex;
-  justify-content: center;
-}
-
-body > * {
-  max-width: 100%;
-}
-
-
-/* ==========================================================
-   HEADER
-========================================================== */
-
-.header,
-.app-header {
+#app {
   width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 28px 32px 30px;
+  max-width: 600px;
+  min-height: 100vh;
+  background: #f7faf9;
+  box-shadow:
+    0 0 30px rgba(0,0,0,.08);
+}
 
-  background: linear-gradient(
-    135deg,
-    #087451,
-    #08a477
-  );
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+  min-height: 130px;
+  padding: 28px 25px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #087f5b,
+      #0b986f
+    );
 
   color: white;
 
   border-radius:
-    0 0 45px 45px;
-
-  box-shadow:
-    0 12px 30px rgba(
-      0,
-      90,
-      65,
-      0.15
-    );
+    0 0 35px 35px;
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
 
 .header-icon {
-  width: 86px;
-  height: 86px;
+  width: 68px;
+  height: 68px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: rgba(
-    255,
-    255,
-    255,
-    0.16
-  );
+  border-radius: 22px;
 
-  border-radius: 28px;
-
-  font-size: 42px;
-}
-
-.header h1 {
-  margin: 0;
+  background:
+    rgba(255,255,255,.17);
 
   font-size: 36px;
+}
+
+
+.header-title {
+  font-size: 27px;
   font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.header p {
-  margin: 7px 0 0;
-
-  font-size: 19px;
-  font-weight: 500;
+  letter-spacing: .5px;
 }
 
 
-/* ==========================================================
+.header-subtitle {
+  margin-top: 5px;
+  font-size: 15px;
+  opacity: .9;
+}
+
+
+/* =====================================================
    PAGE
-========================================================== */
+===================================================== */
 
 .page {
-  width: 100%;
-  max-width: 760px;
-
-  margin: 0 auto;
-
-  padding:
-    32px 28px 60px;
+  padding: 28px 22px 35px;
+  min-height: calc(100vh - 130px);
 }
 
 
-/* ==========================================================
-   TOP BAR
-========================================================== */
-
-.top-bar {
-  display: flex;
-  align-items: center;
-
-  gap: 18px;
-
-  margin-bottom: 28px;
+.hidden {
+  display: none !important;
 }
 
-.back-button {
-  width: 66px;
-  height: 66px;
 
-  border: none;
-  border-radius: 20px;
+/* =====================================================
+   WELCOME
+===================================================== */
 
-  background: white;
-
-  color: #087451;
-
-  font-size: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow:
-    0 8px 20px rgba(
-      0,
-      0,
-      0,
-      0.08
-    );
+.welcome {
+  text-align: center;
+  padding: 35px 10px 20px;
 }
 
-.back-button:hover {
-  transform: translateY(-1px);
+
+.welcome-icon {
+  font-size: 48px;
 }
 
-.top-bar h2 {
-  margin: 0;
 
-  color: #00694b;
+.welcome h1 {
+  margin:
+    8px 0 3px;
+
+  color: #075c43;
 
   font-size: 30px;
-  font-weight: 800;
 }
 
-.top-bar p {
-  margin: 4px 0 0;
+
+.welcome p {
+  margin: 0;
 
   color: #777;
 
@@ -206,123 +156,1028 @@ body > * {
 }
 
 
-/* ==========================================================
-   CONTENT CARD
-========================================================== */
+/* =====================================================
+   HOME MENU
+===================================================== */
 
-.content-card {
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.menu-card {
   width: 100%;
+
+  border: none;
+
+  display: flex;
+  align-items: center;
+
+  text-align: left;
+
+  padding: 20px;
 
   background: white;
 
-  border-radius: 28px;
-
-  padding: 30px;
-
-  margin-bottom: 24px;
+  border-radius: 23px;
 
   box-shadow:
-    0 10px 28px rgba(
-      0,
-      0,
-      0,
-      0.07
-    );
-}
-
-.card-title {
-  color: #00694b;
-
-  font-size: 23px;
-
-  font-weight: 800;
-
-  margin-bottom: 24px;
-}
-
-
-/* ==========================================================
-   LABEL
-========================================================== */
-
-label {
-  display: block;
-
-  margin-bottom: 9px;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  color: #444;
-}
-
-
-/* ==========================================================
-   INPUT
-========================================================== */
-
-.form-input,
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="month"],
-select {
-
-  width: 100%;
-
-  height: 58px;
-
-  border: 1px solid #d8d8d8;
-
-  border-radius: 17px;
-
-  background: #fff;
-
-  padding:
-    0 18px;
-
-  font-size: 18px;
-
-  color: #222;
-
-  outline: none;
+    0 5px 18px rgba(0,0,0,.07);
 
   transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+    transform .15s,
+    box-shadow .15s;
 }
 
-.form-input:focus,
-input:focus,
-select:focus {
 
-  border-color: #07976e;
+.menu-card:active {
+  transform: scale(.98);
+}
+
+
+.menu-icon {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 21px;
+
+  font-size: 34px;
+
+  margin-right: 18px;
+}
+
+
+.admin-icon {
+  background: #e4edff;
+}
+
+
+.guru-icon {
+  background: #dcf5ea;
+}
+
+
+.rekap-icon {
+  background: #fff0d7;
+}
+
+
+.menu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.menu-text strong {
+  font-size: 20px;
+  color: #075c43;
+}
+
+
+.menu-text span {
+  color: #888;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   TIME
+===================================================== */
+
+.time-card {
+  margin-top: 22px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 18px;
+
+  background: white;
+
+  border-radius: 19px;
 
   box-shadow:
-    0 0 0 3px rgba(
-      7,
-      151,
-      110,
-      0.10
-    );
+    0 4px 15px rgba(0,0,0,.06);
 }
 
 
-/* ==========================================================
-   BUTTON UMUM
-========================================================== */
+.time-icon {
+  font-size: 30px;
+  margin-right: 15px;
+}
 
-.primary-button {
 
-  min-height: 58px;
+.time-card div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+.time-card strong {
+  font-size: 15px;
+}
+
+
+.time-card span {
+  color: #087f5b;
+  font-weight: bold;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.system-status {
+  text-align: center;
+
+  color: #777;
+
+  margin-top: 18px;
+
+  font-size: 13px;
+}
+
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+
+  display: inline-block;
+
+  margin-right: 7px;
+
+  border-radius: 50%;
+
+  background: #18ad72;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.page-title {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 22px;
+}
+
+
+.page-title h2 {
+  margin: 0;
+
+  color: #075c43;
+
+  font-size: 25px;
+}
+
+
+.page-title span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #888;
+
+  font-size: 14px;
+}
+
+
+.back-button {
+  width: 53px;
+  height: 53px;
 
   border: none;
 
   border-radius: 17px;
 
+  background: white;
+
+  color: #075c43;
+
+  font-size: 28px;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.07);
+}
+
+
+/* =====================================================
+   LOGIN ADMIN
+===================================================== */
+
+.login-card {
+  background: white;
+
+  padding: 38px 25px 30px;
+
+  border-radius: 25px;
+
+  box-shadow:
+    0 6px 22px rgba(0,0,0,.08);
+
+  text-align: center;
+}
+
+
+.login-icon {
+  font-size: 53px;
+}
+
+
+.login-card h2 {
+  color: #075c43;
+
+  font-size: 27px;
+
+  margin:
+    12px 0 7px;
+}
+
+
+.login-card p {
+  color: #888;
+
+  margin:
+    0 0 25px;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-input {
+  width: 100%;
+
+  height: 56px;
+
   padding:
-    0 22px;
+    0 17px;
+
+  margin:
+    7px 0 15px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 15px;
+
+  outline: none;
+
+  font-size: 16px;
+
+  background: white;
+}
+
+
+.form-input:focus {
+  border-color: #087f5b;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(8,127,91,.10);
+}
+
+
+label {
+  display: block;
+
+  text-align: left;
+
+  color: #555;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  margin-top: 5px;
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.primary-button {
+  width: 100%;
+
+  min-height: 56px;
+
+  border: none;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #087f5b,
+      #0ba878
+    );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 15px
+    rgba(8,127,91,.18);
+}
+
+
+.primary-button:active {
+  transform: scale(.98);
+}
+
+
+.danger-button {
+  width: 100%;
+
+  min-height: 52px;
+
+  margin-top: 12px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: #dc3545;
+
+  color: white;
+
+  font-weight: bold;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.message {
+  margin-top: 12px;
+}
+
+
+.admin-message-success {
+  padding: 11px;
+
+  border-radius: 11px;
+
+  color: #087f5b;
+
+  background: #e1f6ed;
+
+  font-size: 13px;
+}
+
+
+.admin-message-error {
+  padding: 11px;
+
+  border-radius: 11px;
+
+  color: #b00020;
+
+  background: #ffe6e8;
+
+  font-size: 13px;
+}
+
+
+.loading {
+  text-align: center;
+
+  padding: 25px;
+
+  color: #888;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   ADMIN PANEL
+===================================================== */
+
+.admin-panel {
+  display: block;
+}
+
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 9px;
+
+  margin-bottom: 15px;
+}
+
+
+.stat-card {
+  background: white;
+
+  padding: 17px 7px;
+
+  text-align: center;
+
+  border-radius: 17px;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.06);
+}
+
+
+.stat-number {
+  color: #075c43;
+
+  font-size: 25px;
+
+  font-weight: 800;
+}
+
+
+.stat-label {
+  color: #888;
+
+  font-size: 11px;
+
+  margin-top: 4px;
+}
+
+
+.stat-card.active
+.stat-number {
+  color: #087f5b;
+}
+
+
+.stat-card.inactive
+.stat-number {
+  color: #dc3545;
+}
+
+
+/* =====================================================
+   CONTENT CARD
+===================================================== */
+
+.content-card {
+  background: white;
+
+  padding: 19px;
+
+  border-radius: 21px;
+
+  margin-bottom: 16px;
+
+  box-shadow:
+    0 4px 17px rgba(0,0,0,.06);
+}
+
+
+.card-title {
+  color: #075c43;
+
+  font-weight: 800;
+
+  font-size: 17px;
+
+  margin-bottom: 16px;
+}
+
+
+.card-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+.card-header .card-title {
+  margin-bottom: 10px;
+}
+
+
+.small-button {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: #e6f5ef;
+
+  color: #087f5b;
+
+  font-size: 23px;
+}
+
+
+/* =====================================================
+   GURU ITEM
+===================================================== */
+
+.guru-item {
+  border-top:
+    1px solid #eee;
+
+  padding:
+    15px 0;
+}
+
+
+.guru-item:first-child {
+  border-top: none;
+}
+
+
+.guru-name {
+  color: #075c43;
+
+  font-size: 16px;
+
+  font-weight: 800;
+}
+
+
+.guru-info {
+  color: #888;
+
+  font-size: 12px;
+
+  margin-top: 4px;
+}
+
+
+.guru-code {
+  display: inline-block;
+
+  margin-top: 8px;
+
+  padding: 7px 10px;
+
+  background: #eef8f4;
+
+  border-radius: 8px;
+
+  color: #075c43;
+
+  font-family: monospace;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+
+.guru-status {
+  margin-top: 7px;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+
+.guru-actions {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+
+.guru-actions button {
+  flex: 1;
+
+  border: none;
+
+  border-radius: 10px;
+
+  padding: 10px 5px;
+
+  font-weight: bold;
+
+  font-size: 11px;
+}
+
+
+.qr-button {
+  background: #e5f0ff;
+
+  color: #075ca8;
+}
+
+
+.status-button {
+  background: #fff0d8;
+
+  color: #9a6100;
+}
+
+
+/* =====================================================
+   SCANNER
+===================================================== */
+
+.scanner-card {
+  background: white;
+
+  padding: 25px 20px;
+
+  border-radius: 24px;
+
+  text-align: center;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.07);
+}
+
+
+.camera-icon {
+  font-size: 55px;
+}
+
+
+.scanner-card h2 {
+  color: #075c43;
+
+  margin:
+    10px 0 5px;
+}
+
+
+.scanner-card p {
+  color: #888;
+
+  font-size: 14px;
+}
+
+
+.time-notice {
+  margin-top: 18px;
+
+  padding: 14px;
+
+  background: #eef8f4;
+
+  border-radius: 13px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.time-notice span {
+  color: #087f5b;
+
+  font-weight: bold;
+}
+
+
+.qr-reader {
+  width: 100%;
+
+  margin-top: 15px;
+
+  overflow: hidden;
+
+  border-radius: 15px;
+
+  background: #000;
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+.result-card {
+  margin-top: 17px;
+
+  padding: 25px 20px;
+
+  border-radius: 22px;
+
+  background: #dff7eb;
+
+  color: #075c43;
+
+  text-align: center;
+
+  box-shadow:
+    0 4px 17px rgba(0,0,0,.06);
+}
+
+
+.result-icon {
+  width: 65px;
+  height: 65px;
+
+  margin:
+    0 auto 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #18ad72;
+
+  color: white;
+
+  font-size: 35px;
+
+  font-weight: bold;
+}
+
+
+.result-card h2 {
+  margin:
+    8px 0 13px;
+}
+
+
+.result-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  margin-bottom: 15px;
+}
+
+
+.result-info strong {
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   REKAP
+===================================================== */
+
+.rekap-result {
+  margin-top: 15px;
+}
+
+
+.rekap-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 11px;
+}
+
+
+.rekap-table th,
+.rekap-table td {
+  padding: 8px 4px;
+
+  border-bottom:
+    1px solid #eee;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   QR MODAL
+===================================================== */
+
+.qr-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 99999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(0,0,0,.68);
+}
+
+
+.qr-box {
+  width: 100%;
+
+  max-width: 370px;
+
+  padding: 24px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  text-align: center;
+}
+
+
+.qr-box h2 {
+  color: #075c43;
+
+  margin-top: 0;
+}
+
+
+.qr-box img {
+  width: 260px;
+
+  height: 260px;
+
+  max-width: 100%;
+}
+
+
+.qr-code-text {
+  margin: 12px 0;
+
+  padding: 10px;
+
+  background: #eef8f4;
+
+  color: #075c43;
+
+  border-radius: 10px;
+
+  font-family: monospace;
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+  letter-spacing: 3px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+  text-align: center;
+
+  padding:
+    15px 20px 25px;
+
+  color: #777;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  font-size: 12px;
+}
+
+
+footer strong {
+  color: #075c43;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .header {
+    min-height: 115px;
+
+    padding:
+      22px 18px;
+  }
+
+
+  .header-icon {
+    width: 58px;
+    height: 58px;
+
+    font-size: 30px;
+  }
+
+
+  .header-title {
+    font-size: 23px;
+  }
+
+
+  .page {
+    padding:
+      23px 16px 30px;
+  }
+
+
+  .welcome h1 {
+    font-size: 27px;
+  }
+
+
+  .menu-icon {
+    width: 63px;
+    height: 63px;
+  }
+
+   /* ==========================================================
+   TOMBOL REKAP - SATU BARIS
+   TAMPILKAN REKAP | EXPORT EXCEL | EXPORT PDF
+========================================================== */
+
+section.content-card:has(#bulanRekap)
+  button[onclick="tampilkanRekap()"],
+section.content-card:has(#bulanRekap)
+  button[onclick="exportExcel()"],
+section.content-card:has(#bulanRekap)
+  button[onclick="exportPDF()"] {
+
+  display: inline-flex;
+
+  width: calc(33.333% - 8px);
+
+  min-height: 54px;
+
+  height: 54px;
+
+  margin-top: 12px;
+
+  margin-right: 7px;
+
+  padding: 0 8px;
+
+  border-radius: 15px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  vertical-align: top;
+
+  white-space: nowrap;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* Hapus jarak kanan tombol terakhir */
+
+section.content-card:has(#bulanRekap)
+  button[onclick="exportPDF()"] {
+
+  margin-right: 0;
+
+}
+
+
+/* Tombol REKAP */
+
+section.content-card:has(#bulanRekap)
+  button[onclick="tampilkanRekap()"] {
 
   background:
     linear-gradient(
@@ -333,234 +1188,61 @@ select:focus {
 
   color: white;
 
-  font-size: 18px;
-
-  font-weight: 800;
-
-  box-shadow:
-    0 8px 18px rgba(
-      0,
-      130,
-      90,
-      0.14
-    );
-
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
-}
-
-.primary-button:hover {
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    0 10px 22px rgba(
-      0,
-      130,
-      90,
-      0.20
-    );
-}
-
-.primary-button:active {
-
-  transform:
-    translateY(0);
-}
-
-
-/* ==========================================================
-   REKAP - BARIS TOMBOL
-========================================================== */
-
-/*
-  Container tombol Rekap.
-  Jika HTML menggunakan section/content-card,
-  aturan ini membuat tombol horizontal.
-*/
-
-.content-card
-button.primary-button {
-
-  margin-top: 10px;
-}
-
-
-/*
-  Tombol rekap, Excel dan PDF dibuat
-  dalam satu baris.
-
-  Mendukung HTML lama yang tombolnya
-  tidak berada dalam div khusus.
-*/
-
-.rekap-buttons {
-
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr 1fr;
-
-  gap: 10px;
-
-  margin-top: 12px;
-
-  margin-bottom: 20px;
-}
-
-
-/* ==========================================================
-   JIKA TOMBOL ADA LANGSUNG DI CONTENT CARD
-========================================================== */
-
-.rekap-action-row {
-
-  width: 100%;
-
-  display: flex;
-
-  align-items: stretch;
-
-  gap: 10px;
-
-  margin-top: 12px;
-
-  margin-bottom: 20px;
-}
-
-.rekap-action-row button {
-
-  flex: 1;
-
-  min-width: 0;
-
-  height: 56px;
-
-  padding:
-    0 10px;
-
   border: none;
 
-  border-radius: 15px;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  white-space: nowrap;
+  box-shadow:
+    0 6px 15px
+    rgba(
+      0,
+      130,
+      90,
+      0.15
+    );
 }
 
 
-/* ==========================================================
-   TOMBOL REKAP
-========================================================== */
+/* Tombol EXCEL */
 
-.rekap-button,
-button[onclick="tampilkanRekap()"] {
+section.content-card:has(#bulanRekap)
+  button[onclick="exportExcel()"] {
 
   background:
     linear-gradient(
       135deg,
-      #07865f,
-      #08a879
+      #07855f,
+      #09a878
     );
 
   color: white;
 
   border: none;
 
-  border-radius: 15px;
-
-  min-height: 56px;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  padding:
-    0 12px;
-
   box-shadow:
-    0 7px 16px rgba(
+    0 6px 15px
+    rgba(
       0,
       130,
       90,
-      0.13
+      0.15
     );
 }
 
 
-/* ==========================================================
-   TOMBOL EXCEL
-========================================================== */
+/* Tombol PDF */
 
-.excel-button,
-button[onclick="exportExcel()"] {
+section.content-card:has(#bulanRekap)
+  button[onclick="exportPDF()"] {
 
-  background:
-    linear-gradient(
-      135deg,
-      #07865f,
-      #08a879
-    );
-
-  color: white;
-
-  border: none;
-
-  border-radius: 15px;
-
-  min-height: 56px;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  padding:
-    0 12px;
-
-  box-shadow:
-    0 7px 16px rgba(
-      0,
-      130,
-      90,
-      0.13
-    );
-}
-
-
-/* ==========================================================
-   TOMBOL PDF
-========================================================== */
-
-.pdf-button,
-button[onclick="exportPDF()"] {
-
-  background:
-    #f1f1f1;
+  background: #eeeeee;
 
   color: #333;
 
   border:
-    1px solid #d4d4d4;
-
-  border-radius: 15px;
-
-  min-height: 56px;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  padding:
-    0 12px;
+    1px solid #d2d2d2;
 
   box-shadow:
-    0 5px 12px rgba(
+    0 4px 10px
+    rgba(
       0,
       0,
       0,
@@ -569,832 +1251,86 @@ button[onclick="exportPDF()"] {
 }
 
 
-/* ==========================================================
-   HOVER TOMBOL REKAP
-========================================================== */
+/* Hover */
 
-.rekap-button:hover,
-.excel-button:hover,
-button[onclick="tampilkanRekap()"]:hover,
-button[onclick="exportExcel()"]:hover {
+section.content-card:has(#bulanRekap)
+  button[onclick="tampilkanRekap()"]:hover,
+section.content-card:has(#bulanRekap)
+  button[onclick="exportExcel()"]:hover {
 
-  transform:
-    translateY(-1px);
-
-  filter:
-    brightness(1.04);
-}
-
-.pdf-button:hover,
-button[onclick="exportPDF()"]:hover {
-
-  background: #e8e8e8;
+  filter: brightness(1.05);
 
   transform:
     translateY(-1px);
 }
 
 
-/* ==========================================================
-   REKAP TABLE
-========================================================== */
+section.content-card:has(#bulanRekap)
+  button[onclick="exportPDF()"]:hover {
 
-.rekap-table {
+  background: #e5e5e5;
 
-  width: 100%;
-
-  border-collapse:
-    collapse;
-
-  margin-top: 15px;
-
-  font-size: 15px;
-}
-
-.rekap-table th {
-
-  padding:
-    13px 9px;
-
-  text-align: center;
-
-  color: #333;
-
-  font-weight: 800;
-
-  border-bottom:
-    1px solid #e1e1e1;
-
-  white-space: nowrap;
-}
-
-.rekap-table td {
-
-  padding:
-    13px 9px;
-
-  text-align: center;
-
-  border-bottom:
-    1px solid #e8e8e8;
-
-  color: #222;
-
-  vertical-align: middle;
-}
-
-.rekap-table td:first-child,
-.rekap-table th:first-child {
-
-  text-align: left;
-}
-
-.rekap-table td strong {
-
-  font-weight: 800;
-}
-
-.rekap-table td:last-child strong {
-
-  color: #00815d;
+  transform:
+    translateY(-1px);
 }
 
 
 /* ==========================================================
-   NIP PADA REKAP
+   HP
 ========================================================== */
 
-.rekap-table small {
+@media (max-width: 560px) {
 
-  color: #555;
+  section.content-card:has(#bulanRekap)
+    button[onclick="tampilkanRekap()"],
+  section.content-card:has(#bulanRekap)
+    button[onclick="exportExcel()"],
+  section.content-card:has(#bulanRekap)
+    button[onclick="exportPDF()"] {
 
-  font-size: 11px;
+    width: calc(33.333% - 6px);
 
-  font-weight: 400;
-}
+    min-height: 48px;
 
-
-/* ==========================================================
-   JUDUL REKAP
-========================================================== */
-
-.rekap-summary {
-
-  color: #00815d;
-
-  font-size: 21px;
-
-  font-weight: 800;
-
-  margin:
-    14px 0 12px;
-}
-
-
-/* ==========================================================
-   MESSAGE
-========================================================== */
-
-.admin-message-success,
-.admin-message-error {
-
-  width: 100%;
-
-  padding:
-    14px 17px;
-
-  border-radius: 13px;
-
-  margin-top: 14px;
-
-  line-height: 1.5;
-
-  font-size: 15px;
-}
-
-.admin-message-success {
-
-  background: #e3f7ef;
-
-  color: #087451;
-}
-
-.admin-message-error {
-
-  background: #ffe5e5;
-
-  color: #c62828;
-}
-
-
-/* ==========================================================
-   LOADING
-========================================================== */
-
-.loading {
-
-  padding: 24px;
-
-  text-align: center;
-
-  color: #777;
-
-  font-size: 16px;
-}
-
-
-/* ==========================================================
-   GURU
-========================================================== */
-
-.guru-item {
-
-  padding:
-    18px 0;
-
-  border-bottom:
-    1px solid #e8e8e8;
-}
-
-.guru-name {
-
-  font-size: 18px;
-
-  font-weight: 800;
-
-  color: #075f47;
-}
-
-.guru-info {
-
-  margin-top: 5px;
-
-  color: #666;
-
-  font-size: 14px;
-}
-
-.guru-code {
-
-  margin-top: 7px;
-
-  color: #777;
-
-  font-family: monospace;
-
-  font-size: 13px;
-}
-
-.guru-status {
-
-  margin-top: 8px;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-.guru-actions {
-
-  display: flex;
-
-  gap: 9px;
-
-  margin-top: 12px;
-}
-
-.qr-button,
-.status-button {
-
-  border: none;
-
-  border-radius: 11px;
-
-  min-height: 42px;
-
-  padding:
-    0 15px;
-
-  font-weight: 700;
-}
-
-.qr-button {
-
-  background: #e5f6f0;
-
-  color: #087451;
-}
-
-.status-button {
-
-  background: #f0f0f0;
-
-  color: #444;
-}
-
-
-/* ==========================================================
-   QR MODAL
-========================================================== */
-
-.qr-modal {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      0.62
-    );
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-}
-
-.qr-box {
-
-  width: 100%;
-
-  max-width: 450px;
-
-  max-height: 92vh;
-
-  overflow-y: auto;
-
-  background: white;
-
-  border-radius: 28px;
-
-  padding: 28px;
-
-  text-align: center;
-
-  box-shadow:
-    0 20px 50px rgba(
-      0,
-      0,
-      0,
-      0.25
-    );
-}
-
-.qr-box h2 {
-
-  margin:
-    0 0 10px;
-
-  color: #086a4d;
-}
-
-.qr-box img {
-
-  display: block;
-
-  width: min(
-    100%,
-    320px
-  );
-
-  margin:
-    20px auto;
-
-  border-radius: 5px;
-}
-
-.qr-code-text {
-
-  background: #edf8f4;
-
-  color: #075f47;
-
-  border-radius: 13px;
-
-  padding: 13px;
-
-  font-family: monospace;
-
-  font-size: 19px;
-
-  font-weight: 800;
-
-  letter-spacing: 3px;
-}
-
-.danger-button {
-
-  width: 100%;
-
-  min-height: 54px;
-
-  border: none;
-
-  border-radius: 15px;
-
-  background: #eeeeee;
-
-  color: #444;
-
-  font-weight: 800;
-
-  font-size: 16px;
-}
-
-
-/* ==========================================================
-   HASIL ABSENSI
-========================================================== */
-
-#hasilAbsensi {
-
-  margin-top: 20px;
-
-  padding: 24px;
-
-  border-radius: 20px;
-
-  text-align: center;
-
-  background: #e4f8ef;
-
-  color: #086a4d;
-}
-
-.result-icon {
-
-  width: 58px;
-
-  height: 58px;
-
-  margin:
-    0 auto 12px;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background: #0a966c;
-
-  color: white;
-
-  font-size: 30px;
-
-  font-weight: 800;
-}
-
-#hasilAbsensi h2 {
-
-  margin:
-    8px 0 14px;
-
-  font-size: 22px;
-}
-
-.result-info {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  color: #555;
-}
-
-
-/* ==========================================================
-   QR READER
-========================================================== */
-
-#qr-reader {
-
-  width: 100%;
-
-  overflow: hidden;
-
-  border-radius: 20px;
-
-  background: #111;
-
-  margin-bottom: 15px;
-}
-
-#qr-reader video {
-
-  width: 100% !important;
-
-  border-radius: 20px;
-}
-
-
-/* ==========================================================
-   RESPONSIVE TABLET
-========================================================== */
-
-@media (
-  max-width: 760px
-) {
-
-  .header,
-  .app-header {
-
-    border-radius:
-      0 0 35px 35px;
-
-    padding:
-      24px 25px 27px;
-  }
-
-  .header h1 {
-
-    font-size: 30px;
-  }
-
-  .header p {
-
-    font-size: 17px;
-  }
-
-  .page {
-
-    padding:
-      25px 20px 50px;
-  }
-
-  .content-card {
-
-    padding: 25px;
-
-    border-radius: 24px;
-  }
-
-}
-
-
-/* ==========================================================
-   RESPONSIVE HP
-========================================================== */
-
-@media (
-  max-width: 560px
-) {
-
-  .header,
-  .app-header {
-
-    padding:
-      20px 20px 24px;
-
-    border-radius:
-      0 0 30px 30px;
-  }
-
-
-  .header-content {
-
-    gap: 14px;
-  }
-
-
-  .header-icon {
-
-    width: 65px;
-
-    height: 65px;
-
-    border-radius: 21px;
-
-    font-size: 32px;
-  }
-
-
-  .header h1 {
-
-    font-size: 25px;
-
-    letter-spacing: 0;
-  }
-
-
-  .header p {
-
-    margin-top: 3px;
-
-    font-size: 15px;
-  }
-
-
-  .page {
-
-    padding:
-      22px 14px 40px;
-  }
-
-
-  .top-bar {
-
-    gap: 13px;
-
-    margin-bottom: 20px;
-  }
-
-
-  .back-button {
-
-    width: 55px;
-
-    height: 55px;
-
-    border-radius: 17px;
-
-    font-size: 27px;
-  }
-
-
-  .top-bar h2 {
-
-    font-size: 25px;
-  }
-
-
-  .top-bar p {
-
-    font-size: 14px;
-  }
-
-
-  .content-card {
-
-    padding:
-      20px 16px;
-
-    border-radius: 22px;
-  }
-
-
-  .card-title {
-
-    font-size: 20px;
-
-    margin-bottom: 20px;
-  }
-
-
-  .form-input,
-  input[type="month"] {
-
-    height: 54px;
-
-    font-size: 17px;
-  }
-
-
-  /*
-   * TIGA TOMBOL TETAP SATU BARIS
-   */
-
-  .rekap-buttons {
-
-    display: grid;
-
-    grid-template-columns:
-      1fr 1fr 1fr;
-
-    gap: 7px;
+    height: 48px;
 
     margin-top: 10px;
 
-    margin-bottom: 15px;
-  }
+    margin-right: 4px;
 
+    padding: 0 3px;
 
-  .rekap-action-row {
+    border-radius: 12px;
 
-    display: grid;
-
-    grid-template-columns:
-      1fr 1fr 1fr;
-
-    gap: 7px;
-
-    margin-bottom: 15px;
-  }
-
-
-  .rekap-action-row button,
-  .rekap-button,
-  .excel-button,
-  .pdf-button,
-  button[onclick="tampilkanRekap()"],
-  button[onclick="exportExcel()"],
-  button[onclick="exportPDF()"] {
-
-    min-height: 50px;
-
-    height: 50px;
-
-    padding:
-      0 5px;
-
-    border-radius: 13px;
-
-    font-size: 12px;
+    font-size: 11px;
 
     line-height: 1.1;
 
-    white-space: nowrap;
-  }
-
-
-  .rekap-table {
-
-    font-size: 13px;
-  }
-
-
-  .rekap-table th,
-  .rekap-table td {
-
-    padding:
-      11px 5px;
-  }
-
-
-  .rekap-summary {
-
-    font-size: 18px;
-  }
-
-
-  .guru-actions {
-
-    flex-wrap: wrap;
   }
 
 }
 
 
 /* ==========================================================
-   HP SANGAT KECIL
+   HP KECIL
 ========================================================== */
 
-@media (
-  max-width: 380px
-) {
+@media (max-width: 380px) {
 
-  .page {
+  section.content-card:has(#bulanRekap)
+    button[onclick="tampilkanRekap()"],
+  section.content-card:has(#bulanRekap)
+    button[onclick="exportExcel()"],
+  section.content-card:has(#bulanRekap)
+    button[onclick="exportPDF()"] {
 
-    padding-left: 10px;
-
-    padding-right: 10px;
-  }
-
-
-  .content-card {
-
-    padding:
-      17px 12px;
-  }
-
-
-  .rekap-buttons,
-  .rekap-action-row {
-
-    gap: 5px;
-  }
-
-
-  .rekap-action-row button,
-  .rekap-button,
-  .excel-button,
-  .pdf-button,
-  button[onclick="tampilkanRekap()"],
-  button[onclick="exportExcel()"],
-  button[onclick="exportPDF()"] {
+    width: calc(33.333% - 5px);
 
     font-size: 10px;
 
-    padding:
-      0 3px;
+    padding: 0 2px;
 
-    border-radius: 11px;
-  }
-
-
-  .rekap-table {
-
-    font-size: 11px;
-  }
-
-
-  .rekap-table th,
-  .rekap-table td {
-
-    padding:
-      9px 3px;
   }
 
 }
-
-
-/* ==========================================================
-   PRINT
-========================================================== */
-
-@media print {
-
-  body {
-
-    background: white;
-  }
-
-
-  .header,
-  .app-header,
-  .top-bar,
-  .rekap-buttons,
-  .rekap-action-row,
-  button {
-
-    display: none !important;
-  }
-
-
-  .page {
-
-    max-width: 100%;
-
-    padding: 0;
-  }
-
-
-  .content-card {
-
-    box-shadow: none;
-
-    border-radius: 0;
-
-    padding: 10px;
-  }
-
-
-  .rekap-table {
-
-    width: 100%;
-  }
-
 }
