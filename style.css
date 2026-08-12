@@ -1,59 +1,49 @@
-/* =====================================================
+/* ==========================================================
    ABSENSI GURU
    MTs. BADRIL HUDA
-===================================================== */
-
+========================================================== */
 
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
-
 html,
 body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: #edf4f1;
   color: #202020;
 }
-
 
 body {
   display: flex;
   justify-content: center;
 }
 
-
 button,
 input {
   font-family: inherit;
 }
 
-
 button {
   cursor: pointer;
 }
-
 
 #app {
   width: 100%;
   max-width: 600px;
   min-height: 100vh;
   background: #f7faf9;
-  box-shadow:
-    0 0 30px rgba(0,0,0,.08);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .08);
 }
 
 
-/* =====================================================
+/* ==========================================================
    HEADER
-===================================================== */
+========================================================== */
 
 .header {
   min-height: 130px;
@@ -62,19 +52,15 @@ button {
   align-items: center;
   gap: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #087f5b,
-      #0b986f
-    );
+  background: linear-gradient(
+    135deg,
+    #087f5b,
+    #0b986f
+  );
 
   color: white;
-
-  border-radius:
-    0 0 35px 35px;
+  border-radius: 0 0 35px 35px;
 }
-
 
 .header-icon {
   width: 68px;
@@ -85,20 +71,16 @@ button {
   justify-content: center;
 
   border-radius: 22px;
-
-  background:
-    rgba(255,255,255,.17);
+  background: rgba(255,255,255,.17);
 
   font-size: 36px;
 }
-
 
 .header-title {
   font-size: 27px;
   font-weight: 800;
   letter-spacing: .5px;
 }
-
 
 .header-subtitle {
   margin-top: 5px;
@@ -107,58 +89,49 @@ button {
 }
 
 
-/* =====================================================
+/* ==========================================================
    PAGE
-===================================================== */
+========================================================== */
 
 .page {
   padding: 28px 22px 35px;
   min-height: calc(100vh - 130px);
 }
 
-
 .hidden {
   display: none !important;
 }
 
 
-/* =====================================================
+/* ==========================================================
    WELCOME
-===================================================== */
+========================================================== */
 
 .welcome {
   text-align: center;
   padding: 35px 10px 20px;
 }
 
-
 .welcome-icon {
   font-size: 48px;
 }
 
-
 .welcome h1 {
-  margin:
-    8px 0 3px;
-
+  margin: 8px 0 3px;
   color: #075c43;
-
   font-size: 30px;
 }
 
-
 .welcome p {
   margin: 0;
-
   color: #777;
-
   font-size: 17px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    HOME MENU
-===================================================== */
+========================================================== */
 
 .menu-list {
   display: flex;
@@ -166,36 +139,29 @@ button {
   gap: 15px;
 }
 
-
 .menu-card {
   width: 100%;
-
   border: none;
 
   display: flex;
   align-items: center;
 
   text-align: left;
-
   padding: 20px;
 
   background: white;
-
   border-radius: 23px;
 
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.07);
+  box-shadow: 0 5px 18px rgba(0,0,0,.07);
 
   transition:
     transform .15s,
     box-shadow .15s;
 }
 
-
 .menu-card:active {
   transform: scale(.98);
 }
-
 
 .menu-icon {
   width: 72px;
@@ -206,27 +172,21 @@ button {
   justify-content: center;
 
   border-radius: 21px;
-
   font-size: 34px;
-
   margin-right: 18px;
 }
-
 
 .admin-icon {
   background: #e4edff;
 }
 
-
 .guru-icon {
   background: #dcf5ea;
 }
 
-
 .rekap-icon {
   background: #fff0d7;
 }
-
 
 .menu-text {
   display: flex;
@@ -234,12 +194,10 @@ button {
   gap: 5px;
 }
 
-
 .menu-text strong {
   font-size: 20px;
   color: #075c43;
 }
-
 
 .menu-text span {
   color: #888;
@@ -247,9 +205,9 @@ button {
 }
 
 
-/* =====================================================
+/* ==========================================================
    TIME
-===================================================== */
+========================================================== */
 
 .time-card {
   margin-top: 22px;
@@ -260,19 +218,15 @@ button {
   padding: 18px;
 
   background: white;
-
   border-radius: 19px;
 
-  box-shadow:
-    0 4px 15px rgba(0,0,0,.06);
+  box-shadow: 0 4px 15px rgba(0,0,0,.06);
 }
-
 
 .time-icon {
   font-size: 30px;
   margin-right: 15px;
 }
-
 
 .time-card div:last-child {
   display: flex;
@@ -280,11 +234,9 @@ button {
   gap: 4px;
 }
 
-
 .time-card strong {
   font-size: 15px;
 }
-
 
 .time-card span {
   color: #087f5b;
@@ -292,156 +244,119 @@ button {
 }
 
 
-/* =====================================================
+/* ==========================================================
    STATUS
-===================================================== */
+========================================================== */
 
 .system-status {
   text-align: center;
-
   color: #777;
-
   margin-top: 18px;
-
   font-size: 13px;
 }
-
 
 .status-dot {
   width: 10px;
   height: 10px;
 
   display: inline-block;
-
   margin-right: 7px;
 
   border-radius: 50%;
-
   background: #18ad72;
 }
 
 
-/* =====================================================
+/* ==========================================================
    PAGE TITLE
-===================================================== */
+========================================================== */
 
 .page-title {
   display: flex;
   align-items: center;
-
   gap: 15px;
-
   margin-bottom: 22px;
 }
 
-
 .page-title h2 {
   margin: 0;
-
   color: #075c43;
-
   font-size: 25px;
 }
 
-
 .page-title span {
   display: block;
-
   margin-top: 3px;
-
   color: #888;
-
   font-size: 14px;
 }
-
 
 .back-button {
   width: 53px;
   height: 53px;
 
   border: none;
-
   border-radius: 17px;
 
   background: white;
-
   color: #075c43;
 
   font-size: 28px;
 
-  box-shadow:
-    0 4px 14px rgba(0,0,0,.07);
+  box-shadow: 0 4px 14px rgba(0,0,0,.07);
 }
 
 
-/* =====================================================
+/* ==========================================================
    LOGIN ADMIN
-===================================================== */
+========================================================== */
 
 .login-card {
   background: white;
 
   padding: 38px 25px 30px;
-
   border-radius: 25px;
 
-  box-shadow:
-    0 6px 22px rgba(0,0,0,.08);
+  box-shadow: 0 6px 22px rgba(0,0,0,.08);
 
   text-align: center;
 }
-
 
 .login-icon {
   font-size: 53px;
 }
 
-
 .login-card h2 {
   color: #075c43;
-
   font-size: 27px;
-
-  margin:
-    12px 0 7px;
+  margin: 12px 0 7px;
 }
-
 
 .login-card p {
   color: #888;
-
-  margin:
-    0 0 25px;
+  margin: 0 0 25px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    FORM
-===================================================== */
+========================================================== */
 
 .form-input {
   width: 100%;
-
   height: 56px;
 
-  padding:
-    0 17px;
+  padding: 0 17px;
+  margin: 7px 0 15px;
 
-  margin:
-    7px 0 15px;
-
-  border:
-    1px solid #ddd;
-
+  border: 1px solid #ddd;
   border-radius: 15px;
 
   outline: none;
 
   font-size: 16px;
-
   background: white;
 }
-
 
 .form-input:focus {
   border-color: #087f5b;
@@ -451,33 +366,28 @@ button {
     rgba(8,127,91,.10);
 }
 
-
 label {
   display: block;
 
   text-align: left;
 
   color: #555;
-
   font-size: 13px;
-
   font-weight: bold;
 
   margin-top: 5px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    BUTTON
-===================================================== */
+========================================================== */
 
 .primary-button {
   width: 100%;
-
   min-height: 56px;
 
   border: none;
-
   border-radius: 15px;
 
   background:
@@ -490,7 +400,6 @@ label {
   color: white;
 
   font-size: 16px;
-
   font-weight: 800;
 
   box-shadow:
@@ -498,87 +407,71 @@ label {
     rgba(8,127,91,.18);
 }
 
-
 .primary-button:active {
   transform: scale(.98);
 }
 
-
 .danger-button {
   width: 100%;
-
   min-height: 52px;
 
   margin-top: 12px;
 
   border: none;
-
   border-radius: 14px;
 
   background: #dc3545;
-
   color: white;
 
   font-weight: bold;
-
   font-size: 15px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    MESSAGE
-===================================================== */
+========================================================== */
 
 .message {
   margin-top: 12px;
 }
 
-
 .admin-message-success {
   padding: 11px;
-
   border-radius: 11px;
 
   color: #087f5b;
-
   background: #e1f6ed;
 
   font-size: 13px;
 }
 
-
 .admin-message-error {
   padding: 11px;
-
   border-radius: 11px;
 
   color: #b00020;
-
   background: #ffe6e8;
 
   font-size: 13px;
 }
 
-
 .loading {
   text-align: center;
-
   padding: 25px;
 
   color: #888;
-
   font-size: 14px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    ADMIN PANEL
-===================================================== */
+========================================================== */
 
 .admin-panel {
   display: block;
 }
-
 
 .stats-grid {
   display: grid;
@@ -587,255 +480,199 @@ label {
     repeat(3,1fr);
 
   gap: 9px;
-
   margin-bottom: 15px;
 }
-
 
 .stat-card {
   background: white;
 
   padding: 17px 7px;
-
   text-align: center;
 
   border-radius: 17px;
 
   box-shadow:
-    0 4px 15px rgba(0,0,0,.06);
+    0 4px 15px
+    rgba(0,0,0,.06);
 }
-
 
 .stat-number {
   color: #075c43;
-
   font-size: 25px;
-
   font-weight: 800;
 }
 
-
 .stat-label {
   color: #888;
-
   font-size: 11px;
-
   margin-top: 4px;
 }
 
-
-.stat-card.active
-.stat-number {
+.stat-card.active .stat-number {
   color: #087f5b;
 }
 
-
-.stat-card.inactive
-.stat-number {
+.stat-card.inactive .stat-number {
   color: #dc3545;
 }
 
 
-/* =====================================================
+/* ==========================================================
    CONTENT CARD
-===================================================== */
+========================================================== */
 
 .content-card {
   background: white;
 
   padding: 19px;
-
   border-radius: 21px;
 
   margin-bottom: 16px;
 
   box-shadow:
-    0 4px 17px rgba(0,0,0,.06);
+    0 4px 17px
+    rgba(0,0,0,.06);
 }
-
 
 .card-title {
   color: #075c43;
-
   font-weight: 800;
-
   font-size: 17px;
-
   margin-bottom: 16px;
 }
 
-
 .card-header {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 }
-
 
 .card-header .card-title {
   margin-bottom: 10px;
 }
-
 
 .small-button {
   width: 38px;
   height: 38px;
 
   border: none;
-
   border-radius: 11px;
 
   background: #e6f5ef;
-
   color: #087f5b;
 
   font-size: 23px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    GURU ITEM
-===================================================== */
+========================================================== */
 
 .guru-item {
-  border-top:
-    1px solid #eee;
-
-  padding:
-    15px 0;
+  border-top: 1px solid #eee;
+  padding: 15px 0;
 }
-
 
 .guru-item:first-child {
   border-top: none;
 }
 
-
 .guru-name {
   color: #075c43;
-
   font-size: 16px;
-
   font-weight: 800;
 }
 
-
 .guru-info {
   color: #888;
-
   font-size: 12px;
-
   margin-top: 4px;
 }
-
 
 .guru-code {
   display: inline-block;
 
   margin-top: 8px;
-
   padding: 7px 10px;
 
   background: #eef8f4;
-
   border-radius: 8px;
 
   color: #075c43;
 
   font-family: monospace;
-
   font-weight: bold;
 
   letter-spacing: 2px;
 }
 
-
 .guru-status {
   margin-top: 7px;
 
   font-size: 12px;
-
   font-weight: bold;
 }
 
-
 .guru-actions {
   display: flex;
-
   gap: 8px;
-
   margin-top: 10px;
 }
-
 
 .guru-actions button {
   flex: 1;
 
   border: none;
-
   border-radius: 10px;
 
   padding: 10px 5px;
 
   font-weight: bold;
-
   font-size: 11px;
 }
 
-
 .qr-button {
   background: #e5f0ff;
-
   color: #075ca8;
 }
 
-
 .status-button {
   background: #fff0d8;
-
   color: #9a6100;
 }
 
 
-/* =====================================================
+/* ==========================================================
    SCANNER
-===================================================== */
+========================================================== */
 
 .scanner-card {
   background: white;
 
   padding: 25px 20px;
-
   border-radius: 24px;
 
   text-align: center;
 
   box-shadow:
-    0 5px 20px rgba(0,0,0,.07);
+    0 5px 20px
+    rgba(0,0,0,.07);
 }
-
 
 .camera-icon {
   font-size: 55px;
 }
 
-
 .scanner-card h2 {
   color: #075c43;
-
-  margin:
-    10px 0 5px;
+  margin: 10px 0 5px;
 }
-
 
 .scanner-card p {
   color: #888;
-
   font-size: 14px;
 }
-
 
 .time-notice {
   margin-top: 18px;
@@ -843,23 +680,17 @@ label {
   padding: 14px;
 
   background: #eef8f4;
-
   border-radius: 13px;
 
   display: flex;
-
   flex-direction: column;
-
   gap: 4px;
 }
 
-
 .time-notice span {
   color: #087f5b;
-
   font-weight: bold;
 }
-
 
 .qr-reader {
   width: 100%;
@@ -867,16 +698,15 @@ label {
   margin-top: 15px;
 
   overflow: hidden;
-
   border-radius: 15px;
 
   background: #000;
 }
 
 
-/* =====================================================
+/* ==========================================================
    RESULT
-===================================================== */
+========================================================== */
 
 .result-card {
   margin-top: 17px;
@@ -886,71 +716,58 @@ label {
   border-radius: 22px;
 
   background: #dff7eb;
-
   color: #075c43;
 
   text-align: center;
 
   box-shadow:
-    0 4px 17px rgba(0,0,0,.06);
+    0 4px 17px
+    rgba(0,0,0,.06);
 }
-
 
 .result-icon {
   width: 65px;
   height: 65px;
 
-  margin:
-    0 auto 10px;
+  margin: 0 auto 10px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   border-radius: 50%;
 
   background: #18ad72;
-
   color: white;
 
   font-size: 35px;
-
   font-weight: bold;
 }
 
-
 .result-card h2 {
-  margin:
-    8px 0 13px;
+  margin: 8px 0 13px;
 }
-
 
 .result-info {
   display: flex;
-
   flex-direction: column;
-
   gap: 6px;
 
   margin-bottom: 15px;
 }
-
 
 .result-info strong {
   font-size: 18px;
 }
 
 
-/* =====================================================
+/* ==========================================================
    REKAP
-===================================================== */
+========================================================== */
 
 .rekap-result {
   margin-top: 15px;
 }
-
 
 .rekap-table {
   width: 100%;
@@ -959,7 +776,6 @@ label {
 
   font-size: 11px;
 }
-
 
 .rekap-table th,
 .rekap-table td {
@@ -972,9 +788,157 @@ label {
 }
 
 
-/* =====================================================
+/* ==========================================================
+   REKAP BUTTON
+   REKAP | EXCEL | PDF
+========================================================== */
+
+/*
+   Wrapper yang digunakan:
+
+   <div class="rekap-button-row">
+      <button class="btn-rekap">...</button>
+      <button class="btn-excel">...</button>
+      <button class="btn-pdf">...</button>
+   </div>
+*/
+
+.rekap-button-row {
+  width: 100%;
+
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+
+  align-items: stretch !important;
+  justify-content: stretch !important;
+
+  gap: 8px;
+
+  margin-top: 12px;
+  margin-bottom: 15px;
+
+  padding: 0;
+}
+
+.rekap-button-row > button {
+  display: flex !important;
+
+  flex: 1 1 0 !important;
+
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  height: 54px;
+  min-height: 54px;
+
+  margin: 0 !important;
+
+  padding: 0 5px;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center;
+
+  border-radius: 14px;
+
+  white-space: nowrap !important;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  transition:
+    transform .15s,
+    filter .15s;
+}
+
+
+/* REKAP */
+
+.rekap-button-row .btn-rekap {
+  background:
+    linear-gradient(
+      135deg,
+      #07855f,
+      #09a878
+    ) !important;
+
+  color: #fff !important;
+  border: none !important;
+
+  box-shadow:
+    0 5px 14px
+    rgba(8,127,91,.15);
+}
+
+
+/* EXCEL */
+
+.rekap-button-row .btn-excel {
+  background:
+    linear-gradient(
+      135deg,
+      #07855f,
+      #09a878
+    ) !important;
+
+  color: #fff !important;
+  border: none !important;
+
+  box-shadow:
+    0 5px 14px
+    rgba(8,127,91,.15);
+}
+
+
+/* PDF */
+
+.rekap-button-row .btn-pdf {
+  background: #eeeeee !important;
+
+  color: #333 !important;
+
+  border:
+    1px solid #d2d2d2 !important;
+
+  box-shadow:
+    0 4px 10px
+    rgba(0,0,0,.05);
+}
+
+
+/* Hover / klik */
+
+.rekap-button-row > button:hover {
+  filter: brightness(1.05);
+}
+
+.rekap-button-row > button:active {
+  transform: scale(.97);
+}
+
+
+/* ==========================================================
+   FALLBACK
+   Jika tombol masih memiliki class primary-button
+========================================================== */
+
+.rekap-button-row > .primary-button {
+  width: 0 !important;
+}
+
+
+/* ==========================================================
    QR MODAL
-===================================================== */
+========================================================== */
 
 .qr-modal {
   position: fixed;
@@ -986,7 +950,6 @@ label {
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   padding: 20px;
@@ -995,10 +958,8 @@ label {
     rgba(0,0,0,.68);
 }
 
-
 .qr-box {
   width: 100%;
-
   max-width: 370px;
 
   padding: 24px;
@@ -1010,22 +971,16 @@ label {
   text-align: center;
 }
 
-
 .qr-box h2 {
   color: #075c43;
-
   margin-top: 0;
 }
 
-
 .qr-box img {
   width: 260px;
-
   height: 260px;
-
   max-width: 100%;
 }
-
 
 .qr-code-text {
   margin: 12px 0;
@@ -1048,9 +1003,9 @@ label {
 }
 
 
-/* =====================================================
+/* ==========================================================
    FOOTER
-===================================================== */
+========================================================== */
 
 footer {
   text-align: center;
@@ -1061,7 +1016,6 @@ footer {
   color: #777;
 
   display: flex;
-
   flex-direction: column;
 
   gap: 4px;
@@ -1069,468 +1023,122 @@ footer {
   font-size: 12px;
 }
 
-
 footer strong {
   color: #075c43;
 }
 
 
-/* =====================================================
+/* ==========================================================
    MOBILE
-===================================================== */
+========================================================== */
 
-@media (max-width: 420px) {
+@media screen and (max-width: 600px) {
 
   .header {
     min-height: 115px;
-
-    padding:
-      22px 18px;
+    padding: 22px 18px;
   }
-
 
   .header-icon {
     width: 58px;
     height: 58px;
-
     font-size: 30px;
   }
-
 
   .header-title {
     font-size: 23px;
   }
 
+  .header-subtitle {
+    font-size: 14px;
+  }
 
   .page {
     padding:
       23px 16px 30px;
   }
 
-
   .welcome h1 {
     font-size: 27px;
   }
-
 
   .menu-icon {
     width: 63px;
     height: 63px;
   }
 
-   /* ==========================================================
-   TOMBOL REKAP - SATU BARIS
-   TAMPILKAN REKAP | EXPORT EXCEL | EXPORT PDF
-========================================================== */
 
-section.content-card:has(#bulanRekap)
-  button[onclick="tampilkanRekap()"],
-section.content-card:has(#bulanRekap)
-  button[onclick="exportExcel()"],
-section.content-card:has(#bulanRekap)
-  button[onclick="exportPDF()"] {
+  /* ========================================================
+     REKAP - HP / ANDROID
+  ======================================================== */
 
-  display: inline-flex;
-
-  width: calc(33.333% - 8px);
-
-  min-height: 54px;
-
-  height: 54px;
-
-  margin-top: 12px;
-
-  margin-right: 7px;
-
-  padding: 0 8px;
-
-  border-radius: 15px;
-
-  align-items: center;
-
-  justify-content: center;
-
-  text-align: center;
-
-  vertical-align: top;
-
-  white-space: nowrap;
-
-  font-size: 14px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-
-/* Hapus jarak kanan tombol terakhir */
-
-section.content-card:has(#bulanRekap)
-  button[onclick="exportPDF()"] {
-
-  margin-right: 0;
-
-}
-
-
-/* Tombol REKAP */
-
-section.content-card:has(#bulanRekap)
-  button[onclick="tampilkanRekap()"] {
-
-  background:
-    linear-gradient(
-      135deg,
-      #07855f,
-      #09a878
-    );
-
-  color: white;
-
-  border: none;
-
-  box-shadow:
-    0 6px 15px
-    rgba(
-      0,
-      130,
-      90,
-      0.15
-    );
-}
-
-
-/* Tombol EXCEL */
-
-section.content-card:has(#bulanRekap)
-  button[onclick="exportExcel()"] {
-
-  background:
-    linear-gradient(
-      135deg,
-      #07855f,
-      #09a878
-    );
-
-  color: white;
-
-  border: none;
-
-  box-shadow:
-    0 6px 15px
-    rgba(
-      0,
-      130,
-      90,
-      0.15
-    );
-}
-
-
-/* Tombol PDF */
-
-section.content-card:has(#bulanRekap)
-  button[onclick="exportPDF()"] {
-
-  background: #eeeeee;
-
-  color: #333;
-
-  border:
-    1px solid #d2d2d2;
-
-  box-shadow:
-    0 4px 10px
-    rgba(
-      0,
-      0,
-      0,
-      0.05
-    );
-}
-
-
-/* Hover */
-
-section.content-card:has(#bulanRekap)
-  button[onclick="tampilkanRekap()"]:hover,
-section.content-card:has(#bulanRekap)
-  button[onclick="exportExcel()"]:hover {
-
-  filter: brightness(1.05);
-
-  transform:
-    translateY(-1px);
-}
-
-
-section.content-card:has(#bulanRekap)
-  button[onclick="exportPDF()"]:hover {
-
-  background: #e5e5e5;
-
-  transform:
-    translateY(-1px);
-}
-
-
-/* ==========================================================
-   HP
-========================================================== */
-
-@media (max-width: 560px) {
-
-  section.content-card:has(#bulanRekap)
-    button[onclick="tampilkanRekap()"],
-  section.content-card:has(#bulanRekap)
-    button[onclick="exportExcel()"],
-  section.content-card:has(#bulanRekap)
-    button[onclick="exportPDF()"] {
-
-    width: calc(33.333% - 6px);
-
-    min-height: 48px;
-
-    height: 48px;
-
-    margin-top: 10px;
-
-    margin-right: 4px;
-
-    padding: 0 3px;
-
-    border-radius: 12px;
-
-    font-size: 11px;
-
-    line-height: 1.1;
-
-  }
-
-}
-
-
-/* ==========================================================
-   HP KECIL
-========================================================== */
-
-@media (max-width: 380px) {
-
-  section.content-card:has(#bulanRekap)
-    button[onclick="tampilkanRekap()"],
-  section.content-card:has(#bulanRekap)
-    button[onclick="exportExcel()"],
-  section.content-card:has(#bulanRekap)
-    button[onclick="exportPDF()"] {
-
-    width: calc(33.333% - 5px);
-
-    font-size: 10px;
-
-    padding: 0 2px;
-
-  }
-
-}
-}
-.rekap-button-row {
-    display: flex;
-    width: 100%;
-    gap: 8px;
-    margin-top: 12px;
-    margin-bottom: 15px;
-}
-
-.rekap-button-row button {
-    flex: 1;
-    width: 33.333%;
-    height: 54px;
-    min-height: 54px;
-    padding: 0 8px;
-    border-radius: 15px;
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.rekap-button-row .btn-rekap,
-.rekap-button-row .btn-excel {
-    background: linear-gradient(
-        135deg,
-        #07855f,
-        #09a878
-    );
-    color: white;
-    border: none;
-}
-
-.rekap-button-row .btn-pdf {
-    background: #eeeeee;
-    color: #333;
-    border: 1px solid #d5d5d5;
-}
-
-@media (max-width: 560px) {
-
-    .rekap-button-row {
-        gap: 6px;
-    }
-
-    .rekap-button-row button {
-        height: 50px;
-        min-height: 50px;
-        padding: 0 4px;
-        font-size: 11px;
-        border-radius: 12px;
-    }
-
-}
-
-/* ==========================================================
-   FIX REKAP DI HP / ANDROID
-   WAJIB 1 BARIS
-========================================================== */
-
-.rekap-button-row {
+  .rekap-button-row {
     display: flex !important;
+
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
 
     width: 100% !important;
 
-    gap: 6px !important;
+    gap: 5px !important;
 
-    margin-top: 12px !important;
+    margin-top: 10px !important;
     margin-bottom: 15px !important;
-}
+  }
 
-
-/* Semua tombol di dalam baris */
-
-.rekap-button-row > button {
+  .rekap-button-row > button {
     display: flex !important;
 
     flex: 1 1 0 !important;
 
     width: 0 !important;
+
     min-width: 0 !important;
     max-width: none !important;
 
-    height: 50px !important;
-    min-height: 50px !important;
+    height: 48px !important;
+    min-height: 48px !important;
 
     margin: 0 !important;
 
-    padding: 0 3px !important;
+    padding:
+      0 2px !important;
 
     align-items: center !important;
     justify-content: center !important;
 
-    border-radius: 12px !important;
+    border-radius: 11px !important;
+
+    font-size: 10px !important;
+
+    line-height: 1 !important;
 
     white-space: nowrap !important;
 
-    font-size: 11px !important;
-    font-weight: 800 !important;
+    overflow: hidden !important;
 
     box-sizing: border-box !important;
-}
+  }
+
+  .rekap-button-row .btn-rekap,
+  .rekap-button-row .btn-excel,
+  .rekap-button-row .btn-pdf {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
 
 
-/* REKAP */
+  /* Tabel Rekap */
 
-.rekap-button-row
-.btn-rekap {
-    background:
-        linear-gradient(
-            135deg,
-            #07855f,
-            #09a878
-        ) !important;
+  .rekap-table {
+    font-size: 10px;
+  }
 
-    color: white !important;
-
-    border: none !important;
-}
-
-
-/* EXCEL */
-
-.rekap-button-row
-.btn-excel {
-    background:
-        linear-gradient(
-            135deg,
-            #07855f,
-            #09a878
-        ) !important;
-
-    color: white !important;
-
-    border: none !important;
-}
-
-
-/* PDF */
-
-.rekap-button-row
-.btn-pdf {
-    background: #eeeeee !important;
-
-    color: #333 !important;
-
-    border:
-        1px solid #d5d5d5 !important;
-}
-
-
-/* ==========================================================
-   ANDROID / HP KECIL
-========================================================== */
-
-@media screen and (max-width: 600px) {
-
-    .rekap-button-row {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-
-        width: 100% !important;
-
-        gap: 5px !important;
-    }
-
-
-    .rekap-button-row > button {
-        display: flex !important;
-
-        flex: 1 1 0 !important;
-
-        width: 0 !important;
-
-        min-width: 0 !important;
-
-        max-width: none !important;
-
-        height: 48px !important;
-
-        min-height: 48px !important;
-
-        margin: 0 !important;
-
-        padding:
-            0 2px !important;
-
-        font-size: 10px !important;
-
-        border-radius: 11px !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-    }
+  .rekap-table th,
+  .rekap-table td {
+    padding:
+      7px 3px;
+  }
 
 }
 
@@ -1541,20 +1149,51 @@ section.content-card:has(#bulanRekap)
 
 @media screen and (max-width: 380px) {
 
-    .rekap-button-row {
-        gap: 4px !important;
-    }
+  .page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .content-card {
+    padding: 15px;
+  }
+
+  .rekap-button-row {
+    gap: 3px !important;
+  }
+
+  .rekap-button-row > button {
+    height: 45px !important;
+    min-height: 45px !important;
+
+    padding:
+      0 1px !important;
+
+    font-size: 9px !important;
+
+    border-radius: 10px !important;
+  }
+
+}
 
 
-    .rekap-button-row > button {
-        height: 45px !important;
+/* ==========================================================
+   HP SANGAT-SANGAT KECIL
+========================================================== */
 
-        min-height: 45px !important;
+@media screen and (max-width: 330px) {
 
-        font-size: 9px !important;
+  .rekap-button-row {
+    gap: 2px !important;
+  }
 
-        padding:
-            0 1px !important;
-    }
+  .rekap-button-row > button {
+    height: 43px !important;
+    min-height: 43px !important;
+
+    font-size: 8px !important;
+
+    padding: 0 !important;
+  }
 
 }
