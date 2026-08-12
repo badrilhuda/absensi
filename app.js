@@ -2043,15 +2043,25 @@ function suaraBerhasil() {
    REKAP
 ===================================================== */
 
+// ==========================================================
+// REKAP KEHADIRAN GURU
+// ==========================================================
+
 function tampilkanRekap() {
 
   const bulan =
     el("bulanRekap").value;
 
-
   const hasil =
     el("hasilRekap");
 
+  const message =
+    el("rekapMessage");
+
+
+  // ------------------------------------------
+  // CEK BULAN
+  // ------------------------------------------
 
   if (!bulan) {
 
@@ -2064,28 +2074,38 @@ function tampilkanRekap() {
   }
 
 
-  hasil.innerHTML = `
+  // ------------------------------------------
+  // TAMPILKAN LOADING
+  // ------------------------------------------
 
+  hasil.innerHTML = `
     <div class="loading">
 
       ⏳ Mengambil data rekap...
 
     </div>
-
   `;
 
+  message.innerHTML = "";
+
+
+  // ------------------------------------------
+  // AMBIL DATA ABSENSI
+  // ------------------------------------------
 
   panggilAPI(
 
     {
       action: "rekap",
+
       bulan: bulan
+
     },
 
     function(result) {
 
       console.log(
-        "REKAP:",
+        "HASIL REKAP:",
         result
       );
 
@@ -2099,13 +2119,13 @@ function tampilkanRekap() {
 
           <div class="admin-message-error">
 
-            ${
-              escapeHtml(
-                result &&
-                result.pesan
-                  ? result.pesan
-                  : "Rekap tidak tersedia."
-              )
+            ✕ ${
+              result &&
+              result.pesan
+                ? escapeHtml(
+                    result.pesan
+                  )
+                : "Gagal mengambil data rekap."
             }
 
           </div>
@@ -2117,30 +2137,27 @@ function tampilkanRekap() {
       }
 
 
-      /*
-       * Jika backend mengembalikan array.
-       */
+      // --------------------------------------
+      // DATA ABSENSI
+      // --------------------------------------
 
-      const data =
-        Array.isArray(result)
-          ? result
-          : (
-              Array.isArray(
-                result.data
-              )
-                ? result.data
-                : []
-            );
+      const dataAbsensi =
+        result.data ||
+        result.hasil ||
+        [];
 
 
-      if (!data.length) {
+      if (
+        !Array.isArray(
+          dataAbsensi
+        )
+      ) {
 
         hasil.innerHTML = `
 
-          <div class="loading">
+          <div class="admin-message-error">
 
-            Belum ada data absensi
-            pada bulan ini.
+            ✕ Format data rekap tidak sesuai.
 
           </div>
 
@@ -2151,162 +2168,483 @@ function tampilkanRekap() {
       }
 
 
-      let html = `
+      // --------------------------------------
+      // AMBIL DATA GURU UNTUK JP
+      // --------------------------------------
 
-        <div style="
-          overflow-x:auto;
-        ">
+      panggilAPI(
 
-          <table
-            class="rekap-table">
+        {
+          action: "getGuru"
 
-            <thead>
+        },
 
-              <tr>
+        function(guruResult) {
 
-                <th>
-                  Nama
-                </th>
-
-                <th>
-                  Hadir
-                </th>
-
-                <th>
-                  Terlambat
-                </th>
-
-                <th>
-                  Tidak
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-      `;
+          console.log(
+            "DATA GURU:",
+            guruResult
+          );
 
 
-      data.forEach(
-        function(row) {
+          let daftarGuru = [];
+
+
+          if (
+            guruResult &&
+            Array.isArray(
+              guruResult.data
+            )
+          ) {
+
+            daftarGuru =
+              guruResult.data;
+
+          }
+
+          else if (
+            guruResult &&
+            Array.isArray(
+              guruResult.hasil
+            )
+          ) {
+
+            daftarGuru =
+              guruResult.hasil;
+
+          }
+
+
+          // ------------------------------------
+          // BUAT MAP JP BERDASARKAN NAMA / NIP
+          // ------------------------------------
+
+          const jpGuru = {};
+
+
+          daftarGuru.forEach(
+            function(guru) {
+
+              const nama =
+                String(
+                  guru.nama || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+              const nip =
+                String(
+                  guru.nip || ""
+                )
+                .trim();
+
+
+              const jp =
+                Number(
+                  guru.jp || 0
+                );
+
+
+              if (nama) {
+
+                jpGuru[
+                  "nama:" + nama
+                ] = jp;
+
+              }
+
+
+              if (nip) {
+
+                jpGuru[
+                  "nip:" + nip
+                ] = jp;
+
+              }
+
+            }
+          );
+
+
+          // ------------------------------------
+          // KELOMPOKKAN DATA ABSENSI
+          // ------------------------------------
+
+          const rekapGuru = {};
+
+
+          dataAbsensi.forEach(
+            function(row) {
+
+              const nama =
+                String(
+                  row.nama || "-"
+                )
+                .trim();
+
+
+              const nip =
+                String(
+                  row.nip || ""
+                )
+                .trim();
+
+
+              const key =
+                nip
+                  ? "nip:" + nip
+                  : "nama:" +
+                    nama
+                      .toLowerCase();
+
+
+              if (
+                !rekapGuru[key]
+              ) {
+
+                let jp = 0;
+
+
+                // Cari berdasarkan NIP
+                if (
+                  nip &&
+                  jpGuru[
+                    "nip:" + nip
+                  ] !== undefined
+                ) {
+
+                  jp =
+                    Number(
+                      jpGuru[
+                        "nip:" + nip
+                      ]
+                    );
+
+                }
+
+                // Jika NIP tidak ditemukan,
+                // cari berdasarkan nama
+                else if (
+                  jpGuru[
+                    "nama:" +
+                    nama.toLowerCase()
+                  ] !== undefined
+                ) {
+
+                  jp =
+                    Number(
+                      jpGuru[
+                        "nama:" +
+                        nama.toLowerCase()
+                      ]
+                    );
+
+                }
+
+
+                rekapGuru[key] = {
+
+                  nama:
+                    nama,
+
+                  nip:
+                    nip,
+
+                  jabatan:
+                    String(
+                      row.jabatan || ""
+                    ),
+
+                  jp:
+                    jp,
+
+                  hadir:
+                    0,
+
+                  terlambat:
+                    0,
+
+                  tidak:
+                    0
+
+                };
+
+              }
+
+
+              const guru =
+                rekapGuru[key];
+
+
+              const status =
+                String(
+                  row.status || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+              if (
+                status === "HADIR"
+              ) {
+
+                guru.hadir++;
+
+              }
+
+              else if (
+                status === "TERLAMBAT"
+              ) {
+
+                guru.terlambat++;
+
+              }
+
+              else if (
+                status === "TIDAK"
+              ) {
+
+                guru.tidak++;
+
+              }
+
+            }
+          );
+
+
+          // ------------------------------------
+          // JIKA TIDAK ADA DATA
+          // ------------------------------------
+
+          const daftarRekap =
+            Object.values(
+              rekapGuru
+            );
+
+
+          if (
+            daftarRekap.length === 0
+          ) {
+
+            hasil.innerHTML = `
+
+              <div class="loading">
+
+                Belum ada data absensi
+                pada bulan ini.
+
+              </div>
+
+            `;
+
+            return;
+
+          }
+
+
+          // ------------------------------------
+          // BUAT TABEL
+          // ------------------------------------
+
+          let html = `
+
+            <div
+              class="rekap-summary"
+              style="
+                margin-bottom:15px;
+                font-weight:bold;
+                color:#087f5b;
+              "
+            >
+
+              📊 Rekap Kehadiran
+              ${escapeHtml(bulan)}
+
+            </div>
+
+
+            <div
+              style="
+                overflow-x:auto;
+              "
+            >
+
+              <table
+                class="rekap-table"
+              >
+
+                <thead>
+
+                  <tr>
+
+                    <th>Nama</th>
+
+                    <th>JP/Hari</th>
+
+                    <th>Hadir</th>
+
+                    <th>Terlambat</th>
+
+                    <th>Tidak</th>
+
+                    <th>Total JP</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+          `;
+
+
+          // ------------------------------------
+          // ISI TABEL
+          // ------------------------------------
+
+          daftarRekap.forEach(
+            function(row) {
+
+              const hadir =
+                Number(
+                  row.hadir || 0
+                );
+
+
+              const terlambat =
+                Number(
+                  row.terlambat || 0
+                );
+
+
+              const tidak =
+                Number(
+                  row.tidak || 0
+                );
+
+
+              const jp =
+                Number(
+                  row.jp || 0
+                );
+
+
+              // HADIR + TERLAMBAT
+              const hariDihitung =
+                hadir +
+                terlambat;
+
+
+              // TOTAL JP
+              const totalJP =
+                hariDihitung *
+                jp;
+
+
+              html += `
+
+                <tr>
+
+                  <td>
+
+                    <strong>
+                      ${escapeHtml(
+                        row.nama
+                      )}
+                    </strong>
+
+                    ${
+                      row.nip
+                        ? `
+                          <br>
+                          <small>
+                            NIP:
+                            ${escapeHtml(
+                              row.nip
+                            )}
+                          </small>
+                        `
+                        : ""
+                    }
+
+                  </td>
+
+
+                  <td>
+
+                    ${jp}
+
+                  </td>
+
+
+                  <td>
+
+                    <strong>
+                      ${hadir}
+                    </strong>
+
+                  </td>
+
+
+                  <td>
+
+                    ${terlambat}
+
+                  </td>
+
+
+                  <td>
+
+                    ${tidak}
+
+                  </td>
+
+
+                  <td>
+
+                    <strong
+                      style="
+                        color:#087f5b;
+                      "
+                    >
+
+                      ${totalJP}
+
+                    </strong>
+
+                  </td>
+
+                </tr>
+
+              `;
+
+            }
+          );
+
 
           html += `
 
-            <tr>
+                </tbody>
 
-              <td>
-                ${escapeHtml(
-                  row.nama || "-"
-                )}
-              </td>
+              </table>
 
-              <td>
-                ${escapeHtml(
-                  row.hadir ?? "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  row.terlambat ?? "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  row.tidakHadir ?? "-"
-                )}
-              </td>
-
-            </tr>
+            </div>
 
           `;
 
+
+          hasil.innerHTML =
+            html;
+
         }
+
       );
-
-
-      html += `
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      `;
-
-
-      hasil.innerHTML =
-        html;
 
     }
 
   );
 
 }
-
-
-/* =====================================================
-   DEFAULT
-===================================================== */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
-
-    /*
-     * Set bulan sekarang.
-     */
-
-    const sekarang =
-      new Date();
-
-
-    const bulan =
-      sekarang.getFullYear() +
-      "-" +
-      String(
-        sekarang.getMonth() + 1
-      ).padStart(
-        2,
-        "0"
-      );
-
-
-    if (el("bulanRekap")) {
-
-      el("bulanRekap").value =
-        bulan;
-
-    }
-
-
-    /*
-     * Pastikan halaman awal
-     * hanya Home.
-     */
-
-    sembunyikanSemua();
-
-
-    el("homePage")
-      .classList
-      .remove("hidden");
-
-
-    /*
-     * Admin harus login setiap
-     * kali halaman dimuat.
-     */
-
-    adminSudahLogin =
-      false;
-
-  }
-);
 
 // ==========================================================
 // EXPORT EXCEL
