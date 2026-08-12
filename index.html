@@ -2,292 +2,628 @@
 <html lang="id">
 
 <head>
+
   <meta charset="UTF-8">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <meta name="theme-color"
-        content="#087f5b">
+  <meta
+    name="theme-color"
+    content="#087f5b">
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes">
 
   <title>Absensi Guru - MTs. Badril Huda</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css">
+
+  <!-- QR SCANNER -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    defer>
+  </script>
+
 </head>
+
 
 <body>
 
-  <div class="app">
+<div id="app">
 
-    <!-- HEADER -->
-    <header class="header">
 
-      <div class="school-icon">
-        🕌
+  <!-- ==================================================
+       HEADER
+  =================================================== -->
+
+  <header class="header">
+
+    <div class="header-icon">
+      🕌
+    </div>
+
+    <div>
+
+      <div class="header-title">
+        ABSENSI GURU
+      </div>
+
+      <div class="header-subtitle">
+        MTs. BADRIL HUDA
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ==================================================
+       HOME
+  =================================================== -->
+
+  <main
+    id="homePage"
+    class="page">
+
+    <section class="welcome">
+
+      <div class="welcome-icon">
+        👋
+      </div>
+
+      <h1>
+        Selamat Datang
+      </h1>
+
+      <p>
+        Sistem Kehadiran Guru
+      </p>
+
+    </section>
+
+
+    <div class="menu-list">
+
+
+      <!-- ADMIN -->
+
+      <button
+        class="menu-card"
+        onclick="bukaAdmin()">
+
+        <div class="menu-icon admin-icon">
+          ⚙️
+        </div>
+
+        <div class="menu-text">
+
+          <strong>
+            ADMIN
+          </strong>
+
+          <span>
+            Kelola data guru dan QR
+          </span>
+
+        </div>
+
+      </button>
+
+
+      <!-- GURU -->
+
+      <button
+        class="menu-card"
+        onclick="bukaGuru()">
+
+        <div class="menu-icon guru-icon">
+          👨‍🏫
+        </div>
+
+        <div class="menu-text">
+
+          <strong>
+            GURU
+          </strong>
+
+          <span>
+            Scan QR untuk absensi
+          </span>
+
+        </div>
+
+      </button>
+
+
+      <!-- REKAP -->
+
+      <button
+        class="menu-card"
+        onclick="bukaRekap()">
+
+        <div class="menu-icon rekap-icon">
+          📊
+        </div>
+
+        <div class="menu-text">
+
+          <strong>
+            REKAP
+          </strong>
+
+          <span>
+            Laporan kehadiran guru
+          </span>
+
+        </div>
+
+      </button>
+
+
+    </div>
+
+
+    <!-- JAM -->
+
+    <div class="time-card">
+
+      <div class="time-icon">
+        🕐
       </div>
 
       <div>
-        <h1>ABSENSI GURU</h1>
-        <p>MTs. BADRIL HUDA</p>
+
+        <strong>
+          Waktu Absensi
+        </strong>
+
+        <span>
+          06.30 - 07.30 WIB
+        </span>
+
       </div>
 
-    </header>
+    </div>
 
 
-    <!-- HALAMAN UTAMA -->
-    <main id="homePage" class="page">
+    <div class="system-status">
 
-      <div class="welcome">
+      <span class="status-dot"></span>
 
-        <div class="welcome-icon">
-          👋
+      Sistem siap digunakan
+
+    </div>
+
+  </main>
+
+
+  <!-- ==================================================
+       ADMIN
+  =================================================== -->
+
+  <main
+    id="adminPage"
+    class="page hidden">
+
+
+    <div class="page-title">
+
+      <button
+        class="back-button"
+        onclick="kembaliHome()">
+        ←
+      </button>
+
+      <div>
+
+        <h2>
+          ADMIN
+        </h2>
+
+        <span>
+          Pengelolaan sistem
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOGIN ADMIN -->
+
+    <section
+      id="adminLoginBox"
+      class="login-card">
+
+      <div class="login-icon">
+        🔐
+      </div>
+
+      <h2>
+        Login Admin
+      </h2>
+
+      <p>
+        Masukkan PIN administrator
+      </p>
+
+
+      <input
+        type="password"
+        id="adminPin"
+        class="form-input"
+        placeholder="PIN Admin"
+        inputmode="numeric"
+        autocomplete="off">
+
+
+      <button
+        class="primary-button"
+        onclick="loginAdmin()">
+
+        MASUK ADMIN
+
+      </button>
+
+
+      <div
+        id="loginMessage"
+        class="message">
+      </div>
+
+    </section>
+
+
+    <!-- PANEL ADMIN -->
+
+    <section
+      id="adminPanel"
+      class="admin-panel hidden">
+
+
+      <!-- STATISTIK -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <div class="stat-number"
+               id="totalGuru">
+            0
+          </div>
+
+          <div class="stat-label">
+            Total Guru
+          </div>
+
         </div>
 
-        <h2>Selamat Datang</h2>
+
+        <div class="stat-card active">
+
+          <div class="stat-number"
+               id="guruAktif">
+            0
+          </div>
+
+          <div class="stat-label">
+            Aktif
+          </div>
+
+        </div>
+
+
+        <div class="stat-card inactive">
+
+          <div class="stat-number"
+               id="guruNonaktif">
+            0
+          </div>
+
+          <div class="stat-label">
+            Nonaktif
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- TAMBAH GURU -->
+
+      <section class="content-card">
+
+        <div class="card-title">
+          ➕ Tambah Guru
+        </div>
+
+
+        <label>
+          NIP / NIK
+        </label>
+
+        <input
+          type="text"
+          id="guruNip"
+          class="form-input"
+          placeholder="Masukkan NIP / NIK">
+
+
+        <label>
+          Nama Guru
+        </label>
+
+        <input
+          type="text"
+          id="guruNama"
+          class="form-input"
+          placeholder="Masukkan nama guru">
+
+
+        <label>
+          Jabatan
+        </label>
+
+        <input
+          type="text"
+          id="guruJabatan"
+          class="form-input"
+          placeholder="Contoh: Guru">
+
+
+        <button
+          class="primary-button"
+          onclick="simpanGuru()">
+
+          💾 SIMPAN GURU
+
+        </button>
+
+
+        <div
+          id="tambahGuruMessage"
+          class="message">
+        </div>
+
+      </section>
+
+
+      <!-- DAFTAR GURU -->
+
+      <section class="content-card">
+
+        <div class="card-header">
+
+          <div class="card-title">
+            👨‍🏫 Daftar Guru
+          </div>
+
+          <button
+            class="small-button"
+            onclick="muatDaftarGuru()">
+            ↻
+          </button>
+
+        </div>
+
+
+        <div id="daftarGuru">
+
+          <div class="loading">
+            Memuat data guru...
+          </div>
+
+        </div>
+
+      </section>
+
+
+    </section>
+
+  </main>
+
+
+  <!-- ==================================================
+       GURU / SCANNER
+  =================================================== -->
+
+  <main
+    id="guruPage"
+    class="page hidden">
+
+
+    <div class="page-title">
+
+      <button
+        class="back-button"
+        onclick="kembaliHome()">
+        ←
+      </button>
+
+      <div>
+
+        <h2>
+          ABSENSI GURU
+        </h2>
+
+        <span>
+          Scan QR Code
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <section class="scanner-card">
+
+      <div id="scannerContent">
+
+        <div class="camera-icon">
+          📷
+        </div>
+
+        <h2>
+          Scan QR Guru
+        </h2>
 
         <p>
-          Sistem Kehadiran Guru
+          Tekan tombol untuk mengaktifkan kamera
         </p>
 
-      </div>
 
+        <button
+          class="primary-button"
+          onclick="mulaiScan()">
 
-      <div class="menu-grid">
-
-        <!-- ADMIN -->
-        <button class="menu-card"
-                onclick="bukaAdmin()">
-
-          <div class="menu-icon admin-icon">
-            ⚙️
-          </div>
-
-          <div class="menu-title">
-            ADMIN
-          </div>
-
-          <div class="menu-description">
-            Kelola data guru dan QR
-          </div>
+          📷 AKTIFKAN KAMERA
 
         </button>
 
 
-        <!-- GURU -->
-        <button class="menu-card"
-                onclick="bukaGuru()">
-
-          <div class="menu-icon guru-icon">
-            👨‍🏫
-          </div>
-
-          <div class="menu-title">
-            GURU
-          </div>
-
-          <div class="menu-description">
-            Scan QR untuk absensi
-          </div>
-
-        </button>
-
-
-        <!-- REKAP -->
-        <button class="menu-card"
-                onclick="bukaRekap()">
-
-          <div class="menu-icon rekap-icon">
-            📊
-          </div>
-
-          <div class="menu-title">
-            REKAP
-          </div>
-
-          <div class="menu-description">
-            Laporan kehadiran guru
-          </div>
-
-        </button>
-
-      </div>
-
-
-      <div class="info-card">
-
-        <div class="info-icon">
-          🕐
-        </div>
-
-        <div>
+        <div class="time-notice">
 
           <strong>
             Waktu Absensi
           </strong>
 
-          <p>
+          <span>
             06.30 - 07.30 WIB
-          </p>
+          </span>
 
         </div>
 
       </div>
 
 
-      <div class="connection">
-
-        <span class="online-dot"></span>
-
-        Sistem siap digunakan
-
-      </div>
-
-    </main>
-
-
-    <!-- HALAMAN ADMIN -->
-    <main id="adminPage"
-          class="page hidden">
-
-      <div class="top-bar">
-
-        <button class="back-button"
-                onclick="kembaliHome()">
-
-          ←
-
-        </button>
-
-        <div>
-
-          <h2>ADMIN</h2>
-
-          <p>
-            Pengelolaan sistem
-          </p>
-
-        </div>
-
+      <div
+        id="qr-reader"
+        class="qr-reader hidden">
       </div>
 
 
-      <div class="login-card">
+      <button
+        id="batalScanButton"
+        class="danger-button hidden"
+        onclick="batalScan()">
 
-        <div class="login-icon">
-          🔐
-        </div>
+        ✕ BATAL SCAN
+
+      </button>
+
+    </section>
+
+
+    <!-- HASIL ABSENSI -->
+
+    <section
+      id="hasilAbsensi"
+      class="result-card hidden">
+    </section>
+
+
+  </main>
+
+
+  <!-- ==================================================
+       REKAP
+  =================================================== -->
+
+  <main
+    id="rekapPage"
+    class="page hidden">
+
+
+    <div class="page-title">
+
+      <button
+        class="back-button"
+        onclick="kembaliHome()">
+        ←
+      </button>
+
+      <div>
 
         <h2>
-          Login Admin
+          REKAP
         </h2>
 
-        <p>
-          Masukkan PIN administrator
-        </p>
-
-
-        <input type="password"
-               id="adminPin"
-               placeholder="PIN Admin"
-               maxlength="20">
-
-
-        <button class="primary-button"
-                onclick="loginAdmin()">
-
-          MASUK ADMIN
-
-        </button>
-
-
-        <div id="loginMessage"></div>
+        <span>
+          Laporan kehadiran guru
+        </span>
 
       </div>
 
-    </main>
+    </div>
 
 
-    <!-- HALAMAN REKAP -->
-    <main id="rekapPage"
-          class="page hidden">
+    <section class="content-card">
 
-      <div class="top-bar">
-
-        <button class="back-button"
-                onclick="kembaliHome()">
-
-          ←
-
-        </button>
-
-        <div>
-
-          <h2>REKAP</h2>
-
-          <p>
-            Rekap kehadiran guru
-          </p>
-
-        </div>
-
+      <div class="card-title">
+        📊 Rekap Bulanan
       </div>
 
 
-      <div class="report-card">
+      <label>
+        Pilih Bulan
+      </label>
 
-        <div class="report-icon">
-          📊
-        </div>
-
-        <h2>
-          Rekap Absensi
-        </h2>
-
-        <p>
-          Pilih bulan untuk melihat laporan
-        </p>
+      <input
+        type="month"
+        id="bulanRekap"
+        class="form-input">
 
 
-        <input type="month"
-               id="bulanRekap">
+      <button
+        class="primary-button"
+        onclick="tampilkanRekap()">
+
+        🔍 TAMPILKAN REKAP
+
+      </button>
 
 
-        <button class="primary-button"
-                onclick="tampilkanRekap()">
-
-          TAMPILKAN REKAP
-
-        </button>
-
-
-        <div id="hasilRekap"></div>
-
+      <div
+        id="hasilRekap"
+        class="rekap-result">
       </div>
 
-    </main>
+    </section>
 
 
-    <!-- FOOTER -->
-
-    <footer>
-
-      <strong>
-        MTs. BADRIL HUDA
-      </strong>
-
-      <span>
-        Sistem Absensi Guru
-      </span>
-
-    </footer>
-
-  </div>
+  </main>
 
 
-  <script src="https://unpkg.com/html5-qrcode"
-        type="text/javascript"></script>
+  <!-- ==================================================
+       FOOTER
+  =================================================== -->
 
-<script src="app.js"></script>
+  <footer>
+
+    <strong>
+      MTs. BADRIL HUDA
+    </strong>
+
+    <span>
+      Sistem Absensi Guru
+    </span>
+
+  </footer>
+
+
+</div>
+
+
+<!-- APP JS -->
+
+<script
+  src="app.js">
+</script>
 
 </body>
 
