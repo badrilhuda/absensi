@@ -1,37 +1,22 @@
-/* =====================================================
-   ABSENSI GURU
-   MTs. BADRIL HUDA
-   APP.JS
-===================================================== */
-
-
-/* =====================================================
-   GOOGLE APPS SCRIPT
-===================================================== */
+/* ==========================================================
+   ABSENSI GURU - MTs. BADRIL HUDA
+   APP.JS - LENGKAP
+========================================================== */
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
 
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
 let qrScanner = null;
-
 let sedangScan = false;
-
 let adminSudahLogin = false;
 
 
-/* =====================================================
+/* ==========================================================
    UTILITAS
-===================================================== */
+========================================================== */
 
 function el(id) {
-
   return document.getElementById(id);
-
 }
 
 
@@ -47,9 +32,20 @@ function escapeHtml(text) {
 }
 
 
-/* =====================================================
+function escapeJs(text) {
+
+  return String(text ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\r/g, "")
+    .replace(/\n/g, "\\n");
+
+}
+
+
+/* ==========================================================
    HALAMAN
-===================================================== */
+========================================================== */
 
 function sembunyikanSemua() {
 
@@ -70,38 +66,11 @@ function kembaliHome() {
 
   sembunyikanSemua();
 
-  el("homePage")
-    .classList
-    .remove("hidden");
+  const page = el("homePage");
 
-}
+  if (page) {
 
-
-function bukaAdmin() {
-
-  hentikanScanner();
-
-  sembunyikanSemua();
-
-  el("adminPage")
-    .classList
-    .remove("hidden");
-
-
-  /*
-   * Setiap kali masuk Admin,
-   * kalau belum login tampilkan login.
-   */
-
-  if (adminSudahLogin) {
-
-    tampilkanPanelAdmin();
-
-  }
-
-  else {
-
-    tampilkanLoginAdmin();
+    page.classList.remove("hidden");
 
   }
 
@@ -114,9 +83,13 @@ function bukaGuru() {
 
   sembunyikanSemua();
 
-  el("guruPage")
-    .classList
-    .remove("hidden");
+  const page = el("guruPage");
+
+  if (page) {
+
+    page.classList.remove("hidden");
+
+  }
 
 }
 
@@ -127,16 +100,183 @@ function bukaRekap() {
 
   sembunyikanSemua();
 
-  el("rekapPage")
-    .classList
-    .remove("hidden");
+  const page = el("rekapPage");
+
+  if (page) {
+
+    page.classList.remove("hidden");
+
+  }
 
 }
 
 
-/* =====================================================
+function bukaAdmin() {
+
+  hentikanScanner();
+
+  sembunyikanSemua();
+
+  const page = el("adminPage");
+
+  if (page) {
+
+    page.classList.remove("hidden");
+
+  }
+
+  if (adminSudahLogin) {
+
+    tampilkanPanelAdmin();
+
+  } else {
+
+    tampilkanLoginAdmin();
+
+  }
+
+}
+
+
+/* ==========================================================
+   API JSONP
+========================================================== */
+
+function panggilAPI(parameter, callback) {
+
+  const callbackName =
+    "absensiCallback_" +
+    Date.now() +
+    "_" +
+    Math.floor(
+      Math.random() * 99999
+    );
+
+
+  let selesai = false;
+
+
+  const script =
+    document.createElement("script");
+
+
+  function selesaiRequest(result) {
+
+    if (selesai) {
+
+      return;
+
+    }
+
+    selesai = true;
+
+
+    try {
+
+      callback(result);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+
+    delete window[callbackName];
+
+
+    if (script.parentNode) {
+
+      script.parentNode.removeChild(
+        script
+      );
+
+    }
+
+  }
+
+
+  window[callbackName] =
+    function(result) {
+
+      selesaiRequest(result);
+
+    };
+
+
+  const params =
+    new URLSearchParams();
+
+
+  Object.keys(parameter || {})
+    .forEach(function(key) {
+
+      params.append(
+        key,
+        parameter[key] ?? ""
+      );
+
+    });
+
+
+  params.append(
+    "callback",
+    callbackName
+  );
+
+
+  script.src =
+    API_URL +
+    "?" +
+    params.toString();
+
+
+  script.onerror =
+    function() {
+
+      selesaiRequest({
+
+        sukses: false,
+
+        pesan:
+          "Tidak dapat terhubung ke server Apps Script."
+
+      });
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+
+  setTimeout(
+    function() {
+
+      if (!selesai) {
+
+        selesaiRequest({
+
+          sukses: false,
+
+          pesan:
+            "Server Apps Script tidak merespons."
+
+        });
+
+      }
+
+    },
+    15000
+  );
+
+}
+
+
+/* ==========================================================
    LOGIN ADMIN
-===================================================== */
+========================================================== */
 
 function tampilkanLoginAdmin() {
 
@@ -146,12 +286,6 @@ function tampilkanLoginAdmin() {
   const panel =
     el("adminPanel");
 
-
-  /*
-   * Kita gunakan display langsung.
-   * Ini mencegah masalah CSS hidden
-   * seperti yang terjadi sebelumnya.
-   */
 
   if (loginBox) {
 
@@ -241,7 +375,7 @@ function loginAdmin() {
   panggilAPI(
 
     {
-      action: "login",
+      action: "loginAdmin",
       pin: pin
     },
 
@@ -273,15 +407,9 @@ function loginAdmin() {
         `;
 
 
-        /*
-         * LANGSUNG buka panel.
-         */
-
         tampilkanPanelAdmin();
 
-      }
-
-      else {
+      } else {
 
         message.innerHTML = `
 
@@ -309,9 +437,9 @@ function loginAdmin() {
 }
 
 
-/* =====================================================
+/* ==========================================================
    PANEL ADMIN
-===================================================== */
+========================================================== */
 
 function tampilkanPanelAdmin() {
 
@@ -322,21 +450,6 @@ function tampilkanPanelAdmin() {
     el("adminPanel");
 
 
-  console.log(
-    "ADMIN LOGIN BOX:",
-    loginBox
-  );
-
-  console.log(
-    "ADMIN PANEL:",
-    panel
-  );
-
-
-  /*
-   * Login benar-benar disembunyikan.
-   */
-
   if (loginBox) {
 
     loginBox.style.display =
@@ -344,10 +457,6 @@ function tampilkanPanelAdmin() {
 
   }
 
-
-  /*
-   * Panel benar-benar ditampilkan.
-   */
 
   if (panel) {
 
@@ -361,144 +470,14 @@ function tampilkanPanelAdmin() {
   }
 
 
-  /*
-   * Ambil data guru.
-   */
-
   muatDaftarGuru();
 
 }
 
 
-/* =====================================================
-   API JSONP
-===================================================== */
-
-function panggilAPI(
-  parameter,
-  callback
-) {
-
-  const callbackName =
-    "absensiCallback_" +
-    Date.now() +
-    "_" +
-    Math.floor(
-      Math.random() * 99999
-    );
-
-
-  window[callbackName] =
-    function(result) {
-
-      try {
-
-        callback(result);
-
-      }
-
-      catch(error) {
-
-        console.error(
-          error
-        );
-
-      }
-
-      finally {
-
-        delete window[
-          callbackName
-        ];
-
-      }
-
-    };
-
-
-  const script =
-    document.createElement(
-      "script"
-    );
-
-
-  const params =
-    new URLSearchParams();
-
-
-  Object.keys(
-    parameter
-  ).forEach(
-    function(key) {
-
-      params.append(
-        key,
-        parameter[key]
-      );
-
-    }
-  );
-
-
-  params.append(
-    "callback",
-    callbackName
-  );
-
-
-  script.src =
-    API_URL +
-    "?" +
-    params.toString();
-
-
-  script.onerror =
-    function() {
-
-      delete window[
-        callbackName
-      ];
-
-
-      callback({
-
-        sukses: false,
-
-        pesan:
-          "Tidak dapat terhubung ke server Apps Script."
-
-      });
-
-    };
-
-
-  document.body.appendChild(
-    script
-  );
-
-
-  setTimeout(
-    function() {
-
-      if (
-        script.parentNode
-      ) {
-
-        script.parentNode
-          .removeChild(script);
-
-      }
-
-    },
-    15000
-  );
-
-}
-
-
-/* =====================================================
+/* ==========================================================
    DATA GURU
-===================================================== */
+========================================================== */
 
 function muatDaftarGuru() {
 
@@ -538,14 +517,37 @@ function muatDaftarGuru() {
       );
 
 
-      /*
-       * Backend getGuru()
-       * mengembalikan array.
-       */
+      let data = [];
+
 
       if (
-        !Array.isArray(result)
+        Array.isArray(result)
       ) {
+
+        data = result;
+
+      }
+
+      else if (
+        result &&
+        Array.isArray(result.data)
+      ) {
+
+        data = result.data;
+
+      }
+
+      else if (
+        result &&
+        Array.isArray(result.hasil)
+      ) {
+
+        data = result.hasil;
+
+      }
+
+
+      if (!Array.isArray(data)) {
 
         container.innerHTML = `
 
@@ -563,7 +565,7 @@ function muatDaftarGuru() {
 
 
       tampilkanDaftarGuru(
-        result
+        data
       );
 
     }
@@ -573,9 +575,9 @@ function muatDaftarGuru() {
 }
 
 
-/* =====================================================
-   TAMPILKAN GURU
-===================================================== */
+/* ==========================================================
+   TAMPILKAN DATA GURU
+========================================================== */
 
 function tampilkanDaftarGuru(
   data
@@ -583,6 +585,13 @@ function tampilkanDaftarGuru(
 
   const container =
     el("daftarGuru");
+
+
+  if (!container) {
+
+    return;
+
+  }
 
 
   const total =
@@ -594,21 +603,16 @@ function tampilkanDaftarGuru(
       function(guru) {
 
         return String(
-          guru.aktif
+          guru.aktif || ""
         ).toUpperCase() === "YA";
 
       }
     ).length;
 
 
-  const nonaktif =
-    total - aktif;
-
-
   if (el("totalGuru")) {
 
-    el("totalGuru")
-      .textContent =
+    el("totalGuru").textContent =
       total;
 
   }
@@ -616,8 +620,7 @@ function tampilkanDaftarGuru(
 
   if (el("guruAktif")) {
 
-    el("guruAktif")
-      .textContent =
+    el("guruAktif").textContent =
       aktif;
 
   }
@@ -625,9 +628,8 @@ function tampilkanDaftarGuru(
 
   if (el("guruNonaktif")) {
 
-    el("guruNonaktif")
-      .textContent =
-      nonaktif;
+    el("guruNonaktif").textContent =
+      total - aktif;
 
   }
 
@@ -657,14 +659,8 @@ function tampilkanDaftarGuru(
 
       const aktif =
         String(
-          guru.aktif
+          guru.aktif || ""
         ).toUpperCase() === "YA";
-
-
-      const status =
-        aktif
-          ? "🟢 Aktif"
-          : "🔴 Nonaktif";
 
 
       const statusBaru =
@@ -676,7 +672,6 @@ function tampilkanDaftarGuru(
       html += `
 
         <div class="guru-item">
-
 
           <div class="guru-name">
 
@@ -696,9 +691,7 @@ function tampilkanDaftarGuru(
             ${
               guru.nip
                 ? " • NIP " +
-                  escapeHtml(
-                    guru.nip
-                  )
+                  escapeHtml(guru.nip)
                 : ""
             }
 
@@ -708,7 +701,7 @@ function tampilkanDaftarGuru(
           <div class="guru-code">
 
             ${escapeHtml(
-              guru.kodeQR
+              guru.kodeQR || ""
             )}
 
           </div>
@@ -716,20 +709,24 @@ function tampilkanDaftarGuru(
 
           <div class="guru-status">
 
-            ${status}
+            ${
+              aktif
+                ? "🟢 Aktif"
+                : "🔴 Nonaktif"
+            }
 
           </div>
 
 
           <div class="guru-actions">
 
-
             <button
               class="qr-button"
               onclick="tampilkanQR(
                 '${escapeJs(guru.kodeQR)}',
                 '${escapeJs(guru.nama)}'
-              )">
+              )"
+            >
 
               📷 QR
 
@@ -741,7 +738,8 @@ function tampilkanDaftarGuru(
               onclick="ubahStatus(
                 '${escapeJs(guru.kodeQR)}',
                 '${statusBaru}'
-              )">
+              )"
+            >
 
               ${
                 aktif
@@ -750,7 +748,6 @@ function tampilkanDaftarGuru(
               }
 
             </button>
-
 
           </div>
 
@@ -768,55 +765,37 @@ function tampilkanDaftarGuru(
 }
 
 
-/* =====================================================
-   ESCAPE JAVASCRIPT
-===================================================== */
-
-function escapeJs(text) {
-
-  return String(
-    text ?? ""
-  )
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/\r/g, "")
-    .replace(/\n/g, "\\n");
-
-}
-
-
-/* =====================================================
+/* ==========================================================
    TAMBAH GURU
-===================================================== */
+========================================================== */
 
 function simpanGuru() {
 
   const nip =
-    el("guruNip")
-      .value
-      .trim();
+    el("guruNip")?.value.trim() || "";
 
 
   const nama =
-    el("guruNama")
-      .value
-      .trim();
+    el("guruNama")?.value.trim() || "";
 
 
   const jabatan =
-    el("guruJabatan")
-      .value
-      .trim();
+    el("guruJabatan")?.value.trim() || "";
 
 
   const jp =
-    el("guruJP")
-      .value
-      .trim();
+    el("guruJP")?.value.trim() || "";
 
 
   const message =
     el("tambahGuruMessage");
+
+
+  if (!message) {
+
+    return;
+
+  }
 
 
   if (!nama) {
@@ -853,9 +832,7 @@ function simpanGuru() {
   }
 
 
-  if (
-    Number(jp) < 0
-  ) {
+  if (Number(jp) < 0) {
 
     message.innerHTML = `
 
@@ -921,7 +898,7 @@ function simpanGuru() {
 
             <strong>
               ${escapeHtml(
-                result.nama
+                result.nama || nama
               )}
             </strong>
 
@@ -929,9 +906,8 @@ function simpanGuru() {
 
             JP:
             ${escapeHtml(
-              result.jp
+              result.jp ?? jp
             )}
-
             JP
 
             <br><br>
@@ -941,7 +917,7 @@ function simpanGuru() {
             <strong>
 
               ${escapeHtml(
-                result.kodeQR
+                result.kodeQR || ""
               )}
 
             </strong>
@@ -951,37 +927,45 @@ function simpanGuru() {
         `;
 
 
-        el("guruNip").value =
-          "";
+        [
+          "guruNip",
+          "guruNama",
+          "guruJabatan",
+          "guruJP"
+        ]
+        .forEach(
+          function(id) {
 
-        el("guruNama").value =
-          "";
+            if (el(id)) {
 
-        el("guruJabatan").value =
-          "";
+              el(id).value = "";
 
-        el("guruJP").value =
-          "";
+            }
+
+          }
+        );
 
 
         muatDaftarGuru();
 
 
-        setTimeout(
-          function() {
+        if (result.kodeQR) {
 
-            tampilkanQR(
-              result.kodeQR,
-              result.nama
-            );
+          setTimeout(
+            function() {
 
-          },
-          300
-        );
+              tampilkanQR(
+                result.kodeQR,
+                result.nama || nama
+              );
 
-      }
+            },
+            300
+          );
 
-      else {
+        }
+
+      } else {
 
         message.innerHTML = `
 
@@ -1008,24 +992,21 @@ function simpanGuru() {
 
 }
 
-/* =====================================================
-   UBAH STATUS GURU
-===================================================== */
+
+/* ==========================================================
+   UBAH STATUS
+========================================================== */
 
 function ubahStatus(
   kodeQR,
   status
 ) {
 
-  const pertanyaan =
-    status === "YA"
-      ? "Aktifkan guru ini?"
-      : "Nonaktifkan guru ini?";
-
-
   if (
     !confirm(
-      pertanyaan
+      status === "YA"
+        ? "Aktifkan guru ini?"
+        : "Nonaktifkan guru ini?"
     )
   ) {
 
@@ -1037,9 +1018,12 @@ function ubahStatus(
   panggilAPI(
 
     {
-      action: "ubahStatus",
+      action: "ubahStatusGuru",
+
       kodeQR: kodeQR,
+
       status: status
+
     },
 
     function(result) {
@@ -1051,9 +1035,7 @@ function ubahStatus(
 
         muatDaftarGuru();
 
-      }
-
-      else {
+      } else {
 
         alert(
           result &&
@@ -1071,9 +1053,9 @@ function ubahStatus(
 }
 
 
-/* =====================================================
-   QR CODE
-===================================================== */
+/* ==========================================================
+   QR GURU
+========================================================== */
 
 function tampilkanQR(
   kodeQR,
@@ -1111,7 +1093,6 @@ function tampilkanQR(
 
     <div class="qr-box">
 
-
       <h2>
         QR GURU
       </h2>
@@ -1128,7 +1109,8 @@ function tampilkanQR(
 
       <img
         src="${qrURL}"
-        alt="QR Guru">
+        alt="QR Guru"
+      >
 
 
       <div class="qr-code-text">
@@ -1146,7 +1128,8 @@ function tampilkanQR(
           '${escapeJs(kodeQR)}',
           '${escapeJs(nama)}',
           '${escapeJs(qrURL)}'
-        )">
+        )"
+      >
 
         🖨️ CETAK QR
 
@@ -1158,12 +1141,12 @@ function tampilkanQR(
 
       <button
         class="danger-button"
-        onclick="tutupQR()">
+        onclick="tutupQR()"
+      >
 
         TUTUP
 
       </button>
-
 
     </div>
 
@@ -1176,10 +1159,6 @@ function tampilkanQR(
 
 }
 
-
-/* =====================================================
-   TUTUP QR
-===================================================== */
 
 function tutupQR() {
 
@@ -1195,10 +1174,6 @@ function tutupQR() {
 
 }
 
-
-/* =====================================================
-   CETAK QR
-===================================================== */
 
 function cetakQR(
   kodeQR,
@@ -1232,40 +1207,36 @@ function cetakQR(
 
     <head>
 
-      <title>
-        QR Guru
-      </title>
-
+      <title>QR Guru</title>
 
       <style>
 
         body {
-          font-family:Arial;
-          text-align:center;
-          padding:30px;
+          font-family: Arial;
+          text-align: center;
+          padding: 30px;
         }
 
         h1 {
-          color:#075c43;
+          color: #075c43;
         }
 
         img {
-          width:350px;
-          height:350px;
+          width: 350px;
+          height: 350px;
         }
 
         .kode {
-          font-size:24px;
-          font-family:monospace;
-          font-weight:bold;
-          letter-spacing:4px;
-          margin:15px;
+          font-size: 24px;
+          font-family: monospace;
+          font-weight: bold;
+          letter-spacing: 4px;
+          margin: 15px;
         }
 
       </style>
 
     </head>
-
 
     <body>
 
@@ -1282,28 +1253,29 @@ function cetakQR(
       </h3>
 
       <img
-        src="${qrURL}">
+        src="${qrURL}"
+      >
 
       <div class="kode">
-        ${escapeHtml(kodeQR)}
-      </div>
 
+        ${escapeHtml(kodeQR)}
+
+      </div>
 
       <script>
 
-        window.onload =
-          function() {
+        window.onload = function() {
 
-            setTimeout(
-              function() {
+          setTimeout(
+            function() {
 
-                window.print();
+              window.print();
 
-              },
-              700
-            );
+            },
+            700
+          );
 
-          };
+        };
 
       <\/script>
 
@@ -1319,9 +1291,9 @@ function cetakQR(
 }
 
 
-/* =====================================================
+/* ==========================================================
    SCANNER QR
-===================================================== */
+========================================================== */
 
 async function mulaiScan() {
 
@@ -1339,17 +1311,27 @@ async function mulaiScan() {
   const reader =
     el("qr-reader");
 
-
   const scannerContent =
     el("scannerContent");
-
 
   const batal =
     el("batalScanButton");
 
-
   const hasil =
     el("hasilAbsensi");
+
+
+  if (
+    !reader ||
+    !scannerContent
+  ) {
+
+    sedangScan =
+      false;
+
+    return;
+
+  }
 
 
   if (hasil) {
@@ -1371,9 +1353,13 @@ async function mulaiScan() {
     .remove("hidden");
 
 
-  batal
-    .classList
-    .remove("hidden");
+  if (batal) {
+
+    batal.classList.remove(
+      "hidden"
+    );
+
+  }
 
 
   try {
@@ -1412,10 +1398,6 @@ async function mulaiScan() {
 
     }
 
-
-    /*
-     * Prioritas kamera belakang.
-     */
 
     let kamera =
       cameras.find(
@@ -1459,17 +1441,15 @@ async function mulaiScan() {
                 Math.min(
                   width,
                   height
-                ) * .72
+                ) * 0.72
               );
 
 
             return {
 
-              width:
-                size,
+              width: size,
 
-              height:
-                size
+              height: size
 
             };
 
@@ -1478,7 +1458,6 @@ async function mulaiScan() {
         aspectRatio: 1
 
       },
-
 
       function(decodedText) {
 
@@ -1502,13 +1481,9 @@ async function mulaiScan() {
 
       },
 
-
       function(errorMessage) {
 
-        /*
-         * Tidak perlu menampilkan
-         * error scan biasa.
-         */
+        // Abaikan error scan sementara.
 
       }
 
@@ -1533,9 +1508,13 @@ async function mulaiScan() {
       .add("hidden");
 
 
-    batal
-      .classList
-      .add("hidden");
+    if (batal) {
+
+      batal.classList.add(
+        "hidden"
+      );
+
+    }
 
 
     scannerContent
@@ -1552,13 +1531,12 @@ async function mulaiScan() {
 }
 
 
-/* =====================================================
-   HENTIKAN SCANNER
-===================================================== */
-
 async function hentikanScanner() {
 
   if (!qrScanner) {
+
+    sedangScan =
+      false;
 
     return;
 
@@ -1573,9 +1551,7 @@ async function hentikanScanner() {
 
   catch(error) {
 
-    console.log(
-      error
-    );
+    console.log(error);
 
   }
 
@@ -1588,9 +1564,7 @@ async function hentikanScanner() {
 
   catch(error) {
 
-    console.log(
-      error
-    );
+    console.log(error);
 
   }
 
@@ -1605,47 +1579,43 @@ async function hentikanScanner() {
 }
 
 
-/* =====================================================
-   BATAL SCAN
-===================================================== */
-
 function batalScan() {
 
   hentikanScanner();
 
 
-  const reader =
-    el("qr-reader");
+  if (el("qr-reader")) {
+
+    el("qr-reader")
+      .classList
+      .add("hidden");
+
+  }
 
 
-  const batal =
-    el("batalScanButton");
+  if (el("batalScanButton")) {
+
+    el("batalScanButton")
+      .classList
+      .add("hidden");
+
+  }
 
 
-  const scannerContent =
-    el("scannerContent");
+  if (el("scannerContent")) {
 
+    el("scannerContent")
+      .classList
+      .remove("hidden");
 
-  reader
-    .classList
-    .add("hidden");
-
-
-  batal
-    .classList
-    .add("hidden");
-
-
-  scannerContent
-    .classList
-    .remove("hidden");
+  }
 
 }
 
 
-/* =====================================================
-   PROSES QR
-===================================================== */
+/* ==========================================================
+   PROSES ABSENSI
+========================================================== */
 
 function prosesKodeQR(
   kodeQR
@@ -1653,6 +1623,13 @@ function prosesKodeQR(
 
   const hasil =
     el("hasilAbsensi");
+
+
+  if (!hasil) {
+
+    return;
+
+  }
 
 
   hasil
@@ -1663,17 +1640,23 @@ function prosesKodeQR(
   hasil.innerHTML = `
 
     <div class="result-icon">
+
       ⏳
+
     </div>
 
     <h2>
+
       MEMERIKSA ABSENSI
+
     </h2>
 
     <div class="result-info">
 
       <span>
+
         Mohon tunggu...
+
       </span>
 
     </div>
@@ -1685,7 +1668,9 @@ function prosesKodeQR(
 
     {
       action: "absensi",
+
       kodeQR: kodeQR
+
     },
 
     function(result) {
@@ -1701,10 +1686,6 @@ function prosesKodeQR(
 }
 
 
-/* =====================================================
-   HASIL ABSENSI
-===================================================== */
-
 function tampilkanHasilAbsensi(
   result
 ) {
@@ -1713,9 +1694,24 @@ function tampilkanHasilAbsensi(
     el("hasilAbsensi");
 
 
+  if (!hasil) {
+
+    return;
+
+  }
+
+
   hasil
     .classList
     .remove("hidden");
+
+
+  hasil.style.background =
+    "";
+
+
+  hasil.style.color =
+    "";
 
 
   if (
@@ -1726,34 +1722,47 @@ function tampilkanHasilAbsensi(
     hasil.innerHTML = `
 
       <div class="result-icon">
+
         ✓
+
       </div>
 
       <h2>
+
         ABSENSI BERHASIL
+
       </h2>
 
       <div class="result-info">
 
         <strong>
+
           ${escapeHtml(
             result.nama || "Guru"
           )}
+
         </strong>
 
         <span>
+
           ${escapeHtml(
             result.jabatan || "Guru"
           )}
+
         </span>
 
         <span>
+
           Jam Masuk:
+
           <strong>
+
             ${escapeHtml(
               result.jam || "-"
             )}
+
           </strong>
+
         </span>
 
       </div>
@@ -1761,7 +1770,8 @@ function tampilkanHasilAbsensi(
 
       <button
         class="primary-button"
-        onclick="suaraBerhasil()">
+        onclick="suaraBerhasil()"
+      >
 
         🔊 ABSENSI BERHASIL
 
@@ -1773,7 +1783,8 @@ function tampilkanHasilAbsensi(
 
       <button
         class="primary-button"
-        onclick="mulaiScan()">
+        onclick="mulaiScan()"
+      >
 
         📷 SCAN LAGI
 
@@ -1798,26 +1809,35 @@ function tampilkanHasilAbsensi(
     hasil.innerHTML = `
 
       <div class="result-icon">
+
         ✓
+
       </div>
 
       <h2>
+
         SUDAH ABSEN
+
       </h2>
 
       <div class="result-info">
 
         <strong>
+
           ${escapeHtml(
             result.nama || "Guru"
           )}
+
         </strong>
 
         <span>
+
           Jam:
+
           ${escapeHtml(
             result.jam || "-"
           )}
+
         </span>
 
       </div>
@@ -1825,7 +1845,8 @@ function tampilkanHasilAbsensi(
 
       <button
         class="primary-button"
-        onclick="mulaiScan()">
+        onclick="mulaiScan()"
+      >
 
         📷 SCAN LAGI
 
@@ -1852,16 +1873,19 @@ function tampilkanHasilAbsensi(
 }
 
 
-/* =====================================================
-   ERROR ABSENSI
-===================================================== */
-
 function tampilError(
   pesan
 ) {
 
   const hasil =
     el("hasilAbsensi");
+
+
+  if (!hasil) {
+
+    return;
+
+  }
 
 
   hasil
@@ -1881,9 +1905,8 @@ function tampilError(
 
     <div
       class="result-icon"
-      style="
-        background:#dc3545;
-      ">
+      style="background:#dc3545"
+    >
 
       !
 
@@ -1891,7 +1914,9 @@ function tampilError(
 
 
     <h2>
+
       ABSENSI GAGAL
+
     </h2>
 
 
@@ -1910,7 +1935,8 @@ function tampilError(
 
     <button
       class="primary-button"
-      onclick="mulaiScan()">
+      onclick="mulaiScan()"
+    >
 
       📷 COBA LAGI
 
@@ -1921,10 +1947,6 @@ function tampilError(
 }
 
 
-/* =====================================================
-   ERROR KAMERA
-===================================================== */
-
 function tampilErrorScanner(
   pesan
 ) {
@@ -1933,27 +1955,37 @@ function tampilErrorScanner(
     el("qr-reader");
 
 
-  reader.classList.add(
-    "hidden"
-  );
+  if (reader) {
+
+    reader.classList.add(
+      "hidden"
+    );
+
+  }
 
 
   const hasil =
     el("hasilAbsensi");
 
 
-  hasil.classList.remove(
-    "hidden"
-  );
+  if (!hasil) {
+
+    return;
+
+  }
+
+
+  hasil
+    .classList
+    .remove("hidden");
 
 
   hasil.innerHTML = `
 
     <div
       class="result-icon"
-      style="
-        background:#dc3545;
-      ">
+      style="background:#dc3545"
+    >
 
       !
 
@@ -1961,7 +1993,9 @@ function tampilErrorScanner(
 
 
     <h2>
+
       KAMERA TIDAK DAPAT DIBUKA
+
     </h2>
 
 
@@ -1981,7 +2015,8 @@ function tampilErrorScanner(
 
     <button
       class="primary-button"
-      onclick="mulaiScan()">
+      onclick="mulaiScan()"
+    >
 
       📷 COBA LAGI
 
@@ -1992,13 +2027,18 @@ function tampilErrorScanner(
 }
 
 
-/* =====================================================
-   SUARA
-===================================================== */
-
 function suaraBerhasil() {
 
   try {
+
+    if (
+      !window.speechSynthesis
+    ) {
+
+      return;
+
+    }
+
 
     window.speechSynthesis.cancel();
 
@@ -2021,47 +2061,45 @@ function suaraBerhasil() {
       1;
 
 
-    window.speechSynthesis
-      .speak(
-        suara
-      );
+    window.speechSynthesis.speak(
+      suara
+    );
 
   }
 
   catch(error) {
 
-    console.log(
-      error
-    );
+    console.log(error);
 
   }
 
 }
 
 
-/* =====================================================
-   REKAP
-===================================================== */
-
-// ==========================================================
-// REKAP KEHADIRAN GURU
-// ==========================================================
+/* ==========================================================
+   REKAP BULANAN
+========================================================== */
 
 function tampilkanRekap() {
 
   const bulan =
-    el("bulanRekap").value;
+    el("bulanRekap")?.value || "";
+
 
   const hasil =
     el("hasilRekap");
+
 
   const message =
     el("rekapMessage");
 
 
-  // ------------------------------------------
-  // CEK BULAN
-  // ------------------------------------------
+  if (!hasil) {
+
+    return;
+
+  }
+
 
   if (!bulan) {
 
@@ -2074,24 +2112,24 @@ function tampilkanRekap() {
   }
 
 
-  // ------------------------------------------
-  // TAMPILKAN LOADING
-  // ------------------------------------------
-
   hasil.innerHTML = `
+
     <div class="loading">
 
       ⏳ Mengambil data rekap...
 
     </div>
+
   `;
 
-  message.innerHTML = "";
 
+  if (message) {
 
-  // ------------------------------------------
-  // AMBIL DATA ABSENSI
-  // ------------------------------------------
+    message.innerHTML =
+      "";
+
+  }
+
 
   panggilAPI(
 
@@ -2120,12 +2158,12 @@ function tampilkanRekap() {
           <div class="admin-message-error">
 
             ✕ ${
-              result &&
-              result.pesan
-                ? escapeHtml(
-                    result.pesan
-                  )
-                : "Gagal mengambil data rekap."
+              escapeHtml(
+                result &&
+                result.pesan
+                  ? result.pesan
+                  : "Gagal mengambil data rekap."
+              )
             }
 
           </div>
@@ -2137,14 +2175,24 @@ function tampilkanRekap() {
       }
 
 
-      // --------------------------------------
-      // DATA ABSENSI
-      // --------------------------------------
-
       const dataAbsensi =
-        result.data ||
-        result.hasil ||
-        [];
+
+        Array.isArray(
+          result.data
+        )
+          ? result.data
+
+          : Array.isArray(
+              result.hasil
+            )
+            ? result.hasil
+
+            : Array.isArray(
+                result
+              )
+              ? result
+
+              : [];
 
 
       if (
@@ -2168,21 +2216,551 @@ function tampilkanRekap() {
       }
 
 
-      // --------------------------------------
-      // AMBIL DATA GURU UNTUK JP
-      // --------------------------------------
+      if (
+        dataAbsensi.length === 0
+      ) {
+
+        hasil.innerHTML = `
+
+          <div class="loading">
+
+            Belum ada data absensi pada bulan ini.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      /*
+       * =====================================================
+       * FALLBACK JP
+       *
+       * Jika Kode.gs sudah mengirim row.jp,
+       * langsung gunakan row.jp.
+       *
+       * Jika belum, ambil dari getGuru().
+       * =====================================================
+       */
+
+      function buatTabel(
+        daftarGuru
+      ) {
+
+        const jpGuru = {};
+
+
+        if (
+          Array.isArray(
+            daftarGuru
+          )
+        ) {
+
+          daftarGuru.forEach(
+            function(guru) {
+
+              const nip =
+                String(
+                  guru.nip || ""
+                ).trim();
+
+
+              const nama =
+                String(
+                  guru.nama || ""
+                )
+                  .trim()
+                  .toLowerCase();
+
+
+              const jp =
+                Number(
+                  guru.jp ?? 0
+                ) || 0;
+
+
+              if (nip) {
+
+                jpGuru[
+                  "nip:" + nip
+                ] = jp;
+
+              }
+
+
+              if (nama) {
+
+                jpGuru[
+                  "nama:" + nama
+                ] = jp;
+
+              }
+
+            }
+          );
+
+        }
+
+
+        const rekapGuru = {};
+
+
+        dataAbsensi.forEach(
+          function(row) {
+
+            const nama =
+              String(
+                row.nama || "-"
+              ).trim();
+
+
+            const nip =
+              String(
+                row.nip || ""
+              ).trim();
+
+
+            const key =
+              nip
+                ? "nip:" + nip
+                : "nama:" +
+                  nama.toLowerCase();
+
+
+            /*
+             * UTAMAKAN JP DARI BACKEND
+             */
+
+            let jp = 0;
+
+
+            if (
+              row.jp !== undefined &&
+              row.jp !== null &&
+              String(
+                row.jp
+              ).trim() !== ""
+            ) {
+
+              jp =
+                Number(
+                  row.jp
+                ) || 0;
+
+            }
+
+            else if (
+              jpGuru[key] !== undefined
+            ) {
+
+              jp =
+                Number(
+                  jpGuru[key]
+                ) || 0;
+
+            }
+
+            else if (
+              jpGuru[
+                "nama:" +
+                nama.toLowerCase()
+              ] !== undefined
+            ) {
+
+              jp =
+                Number(
+                  jpGuru[
+                    "nama:" +
+                    nama.toLowerCase()
+                  ]
+                ) || 0;
+
+            }
+
+
+            if (!rekapGuru[key]) {
+
+              rekapGuru[key] = {
+
+                nama:
+                  nama,
+
+                nip:
+                  nip,
+
+                jabatan:
+                  String(
+                    row.jabatan || ""
+                  ),
+
+                jp:
+                  jp,
+
+                hadir:
+                  0,
+
+                terlambat:
+                  0,
+
+                tidak:
+                  0
+
+              };
+
+            }
+
+
+            /*
+             * Jika baris berikutnya
+             * punya JP, gunakan JP tersebut.
+             */
+
+            if (
+              row.jp !== undefined &&
+              row.jp !== null &&
+              String(
+                row.jp
+              ).trim() !== ""
+            ) {
+
+              rekapGuru[key].jp =
+                Number(
+                  row.jp
+                ) || 0;
+
+            }
+
+
+            const status =
+              String(
+                row.status || ""
+              )
+                .trim()
+                .toUpperCase();
+
+
+            if (
+              status === "HADIR"
+            ) {
+
+              rekapGuru[key]
+                .hadir++;
+
+            }
+
+            else if (
+              status === "TERLAMBAT"
+            ) {
+
+              rekapGuru[key]
+                .terlambat++;
+
+            }
+
+            else if (
+              status === "TIDAK"
+            ) {
+
+              rekapGuru[key]
+                .tidak++;
+
+            }
+
+          }
+        );
+
+
+        const daftarRekap =
+          Object.values(
+            rekapGuru
+          );
+
+
+        if (
+          daftarRekap.length === 0
+        ) {
+
+          hasil.innerHTML = `
+
+            <div class="loading">
+
+              Belum ada data absensi pada bulan ini.
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        let html = `
+
+          <div
+            class="rekap-summary"
+            style="
+              margin-bottom:15px;
+              font-weight:bold;
+              color:#087f5b;
+            "
+          >
+
+            📊 Rekap Kehadiran
+            ${escapeHtml(bulan)}
+
+          </div>
+
+
+          <div
+            style="overflow-x:auto;"
+          >
+
+            <table
+              class="rekap-table"
+            >
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    Nama
+                  </th>
+
+                  <th>
+                    JP/Hari
+                  </th>
+
+                  <th>
+                    Hadir
+                  </th>
+
+                  <th>
+                    Terlambat
+                  </th>
+
+                  <th>
+                    Tidak
+                  </th>
+
+                  <th>
+                    Total JP
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+        `;
+
+
+        daftarRekap.forEach(
+          function(row) {
+
+            const hadir =
+              Number(
+                row.hadir || 0
+              );
+
+
+            const terlambat =
+              Number(
+                row.terlambat || 0
+              );
+
+
+            const tidak =
+              Number(
+                row.tidak || 0
+              );
+
+
+            const jp =
+              Number(
+                row.jp || 0
+              );
+
+
+            /*
+             * HADIR + TERLAMBAT
+             * dianggap hari mengajar.
+             */
+
+            const hariDihitung =
+              hadir +
+              terlambat;
+
+
+            const totalJP =
+              hariDihitung *
+              jp;
+
+
+            html += `
+
+              <tr>
+
+                <td>
+
+                  <strong>
+
+                    ${escapeHtml(
+                      row.nama
+                    )}
+
+                  </strong>
+
+                  ${
+                    row.nip
+                      ? `
+                        <br>
+
+                        <small>
+
+                          NIP:
+                          ${escapeHtml(
+                            row.nip
+                          )}
+
+                        </small>
+                      `
+                      : ""
+                  }
+
+                </td>
+
+
+                <td>
+
+                  ${jp}
+
+                </td>
+
+
+                <td>
+
+                  <strong>
+
+                    ${hadir}
+
+                  </strong>
+
+                </td>
+
+
+                <td>
+
+                  ${terlambat}
+
+                </td>
+
+
+                <td>
+
+                  ${tidak}
+
+                </td>
+
+
+                <td>
+
+                  <strong
+                    style="
+                      color:#087f5b;
+                    "
+                  >
+
+                    ${totalJP}
+
+                  </strong>
+
+                </td>
+
+              </tr>
+
+            `;
+
+          }
+        );
+
+
+        html += `
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        `;
+
+
+        hasil.innerHTML =
+          html;
+
+      }
+
+
+      /*
+       * Kalau backend sudah mengirim JP,
+       * langsung tampilkan.
+       */
+
+      const backendMengirimJP =
+        dataAbsensi.some(
+          function(row) {
+
+            return (
+
+              row &&
+
+              row.jp !== undefined &&
+
+              row.jp !== null &&
+
+              String(
+                row.jp
+              ).trim() !== ""
+
+            );
+
+          }
+        );
+
+
+      if (
+        backendMengirimJP
+      ) {
+
+        buatTabel([]);
+
+        return;
+
+      }
+
+
+      /*
+       * Fallback:
+       * ambil data guru.
+       */
 
       panggilAPI(
 
         {
           action: "getGuru"
-
         },
 
         function(guruResult) {
 
           console.log(
-            "DATA GURU:",
+            "DATA GURU UNTUK JP:",
             guruResult
           );
 
@@ -2191,6 +2769,17 @@ function tampilkanRekap() {
 
 
           if (
+            Array.isArray(
+              guruResult
+            )
+          ) {
+
+            daftarGuru =
+              guruResult;
+
+          }
+
+          else if (
             guruResult &&
             Array.isArray(
               guruResult.data
@@ -2215,426 +2804,9 @@ function tampilkanRekap() {
           }
 
 
-          // ------------------------------------
-          // BUAT MAP JP BERDASARKAN NAMA / NIP
-          // ------------------------------------
-
-          const jpGuru = {};
-
-
-          daftarGuru.forEach(
-            function(guru) {
-
-              const nama =
-                String(
-                  guru.nama || ""
-                )
-                .trim()
-                .toLowerCase();
-
-
-              const nip =
-                String(
-                  guru.nip || ""
-                )
-                .trim();
-
-
-              const jp =
-                Number(
-                  guru.jp || 0
-                );
-
-
-              if (nama) {
-
-                jpGuru[
-                  "nama:" + nama
-                ] = jp;
-
-              }
-
-
-              if (nip) {
-
-                jpGuru[
-                  "nip:" + nip
-                ] = jp;
-
-              }
-
-            }
+          buatTabel(
+            daftarGuru
           );
-
-
-          // ------------------------------------
-          // KELOMPOKKAN DATA ABSENSI
-          // ------------------------------------
-
-          const rekapGuru = {};
-
-
-          dataAbsensi.forEach(
-            function(row) {
-
-              const nama =
-                String(
-                  row.nama || "-"
-                )
-                .trim();
-
-
-              const nip =
-                String(
-                  row.nip || ""
-                )
-                .trim();
-
-
-              const key =
-                nip
-                  ? "nip:" + nip
-                  : "nama:" +
-                    nama
-                      .toLowerCase();
-
-
-              if (
-                !rekapGuru[key]
-              ) {
-
-                let jp = 0;
-
-
-                // Cari berdasarkan NIP
-                if (
-                  nip &&
-                  jpGuru[
-                    "nip:" + nip
-                  ] !== undefined
-                ) {
-
-                  jp =
-                    Number(
-                      jpGuru[
-                        "nip:" + nip
-                      ]
-                    );
-
-                }
-
-                // Jika NIP tidak ditemukan,
-                // cari berdasarkan nama
-                else if (
-                  jpGuru[
-                    "nama:" +
-                    nama.toLowerCase()
-                  ] !== undefined
-                ) {
-
-                  jp =
-                    Number(
-                      jpGuru[
-                        "nama:" +
-                        nama.toLowerCase()
-                      ]
-                    );
-
-                }
-
-
-                rekapGuru[key] = {
-
-                  nama:
-                    nama,
-
-                  nip:
-                    nip,
-
-                  jabatan:
-                    String(
-                      row.jabatan || ""
-                    ),
-
-                  jp:
-                    jp,
-
-                  hadir:
-                    0,
-
-                  terlambat:
-                    0,
-
-                  tidak:
-                    0
-
-                };
-
-              }
-
-
-              const guru =
-                rekapGuru[key];
-
-
-              const status =
-                String(
-                  row.status || ""
-                )
-                .trim()
-                .toUpperCase();
-
-
-              if (
-                status === "HADIR"
-              ) {
-
-                guru.hadir++;
-
-              }
-
-              else if (
-                status === "TERLAMBAT"
-              ) {
-
-                guru.terlambat++;
-
-              }
-
-              else if (
-                status === "TIDAK"
-              ) {
-
-                guru.tidak++;
-
-              }
-
-            }
-          );
-
-
-          // ------------------------------------
-          // JIKA TIDAK ADA DATA
-          // ------------------------------------
-
-          const daftarRekap =
-            Object.values(
-              rekapGuru
-            );
-
-
-          if (
-            daftarRekap.length === 0
-          ) {
-
-            hasil.innerHTML = `
-
-              <div class="loading">
-
-                Belum ada data absensi
-                pada bulan ini.
-
-              </div>
-
-            `;
-
-            return;
-
-          }
-
-
-          // ------------------------------------
-          // BUAT TABEL
-          // ------------------------------------
-
-          let html = `
-
-            <div
-              class="rekap-summary"
-              style="
-                margin-bottom:15px;
-                font-weight:bold;
-                color:#087f5b;
-              "
-            >
-
-              📊 Rekap Kehadiran
-              ${escapeHtml(bulan)}
-
-            </div>
-
-
-            <div
-              style="
-                overflow-x:auto;
-              "
-            >
-
-              <table
-                class="rekap-table"
-              >
-
-                <thead>
-
-                  <tr>
-
-                    <th>Nama</th>
-
-                    <th>JP/Hari</th>
-
-                    <th>Hadir</th>
-
-                    <th>Terlambat</th>
-
-                    <th>Tidak</th>
-
-                    <th>Total JP</th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody>
-          `;
-
-
-          // ------------------------------------
-          // ISI TABEL
-          // ------------------------------------
-
-          daftarRekap.forEach(
-            function(row) {
-
-              const hadir =
-                Number(
-                  row.hadir || 0
-                );
-
-
-              const terlambat =
-                Number(
-                  row.terlambat || 0
-                );
-
-
-              const tidak =
-                Number(
-                  row.tidak || 0
-                );
-
-
-              const jp =
-                Number(
-                  row.jp || 0
-                );
-
-
-              // HADIR + TERLAMBAT
-              const hariDihitung =
-                hadir +
-                terlambat;
-
-
-              // TOTAL JP
-              const totalJP =
-                hariDihitung *
-                jp;
-
-
-              html += `
-
-                <tr>
-
-                  <td>
-
-                    <strong>
-                      ${escapeHtml(
-                        row.nama
-                      )}
-                    </strong>
-
-                    ${
-                      row.nip
-                        ? `
-                          <br>
-                          <small>
-                            NIP:
-                            ${escapeHtml(
-                              row.nip
-                            )}
-                          </small>
-                        `
-                        : ""
-                    }
-
-                  </td>
-
-
-                  <td>
-
-                    ${jp}
-
-                  </td>
-
-
-                  <td>
-
-                    <strong>
-                      ${hadir}
-                    </strong>
-
-                  </td>
-
-
-                  <td>
-
-                    ${terlambat}
-
-                  </td>
-
-
-                  <td>
-
-                    ${tidak}
-
-                  </td>
-
-
-                  <td>
-
-                    <strong
-                      style="
-                        color:#087f5b;
-                      "
-                    >
-
-                      ${totalJP}
-
-                    </strong>
-
-                  </td>
-
-                </tr>
-
-              `;
-
-            }
-          );
-
-
-          html += `
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          `;
-
-
-          hasil.innerHTML =
-            html;
 
         }
 
@@ -2646,14 +2818,19 @@ function tampilkanRekap() {
 
 }
 
-// ==========================================================
-// EXPORT EXCEL
-// ==========================================================
+
+/* ==========================================================
+   EXPORT EXCEL
+========================================================== */
 
 function exportExcel() {
 
   const bulan =
-    el("bulanRekap").value;
+    el("bulanRekap")?.value || "";
+
+
+  const message =
+    el("rekapMessage");
 
 
   if (!bulan) {
@@ -2667,22 +2844,28 @@ function exportExcel() {
   }
 
 
-  const message =
-    el("rekapMessage");
+  if (message) {
 
+    message.innerHTML = `
 
-  message.innerHTML = `
-    <div class="loading">
-      ⏳ Menyiapkan file Excel...
-    </div>
-  `;
+      <div class="loading">
+
+        ⏳ Menyiapkan file Excel...
+
+      </div>
+
+    `;
+
+  }
 
 
   panggilAPI(
 
     {
       action: "exportExcel",
+
       bulan: bulan
+
     },
 
     function(result) {
@@ -2699,40 +2882,61 @@ function exportExcel() {
         result.url
       ) {
 
-        message.innerHTML = `
-          <div class="admin-message-success">
+        if (message) {
 
-            ✓ File Excel berhasil dibuat.
+          message.innerHTML = `
 
-            <br><br>
+            <div class="admin-message-success">
 
-            <a
-              href="${result.url}"
-              target="_blank"
-              class="primary-button"
-              style="
-                display:block;
-                text-align:center;
-                text-decoration:none;
-              "
-            >
-              📊 BUKA / DOWNLOAD EXCEL
-            </a>
+              ✓ File Excel berhasil dibuat.
 
-          </div>
-        `;
+              <br><br>
 
-      }
+              <a
+                href="${escapeHtml(
+                  result.url
+                )}"
+                target="_blank"
+                class="primary-button"
+                style="
+                  display:block;
+                  text-align:center;
+                  text-decoration:none;
+                "
+              >
 
-      else {
+                📊 BUKA / DOWNLOAD EXCEL
 
-        message.innerHTML = `
-          <div class="admin-message-error">
+              </a>
 
-            ✕ Gagal membuat file Excel.
+            </div>
 
-          </div>
-        `;
+          `;
+
+        }
+
+      } else {
+
+        if (message) {
+
+          message.innerHTML = `
+
+            <div class="admin-message-error">
+
+              ✕ ${
+                escapeHtml(
+                  result &&
+                  result.pesan
+                    ? result.pesan
+                    : "Gagal membuat file Excel."
+                )
+              }
+
+            </div>
+
+          `;
+
+        }
 
       }
 
@@ -2743,14 +2947,18 @@ function exportExcel() {
 }
 
 
-// ==========================================================
-// EXPORT PDF
-// ==========================================================
+/* ==========================================================
+   EXPORT PDF
+========================================================== */
 
 function exportPDF() {
 
   const bulan =
-    el("bulanRekap").value;
+    el("bulanRekap")?.value || "";
+
+
+  const message =
+    el("rekapMessage");
 
 
   if (!bulan) {
@@ -2764,22 +2972,28 @@ function exportPDF() {
   }
 
 
-  const message =
-    el("rekapMessage");
+  if (message) {
 
+    message.innerHTML = `
 
-  message.innerHTML = `
-    <div class="loading">
-      ⏳ Menyiapkan file PDF...
-    </div>
-  `;
+      <div class="loading">
+
+        ⏳ Menyiapkan file PDF...
+
+      </div>
+
+    `;
+
+  }
 
 
   panggilAPI(
 
     {
       action: "exportPDF",
+
       bulan: bulan
+
     },
 
     function(result) {
@@ -2796,40 +3010,61 @@ function exportPDF() {
         result.url
       ) {
 
-        message.innerHTML = `
-          <div class="admin-message-success">
+        if (message) {
 
-            ✓ File PDF berhasil dibuat.
+          message.innerHTML = `
 
-            <br><br>
+            <div class="admin-message-success">
 
-            <a
-              href="${result.url}"
-              target="_blank"
-              class="primary-button"
-              style="
-                display:block;
-                text-align:center;
-                text-decoration:none;
-              "
-            >
-              📄 BUKA / DOWNLOAD PDF
-            </a>
+              ✓ File PDF berhasil dibuat.
 
-          </div>
-        `;
+              <br><br>
 
-      }
+              <a
+                href="${escapeHtml(
+                  result.url
+                )}"
+                target="_blank"
+                class="primary-button"
+                style="
+                  display:block;
+                  text-align:center;
+                  text-decoration:none;
+                "
+              >
 
-      else {
+                📄 BUKA / DOWNLOAD PDF
 
-        message.innerHTML = `
-          <div class="admin-message-error">
+              </a>
 
-            ✕ Gagal membuat file PDF.
+            </div>
 
-          </div>
-        `;
+          `;
+
+        }
+
+      } else {
+
+        if (message) {
+
+          message.innerHTML = `
+
+            <div class="admin-message-error">
+
+              ✕ ${
+                escapeHtml(
+                  result &&
+                  result.pesan
+                    ? result.pesan
+                    : "Gagal membuat file PDF."
+                )
+              }
+
+            </div>
+
+          `;
+
+        }
 
       }
 
@@ -2838,3 +3073,40 @@ function exportPDF() {
   );
 
 }
+
+
+/* ==========================================================
+   SAAT HALAMAN DIMUAT
+========================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    const bulan =
+      el("bulanRekap");
+
+
+    if (
+      bulan &&
+      !bulan.value
+    ) {
+
+      const sekarang =
+        new Date();
+
+
+      bulan.value =
+        sekarang.getFullYear() +
+        "-" +
+        String(
+          sekarang.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        );
+
+    }
+
+  }
+);
