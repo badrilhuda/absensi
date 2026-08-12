@@ -271,20 +271,22 @@ function loginAdmin() {
         result
       );
 
-      if (
-        result &&
-        result.sukses === true
-      ) {
+if (
+  result &&
+  result.sukses === true
+) {
 
-        adminSudahLogin = true;
+  adminSudahLogin = true;
 
-        message.innerHTML = `
-          <div class="admin-message-success">
-            ✓ Login berhasil.
-          </div>
-        `;
-            tampilkanPanelAdmin();
-      } else {
+  message.innerHTML = `
+    <div class="admin-message-success">
+      ✓ Login berhasil.
+    </div>
+  `;
+
+  tampilkanPanelAdmin();
+
+} else {
 
         message.innerHTML = `
           <div class="admin-message-error">
@@ -318,16 +320,32 @@ function tampilkanPanelAdmin() {
   const adminPanel =
     document.getElementById("adminPanel");
 
+
+  console.log("LOGIN BOX:", loginBox);
+  console.log("ADMIN PANEL:", adminPanel);
+
+
+  // Sembunyikan form login
   if (loginBox) {
-    loginBox.classList.add("hidden");
+
+    loginBox.style.display = "none";
+
   }
 
+
+  // Tampilkan panel admin
   if (adminPanel) {
+
+    adminPanel.style.display = "block";
+
     adminPanel.classList.remove("hidden");
+
   }
 
-  // Muat data guru setelah panel terbuka
+
+  // Ambil data guru
   muatDaftarGuru();
+
 }
 
 // ======================================================
