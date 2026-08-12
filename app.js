@@ -2307,3 +2307,196 @@ document.addEventListener(
 
   }
 );
+
+// ==========================================================
+// EXPORT EXCEL
+// ==========================================================
+
+function exportExcel() {
+
+  const bulan =
+    el("bulanRekap").value;
+
+
+  if (!bulan) {
+
+    alert(
+      "Silakan pilih bulan terlebih dahulu."
+    );
+
+    return;
+
+  }
+
+
+  const message =
+    el("rekapMessage");
+
+
+  message.innerHTML = `
+    <div class="loading">
+      ⏳ Menyiapkan file Excel...
+    </div>
+  `;
+
+
+  panggilAPI(
+
+    {
+      action: "exportExcel",
+      bulan: bulan
+    },
+
+    function(result) {
+
+      console.log(
+        "EXPORT EXCEL:",
+        result
+      );
+
+
+      if (
+        result &&
+        result.sukses === true &&
+        result.url
+      ) {
+
+        message.innerHTML = `
+          <div class="admin-message-success">
+
+            ✓ File Excel berhasil dibuat.
+
+            <br><br>
+
+            <a
+              href="${result.url}"
+              target="_blank"
+              class="primary-button"
+              style="
+                display:block;
+                text-align:center;
+                text-decoration:none;
+              "
+            >
+              📊 BUKA / DOWNLOAD EXCEL
+            </a>
+
+          </div>
+        `;
+
+      }
+
+      else {
+
+        message.innerHTML = `
+          <div class="admin-message-error">
+
+            ✕ Gagal membuat file Excel.
+
+          </div>
+        `;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+// ==========================================================
+// EXPORT PDF
+// ==========================================================
+
+function exportPDF() {
+
+  const bulan =
+    el("bulanRekap").value;
+
+
+  if (!bulan) {
+
+    alert(
+      "Silakan pilih bulan terlebih dahulu."
+    );
+
+    return;
+
+  }
+
+
+  const message =
+    el("rekapMessage");
+
+
+  message.innerHTML = `
+    <div class="loading">
+      ⏳ Menyiapkan file PDF...
+    </div>
+  `;
+
+
+  panggilAPI(
+
+    {
+      action: "exportPDF",
+      bulan: bulan
+    },
+
+    function(result) {
+
+      console.log(
+        "EXPORT PDF:",
+        result
+      );
+
+
+      if (
+        result &&
+        result.sukses === true &&
+        result.url
+      ) {
+
+        message.innerHTML = `
+          <div class="admin-message-success">
+
+            ✓ File PDF berhasil dibuat.
+
+            <br><br>
+
+            <a
+              href="${result.url}"
+              target="_blank"
+              class="primary-button"
+              style="
+                display:block;
+                text-align:center;
+                text-decoration:none;
+              "
+            >
+              📄 BUKA / DOWNLOAD PDF
+            </a>
+
+          </div>
+        `;
+
+      }
+
+      else {
+
+        message.innerHTML = `
+          <div class="admin-message-error">
+
+            ✕ Gagal membuat file PDF.
+
+          </div>
+        `;
+
+      }
+
+    }
+
+  );
+
+}
