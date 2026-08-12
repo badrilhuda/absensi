@@ -1334,3 +1334,54 @@ section.content-card:has(#bulanRekap)
 
 }
 }
+.rekap-button-row {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 15px;
+}
+
+.rekap-button-row button {
+    flex: 1;
+    width: 33.333%;
+    height: 54px;
+    min-height: 54px;
+    padding: 0 8px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.rekap-button-row .btn-rekap,
+.rekap-button-row .btn-excel {
+    background: linear-gradient(
+        135deg,
+        #07855f,
+        #09a878
+    );
+    color: white;
+    border: none;
+}
+
+.rekap-button-row .btn-pdf {
+    background: #eeeeee;
+    color: #333;
+    border: 1px solid #d5d5d5;
+}
+
+@media (max-width: 560px) {
+
+    .rekap-button-row {
+        gap: 6px;
+    }
+
+    .rekap-button-row button {
+        height: 50px;
+        min-height: 50px;
+        padding: 0 4px;
+        font-size: 11px;
+        border-radius: 12px;
+    }
+
+}
