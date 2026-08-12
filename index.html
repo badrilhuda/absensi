@@ -581,45 +581,45 @@
       </div>
 
 
-      <label>
-        Pilih Bulan
-      </label>
+     <label>
+    Pilih Bulan
+</label>
 
-      <input
-        type="month"
-        id="bulanRekap"
-        class="form-input">
+<input
+    type="month"
+    id="bulanRekap"
+    class="form-input">
 
 
-      <button
-        class="primary-button"
+<div class="rekap-button-row">
+
+    <button
+        class="primary-button btn-rekap"
         onclick="tampilkanRekap()">
 
-        🔍 TAMPILKAN REKAP
+        🔎 REKAP
 
-      </button>
-
-      <div class="export-buttons">
-
-  <button
-    class="primary-button"
-    onclick="exportExcel()">
-
-    📊 EXPORT EXCEL
-
-  </button>
+    </button>
 
 
-  <button
-    class="secondary-button"
-    onclick="exportPDF()">
+    <button
+        class="primary-button btn-excel"
+        onclick="exportExcel()">
 
-    📄 EXPORT PDF
+        📊 EXCEL
 
-  </button>
+    </button>
+
+
+    <button
+        class="primary-button btn-pdf"
+        onclick="exportPDF()">
+
+        📄 PDF
+
+    </button>
 
 </div>
-
       <div
   id="rekapMessage"
   class="message">
