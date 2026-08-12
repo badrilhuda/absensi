@@ -809,6 +809,12 @@ function simpanGuru() {
       .trim();
 
 
+  const jp =
+    el("guruJP")
+      .value
+      .trim();
+
+
   const message =
     el("tambahGuruMessage");
 
@@ -820,6 +826,42 @@ function simpanGuru() {
       <div class="admin-message-error">
 
         Nama guru wajib diisi.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if (jp === "") {
+
+    message.innerHTML = `
+
+      <div class="admin-message-error">
+
+        JP / Hari wajib diisi.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if (
+    Number(jp) < 0
+  ) {
+
+    message.innerHTML = `
+
+      <div class="admin-message-error">
+
+        JP tidak boleh kurang dari 0.
 
       </div>
 
@@ -845,15 +887,21 @@ function simpanGuru() {
 
     {
       action: "tambahGuru",
+
       nip: nip,
+
       nama: nama,
-      jabatan: jabatan
+
+      jabatan: jabatan,
+
+      jp: jp
+
     },
 
     function(result) {
 
       console.log(
-        "HASIL TAMBAH:",
+        "HASIL TAMBAH GURU:",
         result
       );
 
@@ -868,6 +916,23 @@ function simpanGuru() {
           <div class="admin-message-success">
 
             ✓ Guru berhasil ditambahkan.
+
+            <br><br>
+
+            <strong>
+              ${escapeHtml(
+                result.nama
+              )}
+            </strong>
+
+            <br>
+
+            JP:
+            ${escapeHtml(
+              result.jp
+            )}
+
+            JP
 
             <br><br>
 
@@ -895,13 +960,12 @@ function simpanGuru() {
         el("guruJabatan").value =
           "";
 
+        el("guruJP").value =
+          "";
+
 
         muatDaftarGuru();
 
-
-        /*
-         * Tampilkan QR otomatis.
-         */
 
         setTimeout(
           function() {
@@ -943,7 +1007,6 @@ function simpanGuru() {
   );
 
 }
-
 
 /* =====================================================
    UBAH STATUS GURU
