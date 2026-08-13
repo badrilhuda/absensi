@@ -73,13 +73,43 @@ function sembunyikanSemua() {
 }
 
 
-function kembaliHome() {
+/* ==========================================================
+   NAVIGASI HALAMAN
+   HOME / ADMIN / GURU / REKAP
+   ========================================================== */
+
+let sedangNavigasiBack = false;
+
+
+/* ==========================================================
+   SEMBUNYIKAN SEMUA HALAMAN
+   ========================================================== */
+
+function sembunyikanSemua() {
+
+  document
+    .querySelectorAll(".page")
+    .forEach(function(page) {
+
+      page.classList.add("hidden");
+
+    });
+
+}
+
+
+/* ==========================================================
+   TAMPILKAN HOME
+   ========================================================== */
+
+function tampilkanHome() {
 
   hentikanScanner();
 
   sembunyikanSemua();
 
-  const page = el("homePage");
+  const page =
+    el("homePage");
 
   if (page) {
 
@@ -90,23 +120,18 @@ function kembaliHome() {
 }
 
 
-function bukaAdmin() {
+/* ==========================================================
+   TAMPILKAN ADMIN
+   ========================================================== */
+
+function tampilkanAdmin() {
 
   hentikanScanner();
 
-  if (location.hash !== "#admin") {
-
-    history.pushState(
-      { halaman: "admin" },
-      "",
-      "#admin"
-    );
-
-  }
-
   sembunyikanSemua();
 
-  const page = el("adminPage");
+  const page =
+    el("adminPage");
 
   if (page) {
 
@@ -126,23 +151,19 @@ function bukaAdmin() {
 
 }
 
-function bukaGuru() {
+
+/* ==========================================================
+   TAMPILKAN GURU
+   ========================================================== */
+
+function tampilkanGuru() {
 
   hentikanScanner();
 
-  if (location.hash !== "#guru") {
-
-    history.pushState(
-      { halaman: "guru" },
-      "",
-      "#guru"
-    );
-
-  }
-
   sembunyikanSemua();
 
-  const page = el("guruPage");
+  const page =
+    el("guruPage");
 
   if (page) {
 
@@ -152,6 +173,115 @@ function bukaGuru() {
 
 }
 
+
+/* ==========================================================
+   TAMPILKAN REKAP
+   ========================================================== */
+
+function tampilkanHalamanRekap() {
+
+  hentikanScanner();
+
+  sembunyikanSemua();
+
+  const page =
+    el("rekapPage");
+
+  if (page) {
+
+    page.classList.remove("hidden");
+
+  }
+
+}
+
+
+/* ==========================================================
+   KEMBALI KE HOME
+   ========================================================== */
+
+function kembaliHome() {
+
+  hentikanScanner();
+
+  /*
+   * Jika sedang berada di:
+   * #admin
+   * #guru
+   * #rekap
+   *
+   * gunakan history.back()
+   * agar tombol Back Android dan tombol
+   * Kembali memiliki perilaku yang sama.
+   */
+
+  if (
+    location.hash === "#admin" ||
+    location.hash === "#guru" ||
+    location.hash === "#rekap"
+  ) {
+
+    history.back();
+
+    return;
+
+  }
+
+  tampilkanHome();
+
+}
+
+
+/* ==========================================================
+   BUKA ADMIN
+   ========================================================== */
+
+function bukaAdmin() {
+
+  hentikanScanner();
+
+  /*
+   * location.hash membuat entry history baru.
+   * Ini yang akan dibaca oleh tombol Back Android.
+   */
+
+  if (location.hash !== "#admin") {
+
+    location.hash = "admin";
+
+  } else {
+
+    tampilkanAdmin();
+
+  }
+
+}
+
+
+/* ==========================================================
+   BUKA GURU
+   ========================================================== */
+
+function bukaGuru() {
+
+  hentikanScanner();
+
+  if (location.hash !== "#guru") {
+
+    location.hash = "guru";
+
+  } else {
+
+    tampilkanGuru();
+
+  }
+
+}
+
+
+/* ==========================================================
+   BUKA REKAP
+   ========================================================== */
 
 function bukaRekap() {
 
@@ -159,26 +289,171 @@ function bukaRekap() {
 
   if (location.hash !== "#rekap") {
 
-    history.pushState(
-      { halaman: "rekap" },
-      "",
-      "#rekap"
-    );
+    location.hash = "rekap";
 
-  }
+  } else {
 
-  sembunyikanSemua();
-
-  const page = el("rekapPage");
-
-  if (page) {
-
-    page.classList.remove("hidden");
+    tampilkanHalamanRekap();
 
   }
 
 }
 
+
+/* ==========================================================
+   ROUTER HALAMAN
+   ========================================================== */
+
+function jalankanRouter() {
+
+  const halaman =
+    location.hash
+      .replace("#", "")
+      .toLowerCase()
+      .trim();
+
+
+  /* ------------------------------------------
+     HOME
+     ------------------------------------------ */
+
+  if (!halaman) {
+
+    tampilkanHome();
+
+    return;
+
+  }
+
+
+  /* ------------------------------------------
+     ADMIN
+     ------------------------------------------ */
+
+  if (halaman === "admin") {
+
+    tampilkanAdmin();
+
+    return;
+
+  }
+
+
+  /* ------------------------------------------
+     GURU
+     ------------------------------------------ */
+
+  if (halaman === "guru") {
+
+    tampilkanGuru();
+
+    return;
+
+  }
+
+
+  /* ------------------------------------------
+     REKAP
+     ------------------------------------------ */
+
+  if (halaman === "rekap") {
+
+    tampilkanHalamanRekap();
+
+    return;
+
+  }
+
+
+  /* ------------------------------------------
+     HASH TIDAK DIKENAL
+     ------------------------------------------ */
+
+  /*
+   * Jangan menggunakan history.back()
+   * di sini karena bisa menyebabkan Web App
+   * keluar pada Android.
+   */
+
+  history.replaceState(
+    {
+      halaman: "home"
+    },
+    "",
+    location.pathname +
+    location.search
+  );
+
+  tampilkanHome();
+
+}
+
+
+/* ==========================================================
+   HASH CHANGE
+   ========================================================== */
+
+window.addEventListener(
+  "hashchange",
+  function() {
+
+    jalankanRouter();
+
+  }
+);
+
+
+/* ==========================================================
+   POPSTATE
+   ========================================================== */
+
+window.addEventListener(
+  "popstate",
+  function() {
+
+    /*
+     * Saat tombol Back Android ditekan,
+     * jalankan router berdasarkan hash terbaru.
+     */
+
+    jalankanRouter();
+
+  }
+);
+
+
+/* ==========================================================
+   POSISI AWAL APLIKASI
+   ========================================================== */
+
+if (
+  !location.hash
+) {
+
+  history.replaceState(
+    {
+      halaman: "home"
+    },
+    "",
+    location.pathname +
+    location.search
+  );
+
+}
+
+
+/* ==========================================================
+   JALANKAN HALAMAN PERTAMA
+   ========================================================== */
+
+setTimeout(
+  function() {
+
+    jalankanRouter();
+
+  },
+  0
+);
 
 /* ==========================================================
    LOGIN ADMIN
@@ -2887,136 +3162,6 @@ function exportPDF() {
   );
 
 }
-
-/* ==========================================================
-   HISTORY HALAMAN
-   ========================================================== */
-
-// Pastikan halaman awal dianggap sebagai HOME
-if (!history.state) {
-
-  history.replaceState(
-    { halaman: "home" },
-    "",
-    location.pathname + location.search
-  );
-
-}
-
-
-/* ==========================================================
-   TOMBOL BACK ANDROID / BROWSER
-   ========================================================== */
-
-window.addEventListener("popstate", function () {
-
-  const halaman =
-    location.hash.replace("#", "").toLowerCase();
-
-
-  // ================================================
-  // BACK KE HOME
-  // ================================================
-
-  if (!halaman) {
-
-    kembaliHome();
-
-    return;
-
-  }
-
-
-  // ================================================
-  // ADMIN
-  // ================================================
-
-  if (halaman === "admin") {
-
-    hentikanScanner();
-
-    sembunyikanSemua();
-
-    const page =
-      el("adminPage");
-
-    if (page) {
-
-      page.classList.remove("hidden");
-
-    }
-
-    if (adminSudahLogin) {
-
-      tampilkanPanelAdmin();
-
-    } else {
-
-      tampilkanLoginAdmin();
-
-    }
-
-    return;
-
-  }
-
-
-  // ================================================
-  // GURU
-  // ================================================
-
-  if (halaman === "guru") {
-
-    hentikanScanner();
-
-    sembunyikanSemua();
-
-    const page =
-      el("guruPage");
-
-    if (page) {
-
-      page.classList.remove("hidden");
-
-    }
-
-    return;
-
-  }
-
-
-  // ================================================
-  // REKAP
-  // ================================================
-
-  if (halaman === "rekap") {
-
-    hentikanScanner();
-
-    sembunyikanSemua();
-
-    const page =
-      el("rekapPage");
-
-    if (page) {
-
-      page.classList.remove("hidden");
-
-    }
-
-    return;
-
-  }
-
-
-  // ================================================
-  // HASH TIDAK DIKENAL
-  // KEMBALI HOME
-  // ================================================
-
-  kembaliHome();
-
-});
 
 /* ==========================================================
    SELESAI
