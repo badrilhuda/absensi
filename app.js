@@ -2539,6 +2539,14 @@ function suaraBerhasil() {
 
 }
 
+function bukaPiket() {
+
+  hentikanScanner();
+
+  window.location.href =
+    API_URL + "?page=piket";
+
+}
 
 /* ==========================================================
    REKAP BULANAN
