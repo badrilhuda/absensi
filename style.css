@@ -59,7 +59,29 @@ button {
   );
 
   color: white;
-  border-radius: 0 0 35px 35px;
+
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 0;
+}
+
+/* Lengkungan bawah ke atas */
+.header::after {
+  content: "";
+  position: absolute;
+
+  left: -5%;
+  right: -5%;
+  bottom: -72px;
+
+  height: 100px;
+
+  background: #f1f7f5;
+
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+
+  pointer-events: none;
 }
 
 .header-icon {
