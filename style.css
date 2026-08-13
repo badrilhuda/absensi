@@ -44,6 +44,11 @@ button {
 /* ==========================================================
    HEADER
 ========================================================== */
+.header-icon img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
 
 .header {
   min-height: 130px;
