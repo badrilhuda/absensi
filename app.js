@@ -139,6 +139,18 @@ function bukaRekap() {
 
   hentikanScanner();
 
+  // Buat riwayat browser agar tombol BACK Android
+  // kembali ke halaman utama, bukan keluar dari Web App.
+  if (location.hash !== "#rekap") {
+
+    history.pushState(
+      { halaman: "rekap" },
+      "",
+      "#rekap"
+    );
+
+  }
+
   sembunyikanSemua();
 
   const page = el("rekapPage");
@@ -2860,6 +2872,39 @@ function exportPDF() {
 
 }
 
+/* ==========================================================
+   RIWAYAT HALAMAN AWAL
+   ========================================================== */
+
+if (!history.state) {
+
+  history.replaceState(
+    { halaman: "home" },
+    "",
+    location.pathname + location.search
+  );
+
+}
+
+/* ==========================================================
+   BACK ANDROID / BROWSER
+   ========================================================== */
+
+window.addEventListener("popstate", function () {
+
+  /*
+   * Jika pengguna menekan tombol BACK
+   * saat berada di halaman REKAP,
+   * kembali ke halaman utama.
+   */
+
+  if (location.hash !== "#rekap") {
+
+    kembaliHome();
+
+  }
+
+});
 
 /* ==========================================================
    SELESAI
