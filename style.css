@@ -805,8 +805,8 @@ label {
   font-size: 18px;
 }
 
-.primary-button + .primary-button {
-  margin-top: 14px;
+.primary-button.piket-button {
+  margin-top: 14px !important;
 }
 
 /* ==========================================================
