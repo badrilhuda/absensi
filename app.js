@@ -2544,7 +2544,7 @@ function bukaPiket() {
   hentikanScanner();
 
   window.location.href =
-    "https://windows-anwari.github.io/absensi/piket.html";
+    "https://badrilhuda.github.io/absensi/piket.html";
 
 }
 
