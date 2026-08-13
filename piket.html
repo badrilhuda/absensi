@@ -7,35 +7,76 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
   <title>Absensi Guru Piket</title>
 
   <style>
 
+    /* =====================================================
+       RESET
+    ===================================================== */
+
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
+
+    html,
     body {
+      width: 100%;
+      min-height: 100%;
       margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+
       background: #f1f7f5;
+
       font-family:
         Arial,
         Helvetica,
         sans-serif;
+
       color: #123;
+
+      overflow-x: hidden;
+
     }
+
+
+    /* =====================================================
+       CONTAINER
+    ===================================================== */
 
     .container {
+
       width: 100%;
-      max-width: 650px;
+
+      max-width: 760px;
+
       margin: 0 auto;
-      padding: 20px;
+
+      padding:
+        0 16px 24px;
+
     }
 
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
     .header {
+
+      width: calc(100% + 32px);
+
+      margin-left: -16px;
+
       background:
         linear-gradient(
           135deg,
@@ -46,77 +87,185 @@
       color: white;
 
       border-radius:
-        0 0 35px 35px;
+        0 0 34px 34px;
 
       padding:
-        25px 20px;
-
-      margin:
-        -20px -20px 20px;
+        28px 18px 30px;
 
       text-align: center;
+
     }
+
 
     .header h1 {
+
       margin: 0;
-      font-size: 28px;
+
+      font-size: 30px;
+
+      line-height: 1.15;
+
       font-weight: 800;
+
+      letter-spacing: .3px;
+
     }
+
 
     .header p {
-      margin:
-        7px 0 0;
 
-      opacity: .9;
+      margin:
+        8px 0 0;
+
+      font-size: 18px;
+
+      line-height: 1.3;
+
+      opacity: .95;
+
     }
 
+
+    /* =====================================================
+       TANGGAL
+    ===================================================== */
+
     .date-card {
+
+      width: 100%;
+
       background: white;
 
-      border-radius: 18px;
+      border-radius: 20px;
 
-      padding: 18px;
+      padding:
+        20px 16px;
+
+      margin-top: 20px;
 
       margin-bottom: 18px;
 
       text-align: center;
 
       box-shadow:
-        0 5px 20px
-        rgba(0,0,0,.06);
+        0 6px 22px
+        rgba(0, 0, 0, .06);
+
     }
+
 
     .hari {
+
       color: #087f5b;
-      font-size: 20px;
+
+      font-size: 25px;
+
+      line-height: 1.2;
+
       font-weight: 800;
+
     }
+
 
     .tanggal {
-      margin-top: 5px;
+
+      margin-top: 6px;
+
       color: #777;
+
+      font-size: 17px;
+
+      line-height: 1.3;
+
     }
 
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #777;
+
+    /* =====================================================
+       PESAN
+    ===================================================== */
+
+    .message {
+
+      display: none;
+
+      width: 100%;
+
+      margin:
+        0 0 15px;
+
+      padding:
+        13px 15px;
+
+      border-radius: 13px;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+      text-align: left;
+
     }
+
+
+    .message.success {
+
+      display: block;
+
+      background: #e8f7f0;
+
+      color: #087f5b;
+
+    }
+
+
+    .message.error {
+
+      display: block;
+
+      background: #ffe8e8;
+
+      color: #d93025;
+
+    }
+
+
+    /* =====================================================
+       LIST GURU
+    ===================================================== */
 
     .guru-list {
+
+      width: 100%;
+
       display: flex;
+
       flex-direction: column;
+
       gap: 12px;
+
     }
 
+
+    /* =====================================================
+       KARTU GURU
+    ===================================================== */
+
     .guru-button {
+
       width: 100%;
+
+      min-height: 105px;
+
       border: 0;
-      border-radius: 17px;
+
+      border-radius: 18px;
 
       background: white;
 
-      padding: 16px 18px;
+      padding:
+        16px 17px;
+
+      margin: 0;
 
       text-align: left;
 
@@ -124,109 +273,190 @@
 
       box-shadow:
         0 5px 18px
-        rgba(0,0,0,.07);
+        rgba(0, 0, 0, .06);
 
       transition:
-        .2s;
+        transform .15s ease,
+        box-shadow .15s ease;
+
+      font-family: inherit;
+
     }
+
 
     .guru-button:active {
-      transform: scale(.98);
+
+      transform: scale(.985);
+
     }
+
+
+    .guru-button:disabled {
+
+      cursor: default;
+
+    }
+
+
+    /* =====================================================
+       NAMA GURU
+    ===================================================== */
 
     .guru-nama {
-      display: block;
 
-      font-size: 17px;
-      font-weight: 800;
+      display: block;
 
       color: #075f47;
+
+      font-size: 18px;
+
+      line-height: 1.25;
+
+      font-weight: 800;
+
+      word-break: normal;
+
+      overflow-wrap: anywhere;
+
     }
+
+
+    /* =====================================================
+       JABATAN
+    ===================================================== */
 
     .guru-jabatan {
+
       display: block;
 
-      margin-top: 4px;
+      margin-top: 5px;
 
-      font-size: 13px;
-
-      color: #888;
-    }
-
-    .guru-status {
-      display: block;
-
-      margin-top: 8px;
-
-      font-size: 13px;
-
-      font-weight: 600;
-    }
-
-    .status-normal {
-      color: #087f5b;
-    }
-
-    .status-disabled {
-      color: #999;
-    }
-
-    .status-success {
-      color: #087f5b;
-    }
-
-    .status-error {
-      color: #d93025;
-    }
-
-    .guru-button.sudah {
-      background: #eefaf5;
-      cursor: default;
-    }
-
-    .guru-button.bukan-piket {
-      border:
-        1px solid #eee;
-    }
-
-    .message {
-      display: none;
-
-      margin-bottom: 15px;
-
-      padding: 13px 15px;
-
-      border-radius: 12px;
+      color: #777;
 
       font-size: 14px;
 
-      line-height: 1.5;
+      line-height: 1.3;
+
     }
 
-    .message.success {
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .guru-status {
+
       display: block;
-      background: #e8f7f0;
+
+      margin-top: 9px;
+
+      font-size: 14px;
+
+      line-height: 1.35;
+
+      font-weight: 600;
+
+    }
+
+
+    .status-normal {
+
       color: #087f5b;
+
     }
 
-    .message.error {
-      display: block;
-      background: #ffe9e9;
-      color: #c62828;
+
+    .status-disabled {
+
+      color: #999;
+
     }
 
-    .back-button {
+
+    .status-success {
+
+      color: #087f5b;
+
+    }
+
+
+    .status-error {
+
+      color: #d93025;
+
+    }
+
+
+    /* =====================================================
+       SUDAH ABSEN
+    ===================================================== */
+
+    .guru-button.sudah {
+
+      background: #eefaf5;
+
+      box-shadow:
+        0 4px 15px
+        rgba(8, 127, 91, .08);
+
+      cursor: default;
+
+    }
+
+
+    /* =====================================================
+       BUKAN PIKET
+    ===================================================== */
+
+    .guru-button.bukan-piket {
+
+      background: #ffffff;
+
+      cursor: default;
+
+    }
+
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    .loading {
+
       width: 100%;
 
-      margin-top: 20px;
+      padding:
+        30px 15px;
+
+      text-align: center;
+
+      color: #777;
+
+      font-size: 16px;
+
+    }
+
+
+    /* =====================================================
+       TOMBOL KEMBALI
+    ===================================================== */
+
+    .back-button {
+
+      width: 100%;
+
+      min-height: 52px;
+
+      margin-top: 18px;
 
       border: 0;
 
-      border-radius: 15px;
+      border-radius: 16px;
 
-      padding: 14px;
+      padding:
+        13px 15px;
 
-      background: #fff;
+      background: white;
 
       color: #087f5b;
 
@@ -234,7 +464,195 @@
 
       font-weight: 700;
 
+      font-family: inherit;
+
       cursor: pointer;
+
+      box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, .05);
+
+    }
+
+
+    .back-button:active {
+
+      transform: scale(.985);
+
+    }
+
+
+    /* =====================================================
+       TABLET
+    ===================================================== */
+
+    @media (min-width: 600px) {
+
+      .container {
+
+        padding:
+          0 22px 30px;
+
+      }
+
+
+      .header {
+
+        width: calc(100% + 44px);
+
+        margin-left: -22px;
+
+        padding:
+          32px 25px 34px;
+
+      }
+
+
+      .header h1 {
+
+        font-size: 34px;
+
+      }
+
+
+      .header p {
+
+        font-size: 20px;
+
+      }
+
+
+      .guru-list {
+
+        gap: 14px;
+
+      }
+
+
+      .guru-button {
+
+        padding:
+          18px 20px;
+
+      }
+
+
+      .guru-nama {
+
+        font-size: 19px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       HP KECIL
+    ===================================================== */
+
+    @media (max-width: 380px) {
+
+      .container {
+
+        padding-left: 11px;
+
+        padding-right: 11px;
+
+      }
+
+
+      .header {
+
+        width: calc(100% + 22px);
+
+        margin-left: -11px;
+
+        border-radius:
+          0 0 28px 28px;
+
+        padding:
+          23px 13px 26px;
+
+      }
+
+
+      .header h1 {
+
+        font-size: 24px;
+
+      }
+
+
+      .header p {
+
+        font-size: 16px;
+
+      }
+
+
+      .date-card {
+
+        padding:
+          17px 12px;
+
+        border-radius: 17px;
+
+      }
+
+
+      .hari {
+
+        font-size: 22px;
+
+      }
+
+
+      .tanggal {
+
+        font-size: 16px;
+
+      }
+
+
+      .guru-button {
+
+        min-height: 96px;
+
+        padding:
+          14px 15px;
+
+        border-radius: 16px;
+
+      }
+
+
+      .guru-nama {
+
+        font-size: 16px;
+
+      }
+
+
+      .guru-jabatan {
+
+        font-size: 13px;
+
+      }
+
+
+      .guru-status {
+
+        font-size: 13px;
+
+      }
+
+
+      .back-button {
+
+        font-size: 15px;
+
+      }
+
     }
 
   </style>
@@ -245,6 +663,11 @@
 <body>
 
   <div class="container">
+
+
+    <!-- ==================================================
+         HEADER
+    =================================================== -->
 
     <div class="header">
 
@@ -258,6 +681,10 @@
 
     </div>
 
+
+    <!-- ==================================================
+         TANGGAL
+    =================================================== -->
 
     <div class="date-card">
 
@@ -278,11 +705,19 @@
     </div>
 
 
+    <!-- ==================================================
+         PESAN
+    =================================================== -->
+
     <div
       id="message"
       class="message"
     ></div>
 
+
+    <!-- ==================================================
+         DAFTAR GURU
+    =================================================== -->
 
     <div
       id="guruList"
@@ -295,6 +730,10 @@
 
     </div>
 
+
+    <!-- ==================================================
+         KEMBALI
+    =================================================== -->
 
     <button
       type="button"
@@ -309,18 +748,17 @@
 
   <script>
 
-    /*
-     * URL Web App Anda.
-     * Gunakan URL API yang sama dengan app.js.
-     */
+    // =====================================================
+    // URL WEB APP
+    // =====================================================
 
     const API_URL =
       "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
 
 
-    // ======================================================
+    // =====================================================
     // API JSONP
-    // ======================================================
+    // =====================================================
 
     function panggilAPI(
       parameter,
@@ -344,6 +782,7 @@
             callback(result);
 
           }
+
           finally {
 
             delete window[
@@ -413,9 +852,9 @@
     }
 
 
-    // ======================================================
-    // LOAD DATA
-    // ======================================================
+    // =====================================================
+    // MUAT PIKET
+    // =====================================================
 
     function muatPiket() {
 
@@ -468,9 +907,9 @@
     }
 
 
-    // ======================================================
+    // =====================================================
     // TAMPILKAN GURU
-    // ======================================================
+    // =====================================================
 
     function tampilkanGuru(
       data
@@ -592,9 +1031,9 @@
     }
 
 
-    // ======================================================
-    // ABSEN
-    // ======================================================
+    // =====================================================
+    // ABSENSI
+    // =====================================================
 
     function absenPiket(
       kodeQR,
@@ -610,11 +1049,8 @@
       }
 
 
-      /*
-       * Tandai sedang diproses
-       */
-
-      button.disabled = true;
+      button.disabled =
+        true;
 
 
       const status =
@@ -676,10 +1112,6 @@
           }
 
 
-          /*
-           * Tidak punya jadwal
-           */
-
           if (
             result &&
             result.tidakPiket
@@ -711,10 +1143,6 @@
 
           }
 
-
-          /*
-           * Sudah absen
-           */
 
           if (
             result &&
@@ -748,10 +1176,6 @@
           }
 
 
-          /*
-           * Error lain
-           */
-
           button.disabled =
             false;
 
@@ -782,9 +1206,9 @@
     }
 
 
-    // ======================================================
+    // =====================================================
     // PESAN
-    // ======================================================
+    // =====================================================
 
     function tampilkanPesan(
       text,
@@ -808,9 +1232,9 @@
     }
 
 
-    // ======================================================
+    // =====================================================
     // FORMAT TANGGAL
-    // ======================================================
+    // =====================================================
 
     function formatTanggal(
       tanggal
@@ -831,24 +1255,6 @@
       }
 
 
-      const tahun =
-        Number(
-          bagian[0]
-        );
-
-
-      const bulan =
-        Number(
-          bagian[1]
-        );
-
-
-      const hari =
-        Number(
-          bagian[2]
-        );
-
-
       return new Intl.DateTimeFormat(
         "id-ID",
         {
@@ -858,18 +1264,18 @@
         }
       ).format(
         new Date(
-          tahun,
-          bulan - 1,
-          hari
+          Number(bagian[0]),
+          Number(bagian[1]) - 1,
+          Number(bagian[2])
         )
       );
 
     }
 
 
-    // ======================================================
-    // ESCAPE
-    // ======================================================
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
 
     function escapeHtml(
       text
@@ -902,6 +1308,10 @@
     }
 
 
+    // =====================================================
+    // ESCAPE JAVASCRIPT
+    // =====================================================
+
     function escapeJs(
       text
     ) {
@@ -929,9 +1339,9 @@
     }
 
 
-    // ======================================================
+    // =====================================================
     // KEMBALI
-    // ======================================================
+    // =====================================================
 
     function kembaliGuru() {
 
@@ -956,9 +1366,9 @@
     }
 
 
-    // ======================================================
+    // =====================================================
     // MULAI
-    // ======================================================
+    // =====================================================
 
     document.addEventListener(
       "DOMContentLoaded",
