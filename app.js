@@ -2431,7 +2431,7 @@ function tampilkanRekap() {
                 </th>
 
                 <th>
-                  JTM/Minggu
+                  JTM
                 </th>
 
                 <th>
@@ -2443,7 +2443,7 @@ function tampilkanRekap() {
                 </th>
 
                 <th>
-                  Tidak
+                  Tidak Hadir
                 </th>
 
               </tr>
