@@ -375,12 +375,10 @@ button {
   background: #ffffff;
   color: #087f5b;
 
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 36px;
+  font-family: Arial, Arial Black, sans-serif;
+  font-size: 34px;
   font-weight: 900;
   line-height: 1;
-
-  cursor: pointer;
 
   box-shadow:
     0 5px 18px rgba(0, 0, 0, 0.07);
