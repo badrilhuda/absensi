@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Absensi Guru Piket</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f1f7f5;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      color: #123;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background:
+        linear-gradient(
+          135deg,
+          #087f5b,
+          #0aa678
+        );
+
+      color: white;
+
+      border-radius:
+        0 0 35px 35px;
+
+      padding:
+        25px 20px;
+
+      margin:
+        -20px -20px 20px;
+
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .header p {
+      margin:
+        7px 0 0;
+
+      opacity: .9;
+    }
+
+    .date-card {
+      background: white;
+
+      border-radius: 18px;
+
+      padding: 18px;
+
+      margin-bottom: 18px;
+
+      text-align: center;
+
+      box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.06);
+    }
+
+    .hari {
+      color: #087f5b;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .tanggal {
+      margin-top: 5px;
+      color: #777;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    .guru-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .guru-button {
+      width: 100%;
+      border: 0;
+      border-radius: 17px;
+
+      background: white;
+
+      padding: 16px 18px;
+
+      text-align: left;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 18px
+        rgba(0,0,0,.07);
+
+      transition:
+        .2s;
+    }
+
+    .guru-button:active {
+      transform: scale(.98);
+    }
+
+    .guru-nama {
+      display: block;
+
+      font-size: 17px;
+      font-weight: 800;
+
+      color: #075f47;
+    }
+
+    .guru-jabatan {
+      display: block;
+
+      margin-top: 4px;
+
+      font-size: 13px;
+
+      color: #888;
+    }
+
+    .guru-status {
+      display: block;
+
+      margin-top: 8px;
+
+      font-size: 13px;
+
+      font-weight: 600;
+    }
+
+    .status-normal {
+      color: #087f5b;
+    }
+
+    .status-disabled {
+      color: #999;
+    }
+
+    .status-success {
+      color: #087f5b;
+    }
+
+    .status-error {
+      color: #d93025;
+    }
+
+    .guru-button.sudah {
+      background: #eefaf5;
+      cursor: default;
+    }
+
+    .guru-button.bukan-piket {
+      border:
+        1px solid #eee;
+    }
+
+    .message {
+      display: none;
+
+      margin-bottom: 15px;
+
+      padding: 13px 15px;
+
+      border-radius: 12px;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #e8f7f0;
+      color: #087f5b;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffe9e9;
+      color: #c62828;
+    }
+
+    .back-button {
+      width: 100%;
+
+      margin-top: 20px;
+
+      border: 0;
+
+      border-radius: 15px;
+
+      padding: 14px;
+
+      background: #fff;
+
+      color: #087f5b;
+
+      font-size: 16px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+
+      <h1>
+        🧑‍🏫 ABSENSI GURU PIKET
+      </h1>
+
+      <p>
+        MTs. BADRIL HUDA
+      </p>
+
+    </div>
+
+
+    <div class="date-card">
+
+      <div
+        id="hari"
+        class="hari"
+      >
+        Memuat...
+      </div>
+
+      <div
+        id="tanggal"
+        class="tanggal"
+      >
+        Memuat tanggal...
+      </div>
+
+    </div>
+
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+
+    <div
+      id="guruList"
+      class="guru-list"
+    >
+
+      <div class="loading">
+        ⏳ Memuat daftar guru...
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-button"
+      onclick="kembaliGuru()"
+    >
+      ← KEMBALI KE ABSENSI GURU
+    </button>
+
+  </div>
+
+
+  <script>
+
+    /*
+     * URL Web App Anda.
+     * Gunakan URL API yang sama dengan app.js.
+     */
+
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
+
+
+    // ======================================================
+    // API JSONP
+    // ======================================================
+
+    function panggilAPI(
+      parameter,
+      callback
+    ) {
+
+      const callbackName =
+        "piketCallback_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+          Math.random() * 99999
+        );
+
+
+      window[callbackName] =
+        function(result) {
+
+          try {
+
+            callback(result);
+
+          }
+          finally {
+
+            delete window[
+              callbackName
+            ];
+
+          }
+
+        };
+
+
+      const script =
+        document.createElement(
+          "script"
+        );
+
+
+      const params =
+        new URLSearchParams();
+
+
+      Object.keys(
+        parameter
+      ).forEach(
+        function(key) {
+
+          params.append(
+            key,
+            parameter[key]
+          );
+
+        }
+      );
+
+
+      params.append(
+        "callback",
+        callbackName
+      );
+
+
+      script.src =
+        API_URL +
+        "?" +
+        params.toString();
+
+
+      script.onerror =
+        function() {
+
+          delete window[
+            callbackName
+          ];
+
+          tampilkanPesan(
+            "Tidak dapat terhubung ke server.",
+            "error"
+          );
+
+        };
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+
+
+    // ======================================================
+    // LOAD DATA
+    // ======================================================
+
+    function muatPiket() {
+
+      panggilAPI(
+        {
+          action:
+            "getPiketHariIni"
+        },
+
+        function(result) {
+
+          if (
+            !result ||
+            result.sukses !== true
+          ) {
+
+            tampilkanPesan(
+              result?.pesan ||
+              "Gagal mengambil jadwal piket.",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          document.getElementById(
+            "hari"
+          ).textContent =
+            result.hari;
+
+
+          document.getElementById(
+            "tanggal"
+          ).textContent =
+            formatTanggal(
+              result.tanggal
+            );
+
+
+          tampilkanGuru(
+            result.data || []
+          );
+
+        }
+
+      );
+
+    }
+
+
+    // ======================================================
+    // TAMPILKAN GURU
+    // ======================================================
+
+    function tampilkanGuru(
+      data
+    ) {
+
+      const list =
+        document.getElementById(
+          "guruList"
+        );
+
+
+      if (!data.length) {
+
+        list.innerHTML = `
+          <div class="loading">
+            Tidak ada data guru.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = "";
+
+
+      data.forEach(
+        function(guru) {
+
+          let statusText =
+            "Ketuk untuk absensi";
+
+
+          let statusClass =
+            "status-normal";
+
+
+          let disabled =
+            "";
+
+
+          let extraClass =
+            "";
+
+
+          if (
+            guru.sudahAbsen
+          ) {
+
+            statusText =
+              "✓ Sudah absen hari ini • " +
+              guru.jamAbsen;
+
+            statusClass =
+              "status-success";
+
+            disabled =
+              "disabled";
+
+            extraClass =
+              "sudah";
+
+          }
+
+          else if (
+            !guru.punyaJadwal
+          ) {
+
+            statusText =
+              "Tidak bisa absen hari ini";
+
+            statusClass =
+              "status-disabled";
+
+            extraClass =
+              "bukan-piket";
+
+          }
+
+
+          html += `
+
+            <button
+              type="button"
+              class="guru-button ${extraClass}"
+              ${disabled}
+              onclick="absenPiket(
+                '${escapeJs(guru.kodeQR)}',
+                this
+              )"
+            >
+
+              <span class="guru-nama">
+                ${escapeHtml(guru.nama)}
+              </span>
+
+              <span class="guru-jabatan">
+                ${escapeHtml(guru.jabatan)}
+              </span>
+
+              <span
+                class="guru-status ${statusClass}"
+              >
+                ${statusText}
+              </span>
+
+            </button>
+
+          `;
+
+        }
+      );
+
+
+      list.innerHTML =
+        html;
+
+    }
+
+
+    // ======================================================
+    // ABSEN
+    // ======================================================
+
+    function absenPiket(
+      kodeQR,
+      button
+    ) {
+
+      if (
+        button.disabled
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * Tandai sedang diproses
+       */
+
+      button.disabled = true;
+
+
+      const status =
+        button.querySelector(
+          ".guru-status"
+        );
+
+
+      if (status) {
+
+        status.textContent =
+          "⏳ Memproses absensi...";
+
+      }
+
+
+      panggilAPI(
+        {
+          action:
+            "absensiPiket",
+
+          kodeQR:
+            kodeQR
+        },
+
+        function(result) {
+
+          if (
+            result &&
+            result.sukses === true
+          ) {
+
+            button.classList.add(
+              "sudah"
+            );
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-success";
+
+
+              status.textContent =
+                "✓ Sudah absen hari ini • " +
+                result.jam;
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan,
+              "success"
+            );
+
+
+            return;
+
+          }
+
+
+          /*
+           * Tidak punya jadwal
+           */
+
+          if (
+            result &&
+            result.tidakPiket
+          ) {
+
+            button.disabled =
+              false;
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-error";
+
+
+              status.textContent =
+                "✕ Tidak bisa absen hari ini";
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan,
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          /*
+           * Sudah absen
+           */
+
+          if (
+            result &&
+            result.sudahAbsen
+          ) {
+
+            button.disabled =
+              true;
+
+
+            button.classList.add(
+              "sudah"
+            );
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-success";
+
+
+              status.textContent =
+                "✓ Sudah absen hari ini • " +
+                result.jam;
+
+            }
+
+
+            return;
+
+          }
+
+
+          /*
+           * Error lain
+           */
+
+          button.disabled =
+            false;
+
+
+          if (status) {
+
+            status.className =
+              "guru-status status-error";
+
+
+            status.textContent =
+              result?.pesan ||
+              "Absensi gagal.";
+
+          }
+
+
+          tampilkanPesan(
+            result?.pesan ||
+            "Absensi gagal.",
+            "error"
+          );
+
+        }
+
+      );
+
+    }
+
+
+    // ======================================================
+    // PESAN
+    // ======================================================
+
+    function tampilkanPesan(
+      text,
+      type
+    ) {
+
+      const box =
+        document.getElementById(
+          "message"
+        );
+
+
+      box.className =
+        "message " +
+        type;
+
+
+      box.textContent =
+        text;
+
+    }
+
+
+    // ======================================================
+    // FORMAT TANGGAL
+    // ======================================================
+
+    function formatTanggal(
+      tanggal
+    ) {
+
+      const bagian =
+        String(
+          tanggal
+        ).split("-");
+
+
+      if (
+        bagian.length !== 3
+      ) {
+
+        return tanggal;
+
+      }
+
+
+      const tahun =
+        Number(
+          bagian[0]
+        );
+
+
+      const bulan =
+        Number(
+          bagian[1]
+        );
+
+
+      const hari =
+        Number(
+          bagian[2]
+        );
+
+
+      return new Intl.DateTimeFormat(
+        "id-ID",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      ).format(
+        new Date(
+          tahun,
+          bulan - 1,
+          hari
+        )
+      );
+
+    }
+
+
+    // ======================================================
+    // ESCAPE
+    // ======================================================
+
+    function escapeHtml(
+      text
+    ) {
+
+      return String(
+        text ?? ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    function escapeJs(
+      text
+    ) {
+
+      return String(
+        text ?? ""
+      )
+        .replace(
+          /\\/g,
+          "\\\\"
+        )
+        .replace(
+          /'/g,
+          "\\'"
+        )
+        .replace(
+          /\r/g,
+          ""
+        )
+        .replace(
+          /\n/g,
+          "\\n"
+        );
+
+    }
+
+
+    // ======================================================
+    // KEMBALI
+    // ======================================================
+
+    function kembaliGuru() {
+
+      if (
+        document.referrer &&
+        document.referrer.indexOf(
+          location.hostname
+        ) !== -1
+      ) {
+
+        history.back();
+
+      }
+
+      else {
+
+        window.location.href =
+          API_URL;
+
+      }
+
+    }
+
+
+    // ======================================================
+    // MULAI
+    // ======================================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+        muatPiket();
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
