@@ -1,1388 +1,1111 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087f5b">
 
-  <meta charset="UTF-8">
+<title>Absensi Guru Piket - MTs. Badril Huda</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+<style>
 
-  <title>Absensi Guru Piket</title>
+/* ==========================================================
+   RESET
+========================================================== */
 
-  <style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    /* =====================================================
-       RESET
-    ===================================================== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f7f5;
+  color: #173f35;
+}
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+body {
+  min-height: 100vh;
+}
 
+.app {
+  width: 100%;
+  max-width: 900px;
+  min-height: 100vh;
+  margin: auto;
+  background: #f1f7f5;
+}
 
-    html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      padding: 0;
-    }
 
+/* ==========================================================
+   HEADER
+========================================================== */
 
-    body {
+.header {
+  min-height: 145px;
+  padding: 28px 25px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 
-      background: #f1f7f5;
+  background: linear-gradient(
+    135deg,
+    #087f5b,
+    #0b986f
+  );
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+  color: #fff;
 
-      color: #123;
+  position: relative;
+  overflow: hidden;
+}
 
-      overflow-x: hidden;
 
-    }
+/* LENGKUNGAN HEADER */
 
+.header::after {
+  content: "";
 
-    /* =====================================================
-       CONTAINER
-    ===================================================== */
+  position: absolute;
 
-    .container {
+  left: -20%;
+  right: -20%;
 
-      width: 100%;
+  bottom: -105px;
 
-      max-width: 760px;
+  height: 145px;
 
-      margin: 0 auto;
+  background: #f1f7f5;
 
-      padding:
-        0 16px 24px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
 
-    }
+  pointer-events: none;
 
+  z-index: 1;
+}
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
 
-    .header {
+/* ==========================================================
+   LOGO
+========================================================== */
 
-      width: calc(100% + 32px);
+.header-icon {
+  width: 96px;
+  height: 96px;
 
-      margin-left: -16px;
+  flex: 0 0 96px;
 
-      background:
-        linear-gradient(
-          135deg,
-          #087f5b,
-          #0aa678
-        );
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      color: white;
+  border-radius: 24px;
 
-      border-radius:
-        0 0 34px 34px;
+  background: rgba(255,255,255,.16);
 
-      padding:
-        28px 18px 30px;
+  overflow: hidden;
 
-      text-align: center;
+  position: relative;
+  z-index: 3;
+}
 
-    }
+.header-icon img {
+  width: 84px;
+  height: 84px;
 
+  object-fit: contain;
+}
 
-    .header h1 {
 
-      margin: 0;
+/* ==========================================================
+   JUDUL
+========================================================== */
 
-      font-size: 30px;
+.header-text {
+  position: relative;
+  z-index: 3;
+}
 
-      line-height: 1.15;
+.header-text h1 {
+  margin: 0 0 6px;
 
-      font-weight: 800;
+  font-size: clamp(
+    30px,
+    6vw,
+    52px
+  );
 
-      letter-spacing: .3px;
+  line-height: 1;
 
-    }
+  font-weight: 900;
 
+  letter-spacing: .5px;
+}
 
-    .header p {
+.header-text p {
+  margin: 0;
 
-      margin:
-        8px 0 0;
+  font-size: clamp(
+    17px,
+    3vw,
+    25px
+  );
+}
 
-      font-size: 18px;
 
-      line-height: 1.3;
+/* ==========================================================
+   JUDUL HALAMAN
+========================================================== */
 
-      opacity: .95;
+.page-title {
+  padding: 34px 28px 18px;
 
-    }
+  text-align: center;
+}
 
+.page-title h2 {
+  margin: 0;
 
-    /* =====================================================
-       TANGGAL
-    ===================================================== */
+  color: #087f5b;
 
-    .date-card {
+  font-size: clamp(
+    30px,
+    6vw,
+    42px
+  );
 
-      width: 100%;
+  font-weight: 900;
+}
 
-      background: white;
+.page-title span {
+  display: block;
 
-      border-radius: 20px;
+  margin-top: 8px;
 
-      padding:
-        20px 16px;
+  color: #71807c;
 
-      margin-top: 20px;
+  font-size: 17px;
+}
 
-      margin-bottom: 18px;
 
-      text-align: center;
+/* ==========================================================
+   KARTU HARI
+========================================================== */
 
-      box-shadow:
-        0 6px 22px
-        rgba(0, 0, 0, .06);
+.day-card {
+  margin: 10px 24px 18px;
 
-    }
+  padding: 22px 20px;
 
+  background: #fff;
 
-    .hari {
+  border-radius: 26px;
 
-      color: #087f5b;
+  text-align: center;
 
-      font-size: 25px;
+  box-shadow:
+    0 8px 28px rgba(0,0,0,.06);
+}
 
-      line-height: 1.2;
+#hariIni {
+  color: #087f5b;
 
-      font-weight: 800;
+  font-size: 34px;
 
-    }
+  font-weight: 900;
 
+  margin-bottom: 8px;
+}
 
-    .tanggal {
+#tanggalHariIni {
+  color: #71807c;
 
-      margin-top: 6px;
+  font-size: 20px;
+}
 
-      color: #777;
 
-      font-size: 17px;
+/* ==========================================================
+   STATUS GPS
+========================================================== */
 
-      line-height: 1.3;
+.gps-box {
+  margin: 0 24px 18px;
 
-    }
+  padding: 16px 18px;
 
+  background: #fff;
 
-    /* =====================================================
-       PESAN
-    ===================================================== */
+  border-radius: 18px;
 
-    .message {
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.05);
 
-      display: none;
+  text-align: center;
+}
 
-      width: 100%;
+.gps-title {
+  color: #087f5b;
 
-      margin:
-        0 0 15px;
+  font-size: 16px;
 
-      padding:
-        13px 15px;
+  font-weight: 900;
 
-      border-radius: 13px;
+  margin-bottom: 6px;
+}
 
-      font-size: 14px;
+#gpsStatus {
+  color: #71807c;
 
-      line-height: 1.5;
+  font-size: 14px;
 
-      text-align: left;
+  line-height: 1.5;
+}
 
-    }
 
+/* ==========================================================
+   PESAN
+========================================================== */
 
-    .message.success {
+.message {
+  margin: 0 24px 18px;
 
-      display: block;
+  padding: 15px 18px;
 
-      background: #e8f7f0;
+  border-radius: 16px;
 
-      color: #087f5b;
+  font-size: 15px;
 
-    }
+  line-height: 1.5;
 
+  display: none;
+}
 
-    .message.error {
+.message.success {
+  display: block;
 
-      display: block;
+  background: #e4f8ed;
 
-      background: #ffe8e8;
+  color: #087f5b;
+}
 
-      color: #d93025;
+.message.error {
+  display: block;
 
-    }
+  background: #ffe8e8;
 
+  color: #d62828;
+}
 
-    /* =====================================================
-       LIST GURU
-    ===================================================== */
+.message.info {
+  display: block;
 
-    .guru-list {
+  background: #eaf3ff;
 
-      width: 100%;
+  color: #1769aa;
+}
 
-      display: flex;
 
-      flex-direction: column;
+/* ==========================================================
+   DAFTAR GURU
+========================================================== */
 
-      gap: 12px;
+#daftarPiket {
+  padding-bottom: 20px;
+}
 
-    }
+.guru-card {
+  margin: 0 24px 16px;
 
+  padding: 22px;
 
-    /* =====================================================
-       KARTU GURU
-    ===================================================== */
+  background: #fff;
 
-    .guru-button {
+  border-radius: 22px;
 
-      width: 100%;
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.06);
+}
 
-      min-height: 105px;
+.guru-name {
+  color: #075f49;
 
-      border: 0;
+  font-size: 23px;
 
-      border-radius: 18px;
+  font-weight: 900;
 
-      background: white;
+  line-height: 1.25;
 
-      padding:
-        16px 17px;
+  margin-bottom: 6px;
+}
 
-      margin: 0;
+.guru-jabatan {
+  color: #71807c;
 
-      text-align: left;
+  font-size: 16px;
 
-      cursor: pointer;
+  margin-bottom: 14px;
+}
 
-      box-shadow:
-        0 5px 18px
-        rgba(0, 0, 0, .06);
+.guru-status {
+  color: #8a9793;
 
-      transition:
-        transform .15s ease,
-        box-shadow .15s ease;
+  font-size: 15px;
 
-      font-family: inherit;
+  font-weight: 700;
+}
 
-    }
 
+/* ==========================================================
+   TOMBOL ABSEN
+========================================================== */
 
-    .guru-button:active {
+.absen-button {
+  width: 100%;
 
-      transform: scale(.985);
+  min-height: 52px;
 
-    }
+  margin-top: 16px;
 
+  border: 0;
 
-    .guru-button:disabled {
+  border-radius: 14px;
 
-      cursor: default;
+  background:
+    linear-gradient(
+      135deg,
+      #087f5b,
+      #0b986f
+    );
 
-    }
+  color: #fff;
 
+  font-size: 16px;
 
-    /* =====================================================
-       NAMA GURU
-    ===================================================== */
+  font-weight: 900;
 
-    .guru-nama {
+  cursor: pointer;
 
-      display: block;
+  box-shadow:
+    0 5px 15px rgba(
+      8,
+      127,
+      91,
+      .18
+    );
+}
 
-      color: #075f47;
+.absen-button:active {
+  transform: scale(.98);
+}
 
-      font-size: 18px;
+.absen-button:disabled {
+  background: #b7c4c0;
 
-      line-height: 1.25;
+  box-shadow: none;
 
-      font-weight: 800;
+  cursor: not-allowed;
+}
 
-      word-break: normal;
 
-      overflow-wrap: anywhere;
+/* ==========================================================
+   TOMBOL GPS
+========================================================== */
 
-    }
+.gps-button {
+  width: 100%;
 
+  min-height: 52px;
 
-    /* =====================================================
-       JABATAN
-    ===================================================== */
+  margin-top: 12px;
 
-    .guru-jabatan {
+  border: 1px solid #cfe0da;
 
-      display: block;
+  border-radius: 14px;
 
-      margin-top: 5px;
+  background: #fff;
 
-      color: #777;
+  color: #087f5b;
 
-      font-size: 14px;
+  font-size: 15px;
 
-      line-height: 1.3;
+  font-weight: 900;
 
-    }
+  cursor: pointer;
+}
 
+.gps-button:active {
+  transform: scale(.98);
+}
 
-    /* =====================================================
-       STATUS
-    ===================================================== */
 
-    .guru-status {
+/* ==========================================================
+   LOADING
+========================================================== */
 
-      display: block;
+.loading {
+  margin: 0 24px 20px;
 
-      margin-top: 9px;
+  padding: 30px 15px;
 
-      font-size: 14px;
+  background: #fff;
 
-      line-height: 1.35;
+  border-radius: 18px;
 
-      font-weight: 600;
+  text-align: center;
 
-    }
+  color: #71807c;
 
+  display: none;
+}
 
-    .status-normal {
 
-      color: #087f5b;
+/* ==========================================================
+   PESAN KOSONG
+========================================================== */
 
-    }
+.empty-box {
+  margin: 0 24px 20px;
 
+  padding: 30px 15px;
 
-    .status-disabled {
+  background: #fff;
 
-      color: #999;
+  border-radius: 18px;
 
-    }
+  text-align: center;
 
+  color: #71807c;
+}
 
-    .status-success {
 
-      color: #087f5b;
+/* ==========================================================
+   FOOTER
+========================================================== */
 
-    }
+footer {
+  text-align: center;
 
+  padding: 20px 20px 35px;
 
-    .status-error {
+  color: #83908c;
 
-      color: #d93025;
+  font-size: 13px;
+}
 
-    }
+footer strong {
+  display: block;
 
+  color: #087f5b;
 
-    /* =====================================================
-       SUDAH ABSEN
-    ===================================================== */
+  margin-bottom: 4px;
+}
 
-    .guru-button.sudah {
 
-      background: #eefaf5;
+/* ==========================================================
+   MOBILE
+========================================================== */
 
-      box-shadow:
-        0 4px 15px
-        rgba(8, 127, 91, .08);
+@media (max-width: 600px) {
 
-      cursor: default;
+  .header {
+    min-height: 138px;
 
-    }
+    padding:
+      24px 18px;
 
+    gap: 14px;
+  }
 
-    /* =====================================================
-       BUKAN PIKET
-    ===================================================== */
+  .header-icon {
+    width: 78px;
+    height: 78px;
 
-    .guru-button.bukan-piket {
+    flex-basis: 78px;
 
-      background: #ffffff;
+    border-radius: 20px;
+  }
 
-      cursor: default;
+  .header-icon img {
+    width: 70px;
+    height: 70px;
+  }
 
-    }
+  .header-text h1 {
+    font-size: 29px;
+  }
 
+  .header-text p {
+    font-size: 17px;
+  }
 
-    /* =====================================================
-       LOADING
-    ===================================================== */
+  .header::after {
+    bottom: -105px;
+    height: 145px;
+  }
 
-    .loading {
+  .page-title {
+    padding:
+      28px 20px 16px;
+  }
 
-      width: 100%;
+  .day-card {
+    margin:
+      8px 14px 16px;
 
-      padding:
-        30px 15px;
+    padding:
+      20px 15px;
 
-      text-align: center;
+    border-radius: 22px;
+  }
 
-      color: #777;
+  #hariIni {
+    font-size: 30px;
+  }
 
-      font-size: 16px;
+  #tanggalHariIni {
+    font-size: 18px;
+  }
 
-    }
+  .gps-box {
+    margin:
+      0 14px 16px;
+  }
 
+  .message {
+    margin:
+      0 14px 16px;
+  }
 
-    /* =====================================================
-       TOMBOL KEMBALI
-    ===================================================== */
+  .guru-card {
+    margin:
+      0 14px 15px;
 
-    .back-button {
+    padding: 19px;
 
-      width: 100%;
+    border-radius: 20px;
+  }
 
-      min-height: 52px;
+  .guru-name {
+    font-size: 21px;
+  }
 
-      margin-top: 18px;
+  .guru-jabatan {
+    font-size: 15px;
+  }
 
-      border: 0;
+}
 
-      border-radius: 16px;
 
-      padding:
-        13px 15px;
+/* ==========================================================
+   ANIMASI
+========================================================== */
 
-      background: white;
+@keyframes muncul {
 
-      color: #087f5b;
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 
-      font-size: 16px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-      font-weight: 700;
+}
 
-      font-family: inherit;
+.guru-card {
+  animation:
+    muncul .25s ease;
+}
 
-      cursor: pointer;
 
-      box-shadow:
-        0 5px 18px
-        rgba(0, 0, 0, .05);
+/* ==========================================================
+   PRINT
+========================================================== */
 
-    }
+@media print {
 
+  .gps-box,
+  .gps-button,
+  .absen-button,
+  .message {
+    display: none !important;
+  }
 
-    .back-button:active {
+  .guru-card {
+    box-shadow: none;
 
-      transform: scale(.985);
+    border: 1px solid #ddd;
+  }
 
-    }
+  .header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
+}
 
-    /* =====================================================
-       TABLET
-    ===================================================== */
-
-    @media (min-width: 600px) {
-
-      .container {
-
-        padding:
-          0 22px 30px;
-
-      }
-
-
-      .header {
-
-        width: calc(100% + 44px);
-
-        margin-left: -22px;
-
-        padding:
-          32px 25px 34px;
-
-      }
-
-
-      .header h1 {
-
-        font-size: 34px;
-
-      }
-
-
-      .header p {
-
-        font-size: 20px;
-
-      }
-
-
-      .guru-list {
-
-        gap: 14px;
-
-      }
-
-
-      .guru-button {
-
-        padding:
-          18px 20px;
-
-      }
-
-
-      .guru-nama {
-
-        font-size: 19px;
-
-      }
-
-    }
-
-
-    /* =====================================================
-       HP KECIL
-    ===================================================== */
-
-    @media (max-width: 380px) {
-
-      .container {
-
-        padding-left: 11px;
-
-        padding-right: 11px;
-
-      }
-
-
-      .header {
-
-        width: calc(100% + 22px);
-
-        margin-left: -11px;
-
-        border-radius:
-          0 0 28px 28px;
-
-        padding:
-          23px 13px 26px;
-
-      }
-
-
-      .header h1 {
-
-        font-size: 24px;
-
-      }
-
-
-      .header p {
-
-        font-size: 16px;
-
-      }
-
-
-      .date-card {
-
-        padding:
-          17px 12px;
-
-        border-radius: 17px;
-
-      }
-
-
-      .hari {
-
-        font-size: 22px;
-
-      }
-
-
-      .tanggal {
-
-        font-size: 16px;
-
-      }
-
-
-      .guru-button {
-
-        min-height: 96px;
-
-        padding:
-          14px 15px;
-
-        border-radius: 16px;
-
-      }
-
-
-      .guru-nama {
-
-        font-size: 16px;
-
-      }
-
-
-      .guru-jabatan {
-
-        font-size: 13px;
-
-      }
-
-
-      .guru-status {
-
-        font-size: 13px;
-
-      }
-
-
-      .back-button {
-
-        font-size: 15px;
-
-      }
-
-    }
-
-  </style>
-
+</style>
 </head>
 
 
 <body>
 
-  <div class="container">
+<div class="app">
 
 
-    <!-- ==================================================
-         HEADER
-    =================================================== -->
+  <!-- ======================================================
+       HEADER
+  ======================================================= -->
 
-    <div class="header">
+  <header class="header">
 
-      <h1>
-        🧑‍🏫 ABSENSI GURU PIKET
-      </h1>
+    <div class="header-icon">
 
-      <p>
-        MTs. BADRIL HUDA
-      </p>
-
-    </div>
-
-
-    <!-- ==================================================
-         TANGGAL
-    =================================================== -->
-
-    <div class="date-card">
-
-      <div
-        id="hari"
-        class="hari"
+      <img
+        src="https://drive.google.com/thumbnail?id=17TLa9x9TYyBQLGVx-d7DlWrNsAVE-v8e&sz=w300"
+        alt="Logo MTs Badril Huda"
       >
-        Memuat...
-      </div>
-
-      <div
-        id="tanggal"
-        class="tanggal"
-      >
-        Memuat tanggal...
-      </div>
 
     </div>
 
 
-    <!-- ==================================================
-         PESAN
-    =================================================== -->
+    <div class="header-text">
 
-    <div
-      id="message"
-      class="message"
-    ></div>
+      <h1>ABSENSI GURU</h1>
 
-
-    <!-- ==================================================
-         DAFTAR GURU
-    =================================================== -->
-
-    <div
-      id="guruList"
-      class="guru-list"
-    >
-
-      <div class="loading">
-        ⏳ Memuat daftar guru...
-      </div>
+      <p>MTs. BADRIL HUDA</p>
 
     </div>
 
+  </header>
 
-    <!-- ==================================================
-         KEMBALI
-    =================================================== -->
+
+
+  <!-- ======================================================
+       JUDUL
+  ======================================================= -->
+
+  <section class="page-title">
+
+    <h2>GURU PIKET</h2>
+
+    <span>
+      Absensi guru piket menggunakan lokasi GPS
+    </span>
+
+  </section>
+
+
+
+  <!-- ======================================================
+       HARI
+  ======================================================= -->
+
+  <section class="day-card">
+
+    <div id="hariIni">
+      MEMUAT...
+    </div>
+
+    <div id="tanggalHariIni">
+      Memuat tanggal...
+    </div>
+
+  </section>
+
+
+
+  <!-- ======================================================
+       STATUS GPS
+  ======================================================= -->
+
+  <section class="gps-box">
+
+    <div class="gps-title">
+      📍 STATUS LOKASI
+    </div>
+
+    <div id="gpsStatus">
+      Lokasi belum diperiksa.
+    </div>
+
 
     <button
       type="button"
-      class="back-button"
-      onclick="kembaliGuru()"
+      class="gps-button"
+      id="gpsButton"
+      onclick="cekGPS()"
     >
-      ← KEMBALI KE ABSENSI GURU
+      📍 CEK LOKASI GPS
     </button>
 
+  </section>
+
+
+
+  <!-- ======================================================
+       PESAN
+  ======================================================= -->
+
+  <div
+    id="rekapMessage"
+    class="message"
+  ></div>
+
+
+
+  <!-- ======================================================
+       LOADING
+  ======================================================= -->
+
+  <div
+    id="loading"
+    class="loading"
+  >
+    ⏳ Memuat data guru piket...
   </div>
 
 
-  <script>
 
-    // =====================================================
-    // URL WEB APP
-    // =====================================================
+  <!-- ======================================================
+       DAFTAR GURU
+  ======================================================= -->
 
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
+  <main id="daftarPiket">
 
+    <div class="empty-box">
 
-    // =====================================================
-    // API JSONP
-    // =====================================================
+      Memuat jadwal guru piket...
 
-    function panggilAPI(
-      parameter,
-      callback
-    ) {
+    </div>
 
-      const callbackName =
-        "piketCallback_" +
-        Date.now() +
-        "_" +
-        Math.floor(
-          Math.random() * 99999
-        );
+  </main>
 
 
-      window[callbackName] =
-        function(result) {
 
-          try {
+  <!-- ======================================================
+       FOOTER
+  ======================================================= -->
 
-            callback(result);
+  <footer>
 
-          }
+    <strong>
+      MTs. BADRIL HUDA
+    </strong>
 
-          finally {
+    Absensi Guru Piket
 
-            delete window[
-              callbackName
-            ];
-
-          }
-
-        };
+  </footer>
 
 
-      const script =
-        document.createElement(
-          "script"
-        );
+</div>
 
 
-      const params =
-        new URLSearchParams();
+<!-- ========================================================
+     JAVASCRIPT PIKET
+========================================================= -->
+
+<script src="piket.js"></script>
 
 
-      Object.keys(
-        parameter
-      ).forEach(
-        function(key) {
+<!-- ========================================================
+     FUNGSI DASAR GPS
+========================================================= -->
 
-          params.append(
-            key,
-            parameter[key]
-          );
+<script>
 
-        }
-      );
+let lokasiGPS = null;
 
 
-      params.append(
-        "callback",
-        callbackName
-      );
+/* ==========================================================
+   CEK GPS
+========================================================== */
+
+function cekGPS() {
+
+  const status =
+    document.getElementById(
+      'gpsStatus'
+    );
+
+  const button =
+    document.getElementById(
+      'gpsButton'
+    );
 
 
-      script.src =
-        API_URL +
-        "?" +
-        params.toString();
+  if (!navigator.geolocation) {
+
+    status.innerHTML =
+      '❌ Browser ini tidak mendukung GPS.';
+
+    return;
+
+  }
 
 
-      script.onerror =
-        function() {
-
-          delete window[
-            callbackName
-          ];
-
-          tampilkanPesan(
-            "Tidak dapat terhubung ke server.",
-            "error"
-          );
-
-        };
+  status.innerHTML =
+    '⏳ Mengambil lokasi GPS...';
 
 
-      document.body.appendChild(
-        script
-      );
+  button.disabled = true;
 
-    }
-
-
-    // =====================================================
-    // MUAT PIKET
-    // =====================================================
-
-    function muatPiket() {
-
-      panggilAPI(
-        {
-          action:
-            "getPiketHariIni"
-        },
-
-        function(result) {
-
-          if (
-            !result ||
-            result.sukses !== true
-          ) {
-
-            tampilkanPesan(
-              result?.pesan ||
-              "Gagal mengambil jadwal piket.",
-              "error"
-            );
-
-            return;
-
-          }
+  button.innerHTML =
+    '⏳ MENGAMBIL LOKASI...';
 
 
-          document.getElementById(
-            "hari"
-          ).textContent =
-            result.hari;
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      lokasiGPS = {
+
+        latitude:
+          position.coords.latitude,
+
+        longitude:
+          position.coords.longitude,
+
+        accuracy:
+          position.coords.accuracy
+
+      };
 
 
-          document.getElementById(
-            "tanggal"
-          ).textContent =
-            formatTanggal(
-              result.tanggal
-            );
+      status.innerHTML =
+        '✅ GPS aktif.<br>' +
+        'Akurasi: ' +
+        Math.round(
+          position.coords.accuracy
+        ) +
+        ' meter';
 
 
-          tampilkanGuru(
-            result.data || []
-          );
+      button.disabled = false;
 
-        }
+      button.innerHTML =
+        '🔄 PERBARUI LOKASI';
 
-      );
-
-    }
+    },
 
 
-    // =====================================================
-    // TAMPILKAN GURU
-    // =====================================================
+    function(error) {
 
-    function tampilkanGuru(
-      data
-    ) {
-
-      const list =
-        document.getElementById(
-          "guruList"
-        );
+      lokasiGPS = null;
 
 
-      if (!data.length) {
+      let pesan =
+        '❌ Lokasi GPS tidak dapat diperoleh.';
 
-        list.innerHTML = `
-          <div class="loading">
-            Tidak ada data guru.
-          </div>
-        `;
 
-        return;
+      if (error.code === 1) {
+
+        pesan =
+          '❌ Izin lokasi ditolak. ' +
+          'Silakan izinkan akses lokasi pada browser.';
+
+      }
+
+      else if (error.code === 2) {
+
+        pesan =
+          '❌ Lokasi tidak tersedia. ' +
+          'Pastikan GPS aktif.';
+
+      }
+
+      else if (error.code === 3) {
+
+        pesan =
+          '❌ Waktu pengambilan lokasi habis. ' +
+          'Silakan coba lagi.';
 
       }
 
 
-      let html = "";
+      status.innerHTML = pesan;
 
 
-      data.forEach(
-        function(guru) {
+      button.disabled = false;
 
-          let statusText =
-            "Ketuk untuk absensi";
+      button.innerHTML =
+        '📍 COBA LAGI';
 
+    },
 
-          let statusClass =
-            "status-normal";
+    {
 
+      enableHighAccuracy: true,
 
-          let disabled =
-            "";
+      timeout: 15000,
 
-
-          let extraClass =
-            "";
-
-
-          if (
-            guru.sudahAbsen
-          ) {
-
-            statusText =
-              "✓ Sudah absen hari ini • " +
-              guru.jamAbsen;
-
-            statusClass =
-              "status-success";
-
-            disabled =
-              "disabled";
-
-            extraClass =
-              "sudah";
-
-          }
-
-          else if (
-            !guru.punyaJadwal
-          ) {
-
-            statusText =
-              "Tidak bisa absen hari ini";
-
-            statusClass =
-              "status-disabled";
-
-            extraClass =
-              "bukan-piket";
-
-          }
-
-
-          html += `
-
-            <button
-              type="button"
-              class="guru-button ${extraClass}"
-              ${disabled}
-              onclick="absenPiket(
-                '${escapeJs(guru.kodeQR)}',
-                this
-              )"
-            >
-
-              <span class="guru-nama">
-                ${escapeHtml(guru.nama)}
-              </span>
-
-              <span class="guru-jabatan">
-                ${escapeHtml(guru.jabatan)}
-              </span>
-
-              <span
-                class="guru-status ${statusClass}"
-              >
-                ${statusText}
-              </span>
-
-            </button>
-
-          `;
-
-        }
-      );
-
-
-      list.innerHTML =
-        html;
+      maximumAge: 0
 
     }
 
+  );
 
-    // =====================================================
-    // ABSENSI
-    // =====================================================
+}
 
-    function absenPiket(
-      kodeQR,
-      button
-    ) {
 
-      if (
-        button.disabled
-      ) {
+/* ==========================================================
+   TANGGAL
+========================================================== */
 
-        return;
+(function() {
 
-      }
+  const hari = [
 
+    'MINGGU',
+    'SENIN',
+    'SELASA',
+    'RABU',
+    'KAMIS',
+    'JUMAT',
+    'SABTU'
 
-      button.disabled =
-        true;
+  ];
 
 
-      const status =
-        button.querySelector(
-          ".guru-status"
-        );
+  const sekarang =
+    new Date();
 
 
-      if (status) {
+  const namaHari =
+    hari[
+      sekarang.getDay()
+    ];
 
-        status.textContent =
-          "⏳ Memproses absensi...";
 
-      }
-
-
-      panggilAPI(
-        {
-          action:
-            "absensiPiket",
-
-          kodeQR:
-            kodeQR
-        },
-
-        function(result) {
-
-          if (
-            result &&
-            result.sukses === true
-          ) {
-
-            button.classList.add(
-              "sudah"
-            );
-
-
-            if (status) {
-
-              status.className =
-                "guru-status status-success";
-
-
-              status.textContent =
-                "✓ Sudah absen hari ini • " +
-                result.jam;
-
-            }
-
-
-            tampilkanPesan(
-              result.pesan,
-              "success"
-            );
-
-
-            return;
-
-          }
-
-
-          if (
-            result &&
-            result.tidakPiket
-          ) {
-
-            button.disabled =
-              false;
-
-
-            if (status) {
-
-              status.className =
-                "guru-status status-error";
-
-
-              status.textContent =
-                "✕ Tidak bisa absen hari ini";
-
-            }
-
-
-            tampilkanPesan(
-              result.pesan,
-              "error"
-            );
-
-
-            return;
-
-          }
-
-
-          if (
-            result &&
-            result.sudahAbsen
-          ) {
-
-            button.disabled =
-              true;
-
-
-            button.classList.add(
-              "sudah"
-            );
-
-
-            if (status) {
-
-              status.className =
-                "guru-status status-success";
-
-
-              status.textContent =
-                "✓ Sudah absen hari ini • " +
-                result.jam;
-
-            }
-
-
-            return;
-
-          }
-
-
-          button.disabled =
-            false;
-
-
-          if (status) {
-
-            status.className =
-              "guru-status status-error";
-
-
-            status.textContent =
-              result?.pesan ||
-              "Absensi gagal.";
-
-          }
-
-
-          tampilkanPesan(
-            result?.pesan ||
-            "Absensi gagal.",
-            "error"
-          );
-
-        }
-
-      );
-
-    }
-
-
-    // =====================================================
-    // PESAN
-    // =====================================================
-
-    function tampilkanPesan(
-      text,
-      type
-    ) {
-
-      const box =
-        document.getElementById(
-          "message"
-        );
-
-
-      box.className =
-        "message " +
-        type;
-
-
-      box.textContent =
-        text;
-
-    }
-
-
-    // =====================================================
-    // FORMAT TANGGAL
-    // =====================================================
-
-    function formatTanggal(
-      tanggal
-    ) {
-
-      const bagian =
-        String(
-          tanggal
-        ).split("-");
-
-
-      if (
-        bagian.length !== 3
-      ) {
-
-        return tanggal;
-
-      }
-
-
-      return new Intl.DateTimeFormat(
-        "id-ID",
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }
-      ).format(
-        new Date(
-          Number(bagian[0]),
-          Number(bagian[1]) - 1,
-          Number(bagian[2])
-        )
-      );
-
-    }
-
-
-    // =====================================================
-    // ESCAPE HTML
-    // =====================================================
-
-    function escapeHtml(
-      text
-    ) {
-
-      return String(
-        text ?? ""
-      )
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
-
-
-    // =====================================================
-    // ESCAPE JAVASCRIPT
-    // =====================================================
-
-    function escapeJs(
-      text
-    ) {
-
-      return String(
-        text ?? ""
-      )
-        .replace(
-          /\\/g,
-          "\\\\"
-        )
-        .replace(
-          /'/g,
-          "\\'"
-        )
-        .replace(
-          /\r/g,
-          ""
-        )
-        .replace(
-          /\n/g,
-          "\\n"
-        );
-
-    }
-
-
-    // =====================================================
-    // KEMBALI
-    // =====================================================
-
-    function kembaliGuru() {
-
-      if (
-        document.referrer &&
-        document.referrer.indexOf(
-          location.hostname
-        ) !== -1
-      ) {
-
-        history.back();
-
-      }
-
-      else {
-
-        window.location.href =
-          API_URL;
-
-      }
-
-    }
-
-
-    // =====================================================
-    // MULAI
-    // =====================================================
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function() {
-
-        muatPiket();
-
+  const tanggal =
+    sekarang.toLocaleDateString(
+      'id-ID',
+      {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
       }
     );
 
-  </script>
+
+  const hariElement =
+    document.getElementById(
+      'hariIni'
+    );
+
+
+  const tanggalElement =
+    document.getElementById(
+      'tanggalHariIni'
+    );
+
+
+  if (hariElement) {
+
+    hariElement.textContent =
+      namaHari;
+
+  }
+
+
+  if (tanggalElement) {
+
+    tanggalElement.textContent =
+      tanggal;
+
+  }
+
+})();
+
+
+/* ==========================================================
+   FUNGSI BANTU UNTUK PIKET.JS
+========================================================== */
+
+function tampilkanPesan(
+  pesan,
+  tipe
+) {
+
+  const box =
+    document.getElementById(
+      'rekapMessage'
+    );
+
+
+  if (!box) return;
+
+
+  box.className =
+    'message ' +
+    (
+      tipe ||
+      'info'
+    );
+
+
+  box.innerHTML =
+    pesan || '';
+
+}
+
+
+function sembunyikanPesan() {
+
+  const box =
+    document.getElementById(
+      'rekapMessage'
+    );
+
+
+  if (!box) return;
+
+
+  box.className =
+    'message';
+
+
+  box.innerHTML =
+    '';
+
+}
+
+
+/* ==========================================================
+   INFORMASI GPS UNTUK PIKET.JS
+========================================================== */
+
+function getLokasiGPS() {
+
+  return lokasiGPS;
+
+}
+
+
+/* ==========================================================
+   VALIDASI GPS
+========================================================== */
+
+function gpsSiap() {
+
+  return (
+    lokasiGPS !== null &&
+    Number.isFinite(
+      lokasiGPS.latitude
+    ) &&
+    Number.isFinite(
+      lokasiGPS.longitude
+    )
+  );
+
+}
+
+</script>
 
 </body>
-
 </html>
-
-<script src="piket.js"></script>
