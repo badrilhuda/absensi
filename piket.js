@@ -19,7 +19,7 @@ const API_URL =
 
 const LOKASI_SEKOLAH_LAT = -7.757725;
 const LOKASI_SEKOLAH_LNG = 113.704143;
-const BATAS_RADIUS_GPS = 20;
+const BATAS_RADIUS_GPS = 10;
 
 
 // ============================================================
