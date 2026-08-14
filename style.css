@@ -46,7 +46,7 @@ button {
 ========================================================== */
 
 .header {
-  min-height: 130px;
+  min-height: 165px;
   padding: 28px 25px;
   display: flex;
   align-items: center;
@@ -73,9 +73,10 @@ button {
   left: -10%;
   width: 120%;
 
-  bottom: -70px;
+  /* Turunkan lengkungan */
+  bottom: -95px;
 
-  height: 115px;
+  height: 125px;
 
   background: #f1f7f5;
 
