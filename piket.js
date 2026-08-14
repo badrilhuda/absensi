@@ -17,9 +17,9 @@ const API_URL =
 // LOKASI MTs. BADRIL HUDA
 // ============================================================
 
-const LOKASI_SEKOLAH_LAT = -7.757647;
-const LOKASI_SEKOLAH_LNG = 113.704149;
-const BATAS_RADIUS_GPS = 10;
+const LOKASI_SEKOLAH_LAT = -7.757725;
+const LOKASI_SEKOLAH_LNG = 113.704143;
+const BATAS_RADIUS_GPS = 20;
 
 
 // ============================================================
