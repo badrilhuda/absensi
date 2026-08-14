@@ -43,24 +43,24 @@ body{
    HEADER
 ========================================================== */
 
-.header{
-  min-height:175px;
-  padding:28px 25px 40px;
+.header {
+  min-height: 145px;
+  padding: 28px 25px;
 
-  display:flex;
-  align-items:center;
-  gap:18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 
-  background:linear-gradient(
+  background: linear-gradient(
     135deg,
     #087f5b,
     #0b986f
   );
 
-  color:#fff;
+  color: white;
 
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 
@@ -68,32 +68,37 @@ body{
    LENGKUNGAN PUTIH
 ========================================================== */
 
-.header:after{
-  content:"";
+.header:after {
+  content: "";
 
-  position:absolute;
+  position: absolute;
 
-  left:50%;
-  bottom:-165px;
+  left: 50%;
+  bottom: -105px;
 
-  width:160%;
-  height:260px;
+  width: 155%;
+  height: 135px;
 
-  transform:translateX(-50%);
+  transform: translateX(-50%);
 
-  background:#f1f7f5;
+  background: #f1f7f5;
 
-  border-radius:50% 50% 0 0;
+  border-radius: 50% 50% 0 0;
 
-  pointer-events:none;
-
-  z-index:1;
+  pointer-events: none;
+  z-index: 1;
 }
    
 /* ==========================================================
    LOGO
 ========================================================== */
 
+.header-icon,
+.header-text {
+  position: relative;
+  z-index: 2;
+}
+   
 .header-icon{
   width:96px;
   height:96px;
