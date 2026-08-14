@@ -1,9 +1,20 @@
 // ============================================================
 // PIKET.JS
-// ABSENSI GURU PIKET
-// GPS RADIUS 10 METER
-// VERSI BERSIH
+// ABSENSI GURU PIKET + GPS RADIUS 10 METER
 // ============================================================
+
+
+// ============================================================
+// KONFIGURASI GPS
+// ============================================================
+
+const LAT_SEKOLAH = -7.7575797;
+const LNG_SEKOLAH = 113.7043613;
+
+const RADIUS_METER = 10;
+
+// Akurasi GPS maksimal yang diterima
+const AKURASI_MAKSIMAL = 15;
 
 
 // ============================================================
@@ -11,180 +22,114 @@
 // ============================================================
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbwQWJ5fS6Yt9P8xQ7vN3mL2kR1sT0uV9wX8yZ7aB6cD5eF4gH3jK2lM1nO0p/exec";
+  "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
 
 
 // ============================================================
-// KOORDINAT SEKOLAH
+// API JSONP
 // ============================================================
 
-const LAT_SEKOLAH =
-  -7.7575797;
-
-const LNG_SEKOLAH =
-  113.7043613;
-
-
-// Radius maksimal absensi
-const RADIUS_METER =
-  10;
-
-
-// Akurasi GPS maksimal yang diterima
-const AKURASI_MAKSIMAL =
-  15;
-
-
-// ============================================================
-// VARIABEL GLOBAL
-// ============================================================
-
-let daftarGuru = [];
-
-
-// ============================================================
-// SAAT HALAMAN SELESAI DIMUAT
-// ============================================================
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
-
-    muatDaftarGuru();
-
-  }
-);
-
-
-// ============================================================
-// PANGGIL GOOGLE APPS SCRIPT
-// JSONP
-// ============================================================
-
-function panggilAPI(
-  params,
-  callback
-) {
+function panggilAPI(parameter, callback) {
 
   const callbackName =
-    "jsonpCallback_" +
+    "piketCallback_" +
     Date.now() +
     "_" +
-    Math.floor(
-      Math.random() * 100000
-    );
+    Math.floor(Math.random() * 99999);
 
-
-  let selesai =
-    false;
-
-
-  function selesaiRequest(data) {
-
-    if (selesai) {
-      return;
-    }
-
-    selesai = true;
-
+  window[callbackName] = function(result) {
 
     try {
+      callback(result);
+    }
 
-      callback(
-        data
-      );
-
-    } catch (error) {
+    catch (error) {
 
       console.error(
+        "Error callback:",
         error
       );
 
-    }
-
-
-    try {
-
-      delete window[
-        callbackName
-      ];
-
-    } catch (e) {}
-
-
-    if (script) {
-
-      script.remove();
+      tampilkanPesan(
+        "Terjadi kesalahan saat menerima data server.",
+        "error"
+      );
 
     }
 
-  }
+    finally {
+
+      try {
+
+        delete window[
+          callbackName
+        ];
+
+      }
+
+      catch (e) {}
+
+    }
+
+  };
 
 
-  window[
-    callbackName
-  ] =
-    selesaiRequest;
+  const script =
+    document.createElement("script");
 
 
-  const query =
+  const params =
     new URLSearchParams();
 
 
-  Object.keys(params)
-    .forEach(
-      function (key) {
+  Object.keys(parameter).forEach(
+    function(key) {
 
-        const value =
-          params[key];
+      const value =
+        parameter[key];
 
+      params.append(
+        key,
+        value === undefined ||
+        value === null
+          ? ""
+          : String(value)
+      );
 
-        if (
-          value !== undefined &&
-          value !== null
-        ) {
-
-          query.append(
-            key,
-            String(value)
-          );
-
-        }
-
-      }
-    );
+    }
+  );
 
 
-  query.append(
+  params.append(
     "callback",
     callbackName
   );
 
 
-  const script =
-    document.createElement(
-      "script"
-    );
-
-
   script.src =
     API_URL +
     "?" +
-    query.toString();
+    params.toString();
 
 
   script.onerror =
-    function () {
+    function() {
 
-      selesaiRequest({
+      try {
 
-        sukses:
-          false,
+        delete window[
+          callbackName
+        ];
 
-        pesan:
-          "Gagal terhubung ke server Google Apps Script."
+      }
 
-      });
+      catch (e) {}
+
+
+      tampilkanPesan(
+        "Tidak dapat terhubung ke server Google Apps Script.",
+        "error"
+      );
 
     };
 
@@ -192,6 +137,261 @@ function panggilAPI(
   document.body.appendChild(
     script
   );
+
+}
+
+
+// ============================================================
+// MUAT DATA PIKET HARI INI
+// ============================================================
+
+function muatPiket() {
+
+  const guruList =
+    document.getElementById(
+      "guruList"
+    );
+
+
+  if (guruList) {
+
+    guruList.innerHTML = `
+      <div class="loading">
+        ⏳ Memuat daftar guru...
+      </div>
+    `;
+
+  }
+
+
+  panggilAPI(
+    {
+      action:
+        "getPiketHariIni"
+    },
+
+    function(result) {
+
+      if (
+        !result ||
+        result.sukses !== true
+      ) {
+
+        tampilkanPesan(
+          result?.pesan ||
+          "Gagal mengambil jadwal piket.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      // --------------------------------------------------------
+      // HARI
+      // --------------------------------------------------------
+
+      const hari =
+        document.getElementById(
+          "hari"
+        );
+
+
+      if (hari) {
+
+        hari.textContent =
+          result.hari || "";
+
+      }
+
+
+      // --------------------------------------------------------
+      // TANGGAL
+      // --------------------------------------------------------
+
+      const tanggal =
+        document.getElementById(
+          "tanggal"
+        );
+
+
+      if (tanggal) {
+
+        tanggal.textContent =
+          formatTanggal(
+            result.tanggal
+          );
+
+      }
+
+
+      // --------------------------------------------------------
+      // DATA GURU
+      // --------------------------------------------------------
+
+      tampilkanGuru(
+        result.data || []
+      );
+
+    }
+
+  );
+
+}
+
+
+// ============================================================
+// TAMPILKAN DAFTAR GURU
+// ============================================================
+
+function tampilkanGuru(data) {
+
+  const list =
+    document.getElementById(
+      "guruList"
+    );
+
+
+  if (!list) {
+    return;
+  }
+
+
+  if (
+    !Array.isArray(data) ||
+    data.length === 0
+  ) {
+
+    list.innerHTML = `
+      <div class="loading">
+        Tidak ada data guru.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  let html = "";
+
+
+  data.forEach(
+    function(guru) {
+
+      let statusText =
+        "Ketuk untuk absensi";
+
+      let statusClass =
+        "status-normal";
+
+      let disabled =
+        "";
+
+      let extraClass =
+        "";
+
+
+      // --------------------------------------------------------
+      // SUDAH ABSEN
+      // --------------------------------------------------------
+
+      if (
+        guru.sudahAbsen
+      ) {
+
+        statusText =
+          "✓ Sudah absen hari ini • " +
+          (
+            guru.jamAbsen ||
+            ""
+          );
+
+        statusClass =
+          "status-success";
+
+        disabled =
+          "disabled";
+
+        extraClass =
+          "sudah";
+
+      }
+
+
+      // --------------------------------------------------------
+      // BUKAN GURU PIKET
+      // --------------------------------------------------------
+
+      else if (
+        !guru.punyaJadwal
+      ) {
+
+        statusText =
+          "Tidak bisa absen hari ini";
+
+        statusClass =
+          "status-disabled";
+
+        extraClass =
+          "bukan-piket";
+
+        disabled =
+          "disabled";
+
+      }
+
+
+      // --------------------------------------------------------
+      // GURU PIKET
+      // --------------------------------------------------------
+
+      else {
+
+        statusText =
+          "Ketuk untuk absensi";
+
+        statusClass =
+          "status-normal";
+
+      }
+
+
+      html += `
+        <button
+          type="button"
+          class="guru-button ${extraClass}"
+          ${disabled}
+          onclick="absenPiket(
+            '${escapeJs(guru.kodeQR)}',
+            this
+          )"
+        >
+
+          <span class="guru-nama">
+            ${escapeHtml(guru.nama)}
+          </span>
+
+          <span class="guru-jabatan">
+            ${escapeHtml(guru.jabatan)}
+          </span>
+
+          <span
+            class="guru-status ${statusClass}"
+          >
+            ${statusText}
+          </span>
+
+        </button>
+      `;
+
+    }
+  );
+
+
+  list.innerHTML =
+    html;
 
 }
 
@@ -271,186 +471,48 @@ function hitungJarak(
 
 
 // ============================================================
-// MUAT DAFTAR GURU
+// CEK DUKUNGAN GPS
 // ============================================================
 
-function muatDaftarGuru() {
+function cekDukunganGPS() {
 
-  const container =
-    document.getElementById(
-      "daftarGuru"
+  if (
+    !navigator.geolocation
+  ) {
+
+    tampilkanPesan(
+      "HP atau browser ini tidak mendukung GPS.",
+      "error"
     );
 
-
-  if (!container) {
-
-    return;
+    return false;
 
   }
 
 
-  container.innerHTML =
-    '<div class="loading">Memuat daftar guru...</div>';
+  if (
+    window.location.protocol !== "https:" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+  ) {
 
-
-  panggilAPI(
-
-    {
-
-      action:
-        "getDaftarGuru"
-
-    },
-
-
-    function (result) {
-
-
-      if (
-        !result ||
-        result.sukses !== true
-      ) {
-
-        container.innerHTML =
-          '<div class="error-box">' +
-          (
-            result?.pesan ||
-            "Gagal memuat daftar guru."
-          ) +
-          "</div>";
-
-        return;
-
-      }
-
-
-      daftarGuru =
-        result.data ||
-        result.guru ||
-        [];
-
-
-      if (
-        !Array.isArray(
-          daftarGuru
-        ) ||
-        daftarGuru.length === 0
-      ) {
-
-        container.innerHTML =
-          '<div class="empty-box">' +
-          "Data guru belum tersedia." +
-          "</div>";
-
-        return;
-
-      }
-
-
-      tampilkanDaftarGuru();
-
-    }
-
-  );
-
-}
-
-
-// ============================================================
-// TAMPILKAN DAFTAR GURU
-// ============================================================
-
-function tampilkanDaftarGuru() {
-
-  const container =
-    document.getElementById(
-      "daftarGuru"
+    tampilkanPesan(
+      "GPS membutuhkan koneksi HTTPS. Buka halaman melalui GitHub Pages.",
+      "error"
     );
 
-
-  if (!container) {
-
-    return;
+    return false;
 
   }
 
 
-  container.innerHTML =
-    "";
-
-
-  daftarGuru.forEach(
-    function (guru) {
-
-      const kodeQR =
-        guru.kodeQR ||
-        guru.kode ||
-        guru.id ||
-        "";
-
-
-      const nama =
-        guru.nama ||
-        guru.name ||
-        "Nama Guru";
-
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.type =
-        "button";
-
-
-      button.className =
-        "guru-button";
-
-
-      button.dataset.kode =
-        kodeQR;
-
-
-      button.innerHTML =
-        `
-        <span class="guru-name">
-          ${escapeHTML(nama)}
-        </span>
-
-        <small class="guru-status status-normal">
-          Tekan untuk absen
-        </small>
-        `;
-
-
-      button.addEventListener(
-        "click",
-        function () {
-
-          absenPiket(
-            kodeQR,
-            button
-          );
-
-        }
-      );
-
-
-      container.appendChild(
-        button
-      );
-
-    }
-  );
+  return true;
 
 }
 
 
 // ============================================================
 // PROSES ABSENSI GURU PIKET
-// DENGAN GPS
 // ============================================================
 
 function absenPiket(
@@ -461,6 +523,19 @@ function absenPiket(
   if (
     !button ||
     button.disabled
+  ) {
+
+    return;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // CEK GPS
+  // ----------------------------------------------------------
+
+  if (
+    !cekDukunganGPS()
   ) {
 
     return;
@@ -488,61 +563,27 @@ function absenPiket(
       "guru-status status-normal";
 
     status.textContent =
-      "📍 Mengambil lokasi GPS...";
+      "📍 Meminta izin lokasi...";
 
   }
 
 
   tampilkanPesan(
-    "📍 Mengambil lokasi GPS...",
-    "info"
+    "📍 Mohon izinkan akses lokasi pada HP Anda.",
+    "normal"
   );
 
 
   // ----------------------------------------------------------
-  // CEK GPS
-  // ----------------------------------------------------------
-
-  if (
-    !navigator.geolocation
-  ) {
-
-    button.disabled =
-      false;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        "GPS tidak tersedia";
-
-    }
-
-
-    tampilkanPesan(
-      "GPS tidak didukung oleh browser ini.",
-      "error"
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // MINTA LOKASI
+  // AMBIL GPS DARI HP
   // ----------------------------------------------------------
 
   navigator.geolocation.getCurrentPosition(
 
-    function (position) {
+    function(position) {
 
       // ------------------------------------------------------
-      // AMBIL DATA GPS
+      // KOORDINAT
       // ------------------------------------------------------
 
       const latitude =
@@ -563,45 +604,18 @@ function absenPiket(
         );
 
 
-      console.log(
-        "GPS Latitude:",
-        latitude
-      );
-
-
-      console.log(
-        "GPS Longitude:",
-        longitude
-      );
-
-
-      console.log(
-        "GPS Accuracy:",
-        accuracy
-      );
-
-
       // ------------------------------------------------------
-      // VALIDASI GPS
+      // VALIDASI KOORDINAT
       // ------------------------------------------------------
 
       if (
-        !Number.isFinite(
-          latitude
-        ) ||
-
-        !Number.isFinite(
-          longitude
-        ) ||
-
-        !Number.isFinite(
-          accuracy
-        )
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        !Number.isFinite(accuracy)
       ) {
 
         button.disabled =
           false;
-
 
         if (status) {
 
@@ -615,10 +629,9 @@ function absenPiket(
 
 
         tampilkanPesan(
-          "Koordinat GPS tidak berhasil diperoleh.",
+          "Lokasi GPS tidak valid. Silakan aktifkan lokasi kemudian coba lagi.",
           "error"
         );
-
 
         return;
 
@@ -650,18 +663,11 @@ function absenPiket(
 
 
         tampilkanPesan(
-
-          "Akurasi GPS saat ini sekitar " +
-          Math.round(
-            accuracy
-          ) +
-          " meter. " +
-          "Silakan tunggu beberapa detik kemudian coba lagi.",
-
+          "GPS belum cukup akurat (" +
+          Math.round(accuracy) +
+          " meter). Silakan keluar ke tempat terbuka dan coba lagi.",
           "error"
-
         );
-
 
         return;
 
@@ -674,26 +680,15 @@ function absenPiket(
 
       const jarak =
         hitungJarak(
-
           latitude,
-
           longitude,
-
           LAT_SEKOLAH,
-
           LNG_SEKOLAH
-
         );
 
 
-      console.log(
-        "Jarak:",
-        jarak
-      );
-
-
       // ------------------------------------------------------
-      // TAMPILKAN JARAK
+      // TAMPILKAN PROSES
       // ------------------------------------------------------
 
       if (status) {
@@ -702,30 +697,23 @@ function absenPiket(
           "guru-status status-normal";
 
         status.textContent =
-          "📍 Jarak " +
-          Math.round(
-            jarak
-          ) +
-          " meter • Memeriksa...";
+          "📍 Lokasi ditemukan • " +
+          Math.round(jarak) +
+          " meter";
 
       }
 
 
       tampilkanPesan(
-
-        "📍 Lokasi ditemukan. Jarak dari sekolah: " +
-        Math.round(
-          jarak
-        ) +
-        " meter.",
-
-        "info"
-
+        "📍 Lokasi ditemukan. Jarak Anda sekitar " +
+        Math.round(jarak) +
+        " meter dari sekolah.",
+        "normal"
       );
 
 
       // ------------------------------------------------------
-      // CEK RADIUS DI BROWSER
+      // CEK RADIUS DI SISI CLIENT
       // ------------------------------------------------------
 
       if (
@@ -743,24 +731,17 @@ function absenPiket(
             "guru-status status-error";
 
           status.textContent =
-            "✕ Di luar radius 10 meter";
+            "Di luar radius 10 meter";
 
         }
 
 
         tampilkanPesan(
-
-          "Anda berada sekitar " +
-          Math.round(
-            jarak
-          ) +
-          " meter dari lokasi sekolah. " +
-          "Absensi hanya dapat dilakukan dalam radius 10 meter.",
-
+          "❌ Anda berada sekitar " +
+          Math.round(jarak) +
+          " meter dari lokasi sekolah. Absensi hanya dapat dilakukan dalam radius 10 meter.",
           "error"
-
         );
-
 
         return;
 
@@ -768,39 +749,24 @@ function absenPiket(
 
 
       // ------------------------------------------------------
-      // LOKASI VALID
+      // KIRIM KE GOOGLE APPS SCRIPT
       // ------------------------------------------------------
 
       if (status) {
 
-        status.className =
-          "guru-status status-normal";
-
         status.textContent =
-          "✓ Lokasi valid • " +
-          Math.round(
-            jarak
-          ) +
-          " m • Menyimpan...";
+          "⏳ Menyimpan absensi...";
 
       }
 
 
       tampilkanPesan(
-
-        "✓ Lokasi valid. Menyimpan absensi...",
-
-        "info"
-
+        "⏳ Lokasi sesuai. Menyimpan absensi...",
+        "normal"
       );
 
 
-      // ------------------------------------------------------
-      // KIRIM KE GOOGLE APPS SCRIPT
-      // ------------------------------------------------------
-
       panggilAPI(
-
         {
 
           action:
@@ -823,13 +789,274 @@ function absenPiket(
 
         },
 
+        function(result) {
 
-        function (result) {
+          // --------------------------------------------------
+          // BERHASIL
+          // --------------------------------------------------
 
-          prosesHasilAbsensi(
-            result,
-            button,
-            status
+          if (
+            result &&
+            result.sukses === true
+          ) {
+
+            button.disabled =
+              true;
+
+            button.classList.add(
+              "sudah"
+            );
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-success";
+
+              status.textContent =
+                "✓ Sudah absen hari ini • " +
+                (
+                  result.jam ||
+                  ""
+                );
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Absensi berhasil.",
+              "success"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // LOKASI DITOLAK SERVER
+          // --------------------------------------------------
+
+          if (
+            result &&
+            (
+              result.lokasiTidakValid ||
+              result.diluarRadius
+            )
+          ) {
+
+            button.disabled =
+              false;
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-error";
+
+              status.textContent =
+                result.pesan ||
+                "Lokasi tidak memenuhi syarat.";
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Lokasi tidak memenuhi syarat.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // TIDAK PUNYA JADWAL
+          // --------------------------------------------------
+
+          if (
+            result &&
+            result.tidakPiket
+          ) {
+
+            button.disabled =
+              true;
+
+            button.classList.add(
+              "bukan-piket"
+            );
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-error";
+
+              status.textContent =
+                "✕ Tidak bisa absen hari ini";
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Anda tidak memiliki jadwal piket hari ini.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // SUDAH ABSEN
+          // --------------------------------------------------
+
+          if (
+            result &&
+            result.sudahAbsen
+          ) {
+
+            button.disabled =
+              true;
+
+            button.classList.add(
+              "sudah"
+            );
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-success";
+
+              status.textContent =
+                "✓ Sudah absen hari ini • " +
+                (
+                  result.jam ||
+                  ""
+                );
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Anda sudah absen hari ini.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // ABSENSI DITUTUP
+          // --------------------------------------------------
+
+          if (
+            result &&
+            result.ditutup
+          ) {
+
+            button.disabled =
+              true;
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-error";
+
+              status.textContent =
+                result.pesan ||
+                "Absensi Guru Piket sudah ditutup.";
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Absensi Guru Piket sudah ditutup.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // BELUM DIBUKA
+          // --------------------------------------------------
+
+          if (
+            result &&
+            result.diluarJam
+          ) {
+
+            button.disabled =
+              false;
+
+
+            if (status) {
+
+              status.className =
+                "guru-status status-error";
+
+              status.textContent =
+                result.pesan ||
+                "Absensi belum dibuka.";
+
+            }
+
+
+            tampilkanPesan(
+              result.pesan ||
+              "Absensi belum dibuka.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // ERROR UMUM
+          // --------------------------------------------------
+
+          button.disabled =
+            false;
+
+
+          if (status) {
+
+            status.className =
+              "guru-status status-error";
+
+            status.textContent =
+              result?.pesan ||
+              "Absensi gagal.";
+
+          }
+
+
+          tampilkanPesan(
+            result?.pesan ||
+            "Absensi gagal.",
+            "error"
           );
 
         }
@@ -843,66 +1070,46 @@ function absenPiket(
     // ERROR GPS
     // ========================================================
 
-    function (error) {
+    function(error) {
 
       button.disabled =
         false;
-
-
-      console.error(
-        "GPS Error:",
-        error
-      );
 
 
       let pesan =
         "Tidak dapat mengambil lokasi GPS.";
 
 
-      // ------------------------------------------------------
-      // IZIN DITOLAK
-      // ------------------------------------------------------
-
       if (
+        error &&
         error.code ===
-        error.PERMISSION_DENIED
+        1
       ) {
 
         pesan =
-          "Izin lokasi ditolak. " +
-          "Silakan izinkan akses lokasi untuk situs ini, kemudian coba lagi.";
+          "Izin lokasi ditolak. Silakan izinkan akses lokasi untuk situs ini melalui pengaturan browser.";
 
       }
 
-
-      // ------------------------------------------------------
-      // LOKASI TIDAK TERSEDIA
-      // ------------------------------------------------------
-
       else if (
+        error &&
         error.code ===
-        error.POSITION_UNAVAILABLE
+        2
       ) {
 
         pesan =
-          "Lokasi tidak tersedia. " +
-          "Pastikan GPS/Lokasi HP aktif.";
+          "Lokasi GPS tidak tersedia. Pastikan GPS/Lokasi HP aktif kemudian coba lagi.";
 
       }
 
-
-      // ------------------------------------------------------
-      // TIMEOUT
-      // ------------------------------------------------------
-
       else if (
+        error &&
         error.code ===
-        error.TIMEOUT
+        3
       ) {
 
         pesan =
-          "GPS terlalu lama mendapatkan lokasi. " +
-          "Pastikan GPS aktif dan coba lagi.";
+          "GPS terlalu lama mendapatkan lokasi. Silakan coba lagi di tempat terbuka.";
 
       }
 
@@ -913,7 +1120,8 @@ function absenPiket(
           "guru-status status-error";
 
         status.textContent =
-          "✕ GPS gagal";
+          "❌ " +
+          pesan;
 
       }
 
@@ -931,387 +1139,16 @@ function absenPiket(
     // ========================================================
 
     {
-
       enableHighAccuracy:
         true,
 
       timeout:
-        30000,
+        20000,
 
       maximumAge:
         0
 
     }
-
-  );
-
-}
-
-
-// ============================================================
-// PROSES HASIL ABSENSI
-// ============================================================
-
-function prosesHasilAbsensi(
-  result,
-  button,
-  status
-) {
-
-  // ----------------------------------------------------------
-  // SERVER TIDAK MERESPON
-  // ----------------------------------------------------------
-
-  if (!result) {
-
-    button.disabled =
-      false;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        "Server tidak merespon";
-
-    }
-
-
-    tampilkanPesan(
-      "Tidak ada respon dari server.",
-      "error"
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // BERHASIL
-  // ----------------------------------------------------------
-
-  if (
-    result.sukses ===
-    true
-  ) {
-
-    button.disabled =
-      true;
-
-
-    button.classList.add(
-      "sudah"
-    );
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-success";
-
-      status.textContent =
-        "✓ Sudah absen hari ini" +
-        (
-          result.jam
-            ? " • " + result.jam
-            : ""
-        );
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Absensi berhasil.",
-
-      "success"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // GPS TIDAK VALID
-  // ----------------------------------------------------------
-
-  if (
-    result.gpsTidakValid
-  ) {
-
-    button.disabled =
-      false;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        "✕ Lokasi tidak valid";
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Lokasi GPS tidak valid.",
-
-      "error"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // DI LUAR RADIUS
-  // ----------------------------------------------------------
-
-  if (
-    result.diluarRadius ||
-    result.diLuarRadius ||
-    result.jarakTerlaluJauh
-  ) {
-
-    button.disabled =
-      false;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        "✕ Di luar radius 10 meter";
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Anda berada di luar radius absensi 10 meter.",
-
-      "error"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // TIDAK MEMILIKI JADWAL
-  // ----------------------------------------------------------
-
-  if (
-    result.tidakPiket
-  ) {
-
-    button.disabled =
-      true;
-
-
-    button.classList.add(
-      "bukan-piket"
-    );
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        "✕ Tidak ada jadwal piket";
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Anda tidak memiliki jadwal piket hari ini.",
-
-      "error"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // SUDAH ABSEN
-  // ----------------------------------------------------------
-
-  if (
-    result.sudahAbsen
-  ) {
-
-    button.disabled =
-      true;
-
-
-    button.classList.add(
-      "sudah"
-    );
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-success";
-
-      status.textContent =
-        "✓ Sudah absen hari ini" +
-        (
-          result.jam
-            ? " • " + result.jam
-            : ""
-        );
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Anda sudah absen hari ini.",
-
-      "success"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // ABSENSI DITUTUP
-  // ----------------------------------------------------------
-
-  if (
-    result.ditutup
-  ) {
-
-    button.disabled =
-      true;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        result.pesan ||
-        "Absensi Guru Piket sudah ditutup.";
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Absensi Guru Piket sudah ditutup.",
-
-      "error"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // BELUM DIBUKA
-  // ----------------------------------------------------------
-
-  if (
-    result.diluarJam
-  ) {
-
-    button.disabled =
-      false;
-
-
-    if (status) {
-
-      status.className =
-        "guru-status status-error";
-
-      status.textContent =
-        result.pesan ||
-        "Absensi belum dibuka.";
-
-    }
-
-
-    tampilkanPesan(
-
-      result.pesan ||
-      "Absensi belum dibuka.",
-
-      "error"
-
-    );
-
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // ERROR UMUM
-  // ----------------------------------------------------------
-
-  button.disabled =
-    false;
-
-
-  if (status) {
-
-    status.className =
-      "guru-status status-error";
-
-    status.textContent =
-      result.pesan ||
-      "Absensi gagal.";
-
-  }
-
-
-  tampilkanPesan(
-
-    result.pesan ||
-    "Absensi gagal.",
-
-    "error"
 
   );
 
@@ -1323,49 +1160,129 @@ function prosesHasilAbsensi(
 // ============================================================
 
 function tampilkanPesan(
-  pesan,
-  tipe
+  text,
+  type
 ) {
 
-  const element =
-    document.getElementById(
-      "pesan"
-    ) ||
-
+  const box =
     document.getElementById(
       "message"
-    ) ||
-
-    document.getElementById(
-      "rekapMessage"
     );
 
 
-  if (!element) {
-
-    console.log(
-      pesan
-    );
-
+  if (!box) {
     return;
-
   }
 
 
-  element.textContent =
-    pesan;
-
-
-  element.className =
+  box.className =
     "message " +
     (
-      tipe ||
+      type ||
       ""
     );
 
 
-  element.style.display =
-    "block";
+  box.textContent =
+    text || "";
+
+
+  // ----------------------------------------------------------
+  // AUTO HILANG PESAN BERHASIL
+  // ----------------------------------------------------------
+
+  if (
+    type ===
+    "success"
+  ) {
+
+    setTimeout(
+      function() {
+
+        box.className =
+          "message";
+
+        box.textContent =
+          "";
+
+      },
+      5000
+    );
+
+  }
+
+}
+
+
+// ============================================================
+// FORMAT TANGGAL INDONESIA
+// ============================================================
+
+function formatTanggal(
+  tanggal
+) {
+
+  if (!tanggal) {
+    return "";
+  }
+
+
+  const bagian =
+    String(
+      tanggal
+    ).split("-");
+
+
+  if (
+    bagian.length !== 3
+  ) {
+
+    return tanggal;
+
+  }
+
+
+  const tahun =
+    Number(
+      bagian[0]
+    );
+
+
+  const bulan =
+    Number(
+      bagian[1]
+    );
+
+
+  const hari =
+    Number(
+      bagian[2]
+    );
+
+
+  const date =
+    new Date(
+      tahun,
+      bulan - 1,
+      hari
+    );
+
+
+  return new Intl.DateTimeFormat(
+    "id-ID",
+    {
+      day:
+        "numeric",
+
+      month:
+        "long",
+
+      year:
+        "numeric"
+    }
+  ).format(
+    date
+  );
 
 }
 
@@ -1374,228 +1291,129 @@ function tampilkanPesan(
 // ESCAPE HTML
 // ============================================================
 
-function escapeHTML(
-  value
+function escapeHtml(
+  text
 ) {
 
   return String(
-    value ?? ""
+    text ?? ""
   )
 
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-
-  .replace(
-    /</g,
-    "&lt;"
-  )
-
-  .replace(
-    />/g,
-    "&gt;"
-  )
-
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
-
-
-// ============================================================
-// KEMBALI
-// ============================================================
-
-function kembali() {
-
-  if (
-    document.referrer &&
-    document.referrer.includes(
-      "badrilhuda.github.io"
+    .replace(
+      /&/g,
+      "&amp;"
     )
-  ) {
 
-    history.back();
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-  } else {
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    window.location.href =
-      "index.html";
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-  }
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
 // ============================================================
-// DEBUG GPS
+// ESCAPE JAVASCRIPT
 // ============================================================
 
-// Fungsi ini tidak dipanggil otomatis.
-// Bisa digunakan dari Console browser:
-// tesGPS();
-//
+function escapeJs(
+  text
+) {
+
+  return String(
+    text ?? ""
+  )
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    )
+
+    .replace(
+      /\r/g,
+      ""
+    )
+
+    .replace(
+      /\n/g,
+      "\\n"
+    );
+
+}
+
+
+// ============================================================
+// KEMBALI KE HALAMAN GURU
 // ============================================================
 
-function tesGPS() {
+function kembaliGuru() {
 
   if (
-    !navigator.geolocation
+    window.history.length > 1
   ) {
 
-    console.log(
-      "GPS tidak didukung."
-    );
+    window.history.back();
 
     return;
 
   }
 
 
-  console.log(
-    "Memulai tes GPS..."
-  );
+  window.location.href =
+    "index.html";
+
+}
 
 
-  navigator.geolocation.getCurrentPosition(
+// ============================================================
+// REFRESH SAAT KEMBALI DARI CACHE
+// ============================================================
 
-    function (position) {
+window.addEventListener(
+  "pageshow",
+  function(event) {
 
-      const lat =
-        position.coords.latitude;
+    if (
+      event.persisted
+    ) {
 
-      const lon =
-        position.coords.longitude;
-
-      const accuracy =
-        position.coords.accuracy;
-
-
-      const jarak =
-        hitungJarak(
-
-          lat,
-
-          lon,
-
-          LAT_SEKOLAH,
-
-          LNG_SEKOLAH
-
-        );
-
-
-      console.log(
-        "================================"
-      );
-
-      console.log(
-        "LATITUDE:",
-        lat
-      );
-
-      console.log(
-        "LONGITUDE:",
-        lon
-      );
-
-      console.log(
-        "AKURASI:",
-        accuracy,
-        "meter"
-      );
-
-      console.log(
-        "JARAK SEKOLAH:",
-        jarak,
-        "meter"
-      );
-
-      console.log(
-        "RADIUS:",
-        RADIUS_METER,
-        "meter"
-      );
-
-      console.log(
-        "================================"
-      );
-
-
-      alert(
-
-        "GPS berhasil\n\n" +
-
-        "Latitude: " +
-        lat +
-        "\n" +
-
-        "Longitude: " +
-        lon +
-        "\n" +
-
-        "Akurasi: " +
-        Math.round(
-          accuracy
-        ) +
-        " meter\n" +
-
-        "Jarak sekolah: " +
-        Math.round(
-          jarak
-        ) +
-        " meter"
-
-      );
-
-    },
-
-
-    function (error) {
-
-      console.error(
-        "GPS ERROR:",
-        error
-      );
-
-
-      alert(
-
-        "GPS gagal.\n\n" +
-
-        "Kode error: " +
-        error.code +
-        "\n" +
-
-        "Pesan: " +
-        error.message
-
-      );
-
-    },
-
-
-    {
-
-      enableHighAccuracy:
-        true,
-
-      timeout:
-        30000,
-
-      maximumAge:
-        0
+      muatPiket();
 
     }
 
-  );
+  }
+);
 
-}
+
+// ============================================================
+// MULAI APLIKASI
+// ============================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    muatPiket();
+
+  }
+);
