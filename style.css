@@ -42,75 +42,174 @@ button {
 
 
 /* ==========================================================
-   HEADER
+   HEADER ABSENSI GURU
 ========================================================== */
 
 .header {
-  min-height: 220px;
-  padding: 28px 25px;
+  min-height: 190px;
+
+  padding: 32px 40px 42px;
+
   display: flex;
   align-items: center;
-  gap: 18px;
 
-  background: linear-gradient(
-    135deg,
-    #087f5b,
-    #0b986f
-  );
+  gap: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #087f5b,
+      #0b986f
+    );
 
   color: white;
 
   position: relative;
+
   overflow: hidden;
 
-  border-radius: 0;
+  border-radius:
+    0 0 55px 55px;
 }
 
-.header::after {
+
+/* ORNAMEN LINGKARAN KANAN */
+
+.header::before {
+
   content: "";
+
   position: absolute;
 
-  left: -10%;
-  width: 120%;
+  width: 260px;
+  height: 260px;
 
-  /* Turunkan lengkungan */
-  bottom: -95px;
+  right: -100px;
+  top: -130px;
 
-  height: 125px;
+  background:
+    rgba(255,255,255,.08);
 
-  background: #f1f7f5;
-
-  border-radius: 50% 50% 0 0;
+  border-radius: 50%;
 
   pointer-events: none;
 }
 
+
+/* LENGKUNGAN BAGIAN BAWAH */
+
+.header::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: -10%;
+
+  width: 120%;
+
+  bottom: -105px;
+
+  height: 135px;
+
+  background: #f1f7f5;
+
+  border-radius:
+    50% 50% 0 0;
+
+  pointer-events: none;
+}
+
+
+/* LOGO */
+
 .header-icon {
-  width: 68px;
-  height: 68px;
+
+  width: 92px;
+  height: 92px;
+
+  min-width: 92px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  border-radius: 22px;
-  background: rgba(255,255,255,.17);
+  border-radius: 25px;
 
-  font-size: 36px;
+  background:
+    rgba(255,255,255,.17);
+
+  position: relative;
+
+  z-index: 2;
 }
 
-.header-title {
-  font-size: 27px;
-  font-weight: 800;
+
+/* LOGO GAMBAR */
+
+.header-icon img {
+
+  width: 82px;
+  height: 82px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+
+/* TEKS HEADER */
+
+.header-text {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+
+/* JUDUL */
+
+.header-text h1 {
+
+  margin: 0;
+
+  font-size: 40px;
+
+  line-height: 1.05;
+
+  font-weight: 900;
+
   letter-spacing: .5px;
+
+  color: white;
 }
 
-.header-subtitle {
-  margin-top: 5px;
-  font-size: 15px;
-  opacity: .9;
-}
 
+/* SUBJUDUL */
+
+.header-text p {
+
+  margin: 8px 0 0;
+
+  font-size: 23px;
+
+  line-height: 1.2;
+
+  font-weight: 400;
+
+  color: white;
+
+  opacity: .95;
+}
 
 /* ==========================================================
    PAGE
@@ -156,38 +255,104 @@ button {
    HOME MENU
 ========================================================== */
 
-.menu-list {
+
+/*
+ * HOME dibuat sebagai GRID.
+ *
+ * Desktop:
+ * 4 kolom
+ *
+ * Mobile:
+ * 2 kolom
+ */
+
+#homePage {
+
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
   gap: 15px;
-  width: 100%;
+
+  align-items: stretch;
 }
 
-.menu-card {
+
+/*
+ * Welcome mengambil seluruh lebar
+ */
+
+#homePage .welcome {
+
+  grid-column:
+    1 / -1;
+
+}
+
+
+/*
+ * MENU-LIST hanya menjadi
+ * pembungkus 3 tombol.
+ *
+ * display: contents membuat
+ * ADMIN, GURU dan REKAP
+ * langsung menjadi item grid.
+ */
+
+#homePage .menu-list {
+
+  display: contents;
+
+}
+
+
+/* ==========================================================
+   KARTU ADMIN / GURU / REKAP
+========================================================== */
+
+#homePage .menu-card {
+
   width: 100%;
-  min-height: 150px;
+
+  min-width: 0;
+
+  min-height: 180px;
+
   border: none;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
-  padding: 20px;
+
+  padding: 20px 12px;
 
   background: white;
+
   border-radius: 23px;
 
-  box-shadow: 0 5px 18px rgba(0,0,0,.07);
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.07);
 
   transition:
     transform .15s,
     box-shadow .15s;
+
+  box-sizing: border-box;
 }
 
-.menu-card:active {
-  transform: scale(.98);
+
+#homePage .menu-card:active {
+
+  transform:
+    scale(.98);
+
 }
 
 
@@ -195,56 +360,90 @@ button {
    ICON MENU
 ========================================================== */
 
-.menu-icon {
-  width: 62px;
-  height: 62px;
+#homePage .menu-icon {
+
+  width: 68px;
+  height: 68px;
+
+  min-width: 68px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   border-radius: 20px;
 
-  font-size: 30px;
+  font-size: 32px;
 
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
 }
 
-.admin-icon {
+
+#homePage .admin-icon {
+
   background: #e4edff;
+
 }
 
-.guru-icon {
+
+#homePage .guru-icon {
+
   background: #dcf5ea;
+
 }
 
-.rekap-icon {
+
+#homePage .rekap-icon {
+
   background: #fff0d7;
+
 }
 
 
 /* ==========================================================
-   TULISAN MENU
+   TEKS MENU
 ========================================================== */
 
-.menu-text {
+#homePage .menu-text {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
 
   gap: 5px;
 
-  text-align: center;
 }
 
-.menu-text strong {
-  font-size: 18px;
+
+#homePage .menu-text strong {
+
+  font-size: 19px;
+
   color: #075c43;
+
+  font-weight: 800;
+
 }
 
-.menu-text span {
+
+#homePage .menu-text span {
+
   color: #888;
+
   font-size: 14px;
+
+  line-height: 1.25;
+
+  max-width: 130px;
+
 }
 
 
@@ -252,13 +451,17 @@ button {
    WAKTU ABSENSI
 ========================================================== */
 
-.time-card {
-  margin-top: 0;
+#homePage .time-card {
 
   width: 100%;
-  min-height: 150px;
 
-  padding: 20px;
+  min-width: 0;
+
+  min-height: 180px;
+
+  margin-top: 0;
+
+  padding: 20px 12px;
 
   background: white;
 
@@ -287,9 +490,10 @@ button {
    ICON WAKTU
 ========================================================== */
 
-.time-icon {
-  width: 62px;
-  height: 62px;
+#homePage .time-icon {
+
+  width: 68px;
+  height: 68px;
 
   display: flex;
 
@@ -297,23 +501,24 @@ button {
 
   justify-content: center;
 
-  margin: 0 0 10px 0;
-
-  font-size: 34px;
-
-  line-height: 1;
+  margin: 0 0 12px 0;
 
   border-radius: 20px;
 
   background: #e4edff;
+
+  font-size: 34px;
+
+  line-height: 1;
 }
 
 
 /* ==========================================================
-   INFORMASI WAKTU
+   TEKS WAKTU
 ========================================================== */
 
-.time-info {
+#homePage .time-info {
+
   display: flex;
 
   flex-direction: column;
@@ -327,7 +532,9 @@ button {
   gap: 4px;
 }
 
-.time-info strong {
+
+#homePage .time-info strong {
+
   color: #333;
 
   font-size: 18px;
@@ -335,7 +542,9 @@ button {
   font-weight: 800;
 }
 
-.time-info span {
+
+#homePage .time-info span {
+
   color: #087f5b;
 
   font-size: 15px;
@@ -345,36 +554,179 @@ button {
 
 
 /* ==========================================================
+   STATUS ONLINE
+========================================================== */
+
+#homePage .system-status {
+
+  grid-column:
+    1 / -1;
+
+  text-align: center;
+
+  color: #777;
+
+  margin-top: 3px;
+
+  font-size: 13px;
+}
+
+/* ==========================================================
    MOBILE
-   2 KOLOM × 2 BARIS
+   2 × 2
 ========================================================== */
 
 @media (max-width: 768px) {
 
-  .menu-list {
-    grid-template-columns: repeat(2, 1fr);
+  #homePage {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
     gap: 15px;
+
   }
 
-  .menu-card,
-  .time-card {
-    min-height: 145px;
+
+  /*
+   * Welcome tetap penuh
+   */
+
+  #homePage .welcome {
+
+    grid-column:
+      1 / -1;
+
   }
 
-  .menu-icon,
-  .time-icon {
+
+  /*
+   * ADMIN
+   * GURU
+   * REKAP
+   * WAKTU ABSENSI
+   *
+   * semuanya menjadi
+   * item grid masing-masing.
+   */
+
+  #homePage .menu-card,
+  #homePage .time-card {
+
+    min-height: 165px;
+
+  }
+
+
+  #homePage .menu-icon,
+  #homePage .time-icon {
+
     width: 58px;
+
     height: 58px;
+
+    min-width: 58px;
+
+    border-radius: 18px;
+
     font-size: 28px;
+
+    margin-bottom: 10px;
+
   }
 
-  .menu-text strong,
-  .time-info strong {
+
+  #homePage .menu-text strong,
+  #homePage .time-info strong {
+
     font-size: 17px;
+
+  }
+
+
+  #homePage .menu-text span {
+
+    font-size: 13px;
+
+    max-width: 120px;
+
+  }
+
+
+  #homePage .time-info span {
+
+    font-size: 14px;
+
+  }
+
+
+  /*
+   * Header mobile
+   */
+
+  .header {
+
+    min-height: 175px;
+
+    padding:
+      28px 22px 38px;
+
+    gap: 18px;
+
+    border-radius:
+      0 0 42px 42px;
+
+  }
+
+
+  .header-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    min-width: 70px;
+
+    border-radius: 21px;
+
+  }
+
+
+  .header-icon img {
+
+    width: 64px;
+
+    height: 64px;
+
+  }
+
+
+  .header-text h1 {
+
+    font-size:
+      clamp(
+        27px,
+        8vw,
+        38px
+      );
+
+  }
+
+
+  .header-text p {
+
+    font-size:
+      clamp(
+        15px,
+        4vw,
+        20px
+      );
+
+    margin-top: 6px;
+
   }
 
 }
-
 
 /* ==========================================================
    HP KECIL
@@ -382,33 +734,93 @@ button {
 
 @media (max-width: 420px) {
 
-  .menu-list {
+  #homePage {
+
     gap: 12px;
+
   }
 
-  .menu-card,
-  .time-card {
-    min-height: 135px;
-    padding: 15px;
+
+  #homePage .menu-card,
+  #homePage .time-card {
+
+    min-height: 150px;
+
+    padding:
+      15px 8px;
+
   }
 
-  .menu-icon,
-  .time-icon {
+
+  #homePage .menu-icon,
+  #homePage .time-icon {
+
     width: 52px;
+
     height: 52px;
+
+    min-width: 52px;
+
     font-size: 25px;
+
     border-radius: 17px;
-    margin-bottom: 8px;
+
   }
 
-  .menu-text strong,
-  .time-info strong {
+
+  #homePage .menu-text strong,
+  #homePage .time-info strong {
+
     font-size: 15px;
+
   }
 
-  .menu-text span,
-  .time-info span {
+
+  #homePage .menu-text span {
+
+    font-size: 12px;
+
+    max-width: 105px;
+
+  }
+
+
+  #homePage .time-info span {
+
     font-size: 13px;
+
+  }
+
+
+  .header {
+
+    min-height: 160px;
+
+    padding:
+      24px 18px 35px;
+
+    gap: 14px;
+
+  }
+
+
+  .header-icon {
+
+    width: 62px;
+
+    height: 62px;
+
+    min-width: 62px;
+
+  }
+
+
+  .header-icon img {
+
+    width: 57px;
+
+    height: 57px;
+
   }
 
 }
