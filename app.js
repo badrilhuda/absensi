@@ -3594,7 +3594,6 @@ function cetakRekap(
 
 }
 
-
 /* =====================================================
    ABSENSI GURU PIKET
 ===================================================== */
@@ -3602,82 +3601,31 @@ function cetakRekap(
 function bukaPiket() {
 
   /*
-   * Hentikan kamera jika masih aktif.
+   * Hentikan kamera QR jika masih aktif
    */
+  try {
 
-  hentikanScanner();
-
-
-  /*
-   * Semua halaman disembunyikan.
-   */
-
-  sembunyikanSemua();
-
-
-  const piketPage =
-    el("piketPage");
-
-
-  if (!piketPage) {
-
-    console.error(
-      "piketPage tidak ditemukan."
-    );
-
-    alert(
-      "Halaman Absensi Guru Piket tidak ditemukan."
-    );
-
-    kembaliHome();
-
-    return;
+    hentikanScanner();
 
   }
 
+  catch(error) {
 
-  piketPage
-    .classList
-    .remove("hidden");
-
-
-  /*
-   * Jika fungsi muatPiket tersedia,
-   * jalankan.
-   */
-
-  if (
-    typeof muatPiket ===
-    "function"
-  ) {
-
-    try {
-
-      muatPiket();
-
-    }
-    catch(error) {
-
-      console.error(
-        "Gagal memuat jadwal piket:",
-        error
-      );
-
-    }
+    console.log(
+      "Scanner tidak aktif:",
+      error
+    );
 
   }
 
 
   /*
-   * Jika fungsi mulaiAbsensiPiket tersedia,
-   * jangan dijalankan otomatis.
-   *
-   * GPS hanya diminta ketika pengguna
-   * benar-benar menekan tombol absen.
+   * Buka halaman piket.html
    */
+  window.location.href =
+    "piket.html";
 
 }
-
 
 /* =====================================================
    BACK / KEMBALI
@@ -4075,17 +4023,6 @@ bukaRekap =
     );
 
   };
-
-
-bukaPiket =
-  function() {
-
-    navigasiKe(
-      "piket"
-    );
-
-  };
-
 
 /* =====================================================
    HOME
