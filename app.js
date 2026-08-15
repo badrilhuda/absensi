@@ -2783,10 +2783,9 @@ function tampilkanHasilAbsensi(
    BAGIAN 3 / 3
 ===================================================== */
 
-
 /* ==========================================================
    REKAP ABSENSI GURU QR
-   REKAP BULANAN
+   FORMAT SAMA DENGAN REKAP GURU PIKET
 ========================================================== */
 
 function tampilkanRekap() {
@@ -2804,7 +2803,7 @@ function tampilkanRekap() {
   if (!bulanEl || !hasil) {
 
     console.error(
-      "Elemen bulanRekap atau hasilRekap tidak ditemukan."
+      "Elemen rekap tidak ditemukan."
     );
 
     return;
@@ -2813,7 +2812,9 @@ function tampilkanRekap() {
 
 
   const bulan =
-    bulanEl.value;
+    String(
+      bulanEl.value || ""
+    ).trim();
 
 
   if (!bulan) {
@@ -2827,106 +2828,65 @@ function tampilkanRekap() {
   }
 
 
-  /*
-   * Tampilkan loading
-   */
-
-  hasil.innerHTML = `
-
-    <div
-      class="loading"
-      style="
-        text-align:center;
-        padding:25px;
-      "
-    >
-
-      ⏳ Mengambil rekap absensi guru...
-
-    </div>
-
-  `;
-
-
   if (message) {
 
-    message.innerHTML = "";
+    message.innerHTML = `
+      <div class="loading">
+        ⏳ Mengambil data rekap...
+      </div>
+    `;
 
   }
 
 
-  /*
-   * Panggil Google Apps Script
-   */
+  hasil.innerHTML = "";
+
 
   panggilAPI(
 
     {
-
-      action:
-        "rekap",
-
-      bulan:
-        bulan
-
+      action: "rekap",
+      bulan: bulan
     },
-
 
     function(result) {
 
       console.log(
-        "HASIL REKAP GURU:",
+        "REKAP GURU:",
         result
       );
 
-
-      /*
-       * CEK HASIL API
-       */
 
       if (
         !result ||
         result.sukses !== true
       ) {
 
-        hasil.innerHTML = `
+        if (message) {
 
-          <div
-            class="admin-message-error"
-            style="
-              padding:15px;
-              text-align:center;
-            "
-          >
+          message.innerHTML = `
 
-            ✕ ${
-              escapeHtml(
-                result &&
-                result.pesan
-                  ? result.pesan
-                  : "Gagal mengambil data rekap."
-              )
-            }
+            <div class="admin-message-error">
 
-          </div>
+              ✕ ${
+                escapeHtml(
+                  result &&
+                  result.pesan
+                    ? result.pesan
+                    : "Gagal mengambil rekap."
+                )
+              }
 
-        `;
+            </div>
+
+          `;
+
+        }
 
         return;
 
       }
 
-
-      /*
-       * Ambil data.
-       *
-       * Code.gs mengirim:
-       *
-       * {
-       *   sukses: true,
-       *   data: [...]
-       * }
-       */
 
       let data = [];
 
@@ -2954,9 +2914,7 @@ function tampilkanRekap() {
       }
 
       else if (
-        Array.isArray(
-          result
-        )
+        Array.isArray(result)
       ) {
 
         data =
@@ -2965,41 +2923,26 @@ function tampilkanRekap() {
       }
 
 
-      /*
-       * Tidak ada data
-       */
-
       if (!data.length) {
+
+        if (message) {
+
+          message.innerHTML = "";
+
+        }
 
         hasil.innerHTML = `
 
           <div
+            class="loading"
             style="
+              padding:25px;
               text-align:center;
-              padding:30px 15px;
-              color:#777;
             "
           >
 
-            <div
-              style="
-                font-size:38px;
-                margin-bottom:10px;
-              "
-            >
-              📊
-            </div>
-
-            <strong>
-              Belum ada data absensi
-            </strong>
-
-            <br>
-
-            pada bulan
-            ${escapeHtml(
-              bulan
-            )}
+            📊 Belum ada data absensi
+            pada bulan ${escapeHtml(bulan)}.
 
           </div>
 
@@ -3011,23 +2954,102 @@ function tampilkanRekap() {
 
 
       /*
-       * Hitung total
+       * ======================================================
+       * BUAT TABEL
+       * ======================================================
        */
 
-      let totalGuru =
-        data.length;
+      let html = `
+
+        <div
+          class="rekap-summary"
+          style="
+            margin-bottom:15px;
+            font-weight:bold;
+            color:#087f5b;
+          "
+        >
+
+          📊 REKAP ABSENSI BULANAN
+          ${escapeHtml(bulan)}
+
+        </div>
+
+
+        <div
+          style="
+            overflow-x:auto;
+            width:100%;
+          "
+        >
+
+          <table
+            class="rekap-table"
+          >
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Nama
+                </th>
+
+                <th>
+                  JTM/Minggu
+                </th>
+
+                <th>
+                  Hadir
+                </th>
+
+                <th>
+                  Terlambat
+                </th>
+
+                <th>
+                  Tidak
+                </th>
+
+                <th>
+                  Total JP
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+      `;
+
 
       let totalHadir = 0;
-
       let totalTerlambat = 0;
-
       let totalTidak = 0;
-
       let totalJP = 0;
 
 
       data.forEach(
         function(row) {
+
+          const nama =
+            row.nama || "-";
+
+
+          const nip =
+            row.nip || "";
+
+
+          const jp =
+            Number(
+              row.jp !== undefined
+                ? row.jp
+                : row.jtm !== undefined
+                  ? row.jtm
+                  : 0
+            ) || 0;
+
 
           const hadir =
             Number(
@@ -3047,12 +3069,24 @@ function tampilkanRekap() {
             );
 
 
-          const jtm =
-            Number(
-              row.jtm !== undefined
-                ? row.jtm
-                : row.jp || 0
-            ) || 0;
+          /*
+           * Hadir + terlambat =
+           * hari mengajar
+           */
+
+          const hariDihitung =
+            hadir +
+            terlambat;
+
+
+          /*
+           * Total JP
+           */
+
+          const jumlahJP =
+            row.totalJP !== undefined
+              ? Number(row.totalJP || 0)
+              : hariDihitung * jp;
 
 
           totalHadir +=
@@ -3067,312 +3101,22 @@ function tampilkanRekap() {
             tidak;
 
 
-          /*
-           * Total JP dihitung dari
-           * hari hadir + terlambat.
-           */
-
           totalJP +=
-            (
-              hadir +
-              terlambat
-            ) * jtm;
-
-        }
-      );
-
-
-      /*
-       * =====================================================
-       * RINGKASAN
-       * =====================================================
-       */
-
-      let html = `
-
-        <div
-          style="
-            display:grid;
-            grid-template-columns:
-              repeat(
-                auto-fit,
-                minmax(
-                  120px,
-                  1fr
-                )
-              );
-            gap:10px;
-            margin-bottom:18px;
-          "
-        >
-
-
-          <div
-            style="
-              background:#e8f5f1;
-              border-radius:12px;
-              padding:14px 8px;
-              text-align:center;
-            "
-          >
-
-            <strong
-              style="
-                display:block;
-                font-size:22px;
-                color:#087f5b;
-              "
-            >
-              ${totalGuru}
-            </strong>
-
-            <span>
-              GURU
-            </span>
-
-          </div>
-
-
-          <div
-            style="
-              background:#e8f5f1;
-              border-radius:12px;
-              padding:14px 8px;
-              text-align:center;
-            "
-          >
-
-            <strong
-              style="
-                display:block;
-                font-size:22px;
-                color:#087f5b;
-              "
-            >
-              ${totalHadir}
-            </strong>
-
-            <span>
-              HADIR
-            </span>
-
-          </div>
-
-
-          <div
-            style="
-              background:#fff3df;
-              border-radius:12px;
-              padding:14px 8px;
-              text-align:center;
-            "
-          >
-
-            <strong
-              style="
-                display:block;
-                font-size:22px;
-                color:#b06b00;
-              "
-            >
-              ${totalTerlambat}
-            </strong>
-
-            <span>
-              TERLAMBAT
-            </span>
-
-          </div>
-
-
-          <div
-            style="
-              background:#ffe8e8;
-              border-radius:12px;
-              padding:14px 8px;
-              text-align:center;
-            "
-          >
-
-            <strong
-              style="
-                display:block;
-                font-size:22px;
-                color:#c62828;
-              "
-            >
-              ${totalTidak}
-            </strong>
-
-            <span>
-              TIDAK HADIR
-            </span>
-
-          </div>
-
-
-        <div
-          style="
-            margin-bottom:12px;
-            font-weight:bold;
-            color:#087f5b;
-            font-size:17px;
-          "
-        >
-
-          📊 REKAP ABSENSI GURU
-          <br>
-
-          <small
-            style="
-              color:#777;
-              font-weight:normal;
-            "
-          >
-
-            Periode:
-            ${escapeHtml(
-              bulan
-            )}
-
-          </small>
-
-        </div>
-
-
-        <div
-          style="
-            overflow-x:auto;
-            width:100%;
-          "
-        >
-
-          <table
-            class="rekap-table"
-            style="
-              width:100%;
-              min-width:700px;
-            "
-          >
-
-            <thead>
-
-              <tr>
-
-                <th>
-                  No
-                </th>
-
-                <th>
-                  Nama Guru
-                </th>
-
-                <th>
-                  JTM / Minggu
-                </th>
-
-                <th>
-                  Hadir
-                </th>
-
-                <th>
-                  Terlambat
-                </th>
-
-                <th>
-                  Tidak Hadir
-                </th>
-
-                <th>
-                  Total JP
-                </th>
-
-              </tr>
-
-            </thead>
-
-
-            <tbody>
-
-      `;
-
-
-      /*
-       * =====================================================
-       * ISI DATA GURU
-       * =====================================================
-       */
-
-      data.forEach(
-        function(row, index) {
-
-          const nama =
-            row.nama ||
-            "-";
-
-
-          const nip =
-            row.nip ||
-            "";
-
-
-          const jtm =
-            Number(
-              row.jtm !== undefined
-                ? row.jtm
-                : row.jp || 0
-            ) || 0;
-
-
-          const hadir =
-            Number(
-              row.hadir || 0
-            );
-
-
-          const terlambat =
-            Number(
-              row.terlambat || 0
-            );
-
-
-          const tidak =
-            Number(
-              row.tidak || 0
-            );
-
-
-          const hariDihitung =
-            hadir +
-            terlambat;
-
-
-          const totalGuruJP =
-            hariDihitung *
-            jtm;
+            jumlahJP;
 
 
           html += `
 
             <tr>
 
-              <td
-                style="
-                  text-align:center;
-                "
-              >
-
-                ${index + 1}
-
-              </td>
-
-
               <td>
 
                 <strong>
+
                   ${escapeHtml(
                     nama
                   )}
+
                 </strong>
 
                 ${
@@ -3385,10 +3129,12 @@ function tampilkanRekap() {
                           color:#777;
                         "
                       >
+
                         NIP:
                         ${escapeHtml(
                           nip
                         )}
+
                       </small>
                     `
                     : ""
@@ -3403,25 +3149,21 @@ function tampilkanRekap() {
                 "
               >
 
+                ${jp}
+
+              </td>
+
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
                 <strong>
-                  ${jtm}
-                </strong>
 
-              </td>
-
-
-              <td
-                style="
-                  text-align:center;
-                "
-              >
-
-                <strong
-                  style="
-                    color:#087f5b;
-                  "
-                >
                   ${hadir}
+
                 </strong>
 
               </td>
@@ -3433,13 +3175,7 @@ function tampilkanRekap() {
                 "
               >
 
-                <strong
-                  style="
-                    color:#b06b00;
-                  "
-                >
-                  ${terlambat}
-                </strong>
+                ${terlambat}
 
               </td>
 
@@ -3450,13 +3186,7 @@ function tampilkanRekap() {
                 "
               >
 
-                <strong
-                  style="
-                    color:#c62828;
-                  "
-                >
-                  ${tidak}
-                </strong>
+                ${tidak}
 
               </td>
 
@@ -3472,7 +3202,9 @@ function tampilkanRekap() {
                     color:#087f5b;
                   "
                 >
-                  ${totalGuruJP}
+
+                  ${jumlahJP}
+
                 </strong>
 
               </td>
@@ -3485,7 +3217,64 @@ function tampilkanRekap() {
       );
 
 
+      /*
+       * ======================================================
+       * BARIS TOTAL
+       * ======================================================
+       */
+
       html += `
+
+            <tr
+              style="
+                font-weight:bold;
+                background:#f2f8f6;
+              "
+            >
+
+              <td>
+                TOTAL
+              </td>
+
+              <td>
+                -
+              </td>
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+                ${totalHadir}
+              </td>
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+                ${totalTerlambat}
+              </td>
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+                ${totalTidak}
+              </td>
+
+              <td
+                style="
+                  text-align:center;
+                  color:#087f5b;
+                "
+              >
+                ${totalJP}
+              </td>
+
+            </tr>
+
 
             </tbody>
 
@@ -3496,12 +3285,27 @@ function tampilkanRekap() {
       `;
 
 
-      /*
-       * Tampilkan ke halaman
-       */
-
       hasil.innerHTML =
         html;
+
+
+      if (message) {
+
+        message.innerHTML = `
+
+          <div
+            class="admin-message-success"
+          >
+
+            ✓ Rekap ${escapeHtml(
+              bulan
+            )} berhasil ditampilkan.
+
+          </div>
+
+        `;
+
+      }
 
     }
 
