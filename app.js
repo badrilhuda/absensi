@@ -725,40 +725,49 @@ function tampilkanDaftarGuru(
           </div>
 
 
-          <div class="guru-actions">
-
-
-            <button
-              class="qr-button"
-              onclick="tampilkanQR(
-                '${escapeJs(guru.kodeQR)}',
-                '${escapeJs(guru.nama)}'
-              )">
-
-              📷 QR
-
-            </button>
-
-
-            <button
-              class="status-button"
-              onclick="ubahStatus(
-                '${escapeJs(guru.kodeQR)}',
-                '${statusBaru}'
-              )">
-
-              ${
-                aktif
-                  ? "NONAKTIFKAN"
-                  : "AKTIFKAN"
-              }
-
-            </button>
-
-
-          </div>
-
-        </div>
+         <div class="guru-actions">
+         
+         
+           <button
+             class="qr-button"
+             onclick="tampilkanQR(
+               '${escapeJs(guru.kodeQR)}',
+               '${escapeJs(guru.nama)}'
+             )">
+         
+             📷 QR Code
+         
+           </button>
+         
+         
+           <button
+             class="status-button"
+             onclick="ubahStatus(
+               '${escapeJs(guru.kodeQR)}',
+               '${statusBaru}'
+             )">
+         
+             ${
+               aktif
+                 ? "NONAKTIFKAN"
+                 : "AKTIFKAN"
+             }
+         
+           </button>
+         
+         
+           <button
+             class="delete-button"
+             onclick="hapusGuru(
+               '${escapeJs(guru.kodeQR)}'
+             )">
+         
+             🗑️ HAPUS
+         
+           </button>
+         
+         
+         </div>
 
       `;
 
