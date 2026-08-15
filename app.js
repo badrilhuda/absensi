@@ -2784,29 +2784,27 @@ function tampilkanHasilAbsensi(
 ===================================================== */
 
 
-/* =====================================================
-   REKAP ABSENSI
-===================================================== */
+/* ==========================================================
+   REKAP ABSENSI GURU QR
+   REKAP BULANAN
+========================================================== */
 
 function tampilkanRekap() {
 
-  hentikanScanner();
+  const bulanEl =
+    el("bulanRekap");
+
+  const hasil =
+    el("hasilRekap");
+
+  const message =
+    el("rekapMessage");
 
 
-  const tanggal =
-    el("filterTanggal")
-      ? el("filterTanggal").value
-      : "";
+  if (!bulanEl || !hasil) {
 
-
-  const container =
-    el("rekapContainer");
-
-
-  if (!container) {
-
-    console.warn(
-      "rekapContainer tidak ditemukan."
+    console.error(
+      "Elemen bulanRekap atau hasilRekap tidak ditemukan."
     );
 
     return;
@@ -2814,68 +2812,101 @@ function tampilkanRekap() {
   }
 
 
-  container.innerHTML = `
+  const bulan =
+    bulanEl.value;
 
-    <div class="loading">
 
-      ⏳ Memuat rekap absensi...
+  if (!bulan) {
+
+    alert(
+      "Silakan pilih bulan terlebih dahulu."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * Tampilkan loading
+   */
+
+  hasil.innerHTML = `
+
+    <div
+      class="loading"
+      style="
+        text-align:center;
+        padding:25px;
+      "
+    >
+
+      ⏳ Mengambil rekap absensi guru...
 
     </div>
 
   `;
 
 
+  if (message) {
+
+    message.innerHTML = "";
+
+  }
+
+
+  /*
+   * Panggil Google Apps Script
+   */
+
   panggilAPI(
 
     {
 
       action:
-        "getRekap",
+        "rekap",
 
-      tanggal:
-        tanggal
+      bulan:
+        bulan
 
     },
+
 
     function(result) {
 
       console.log(
-        "HASIL REKAP:",
+        "HASIL REKAP GURU:",
         result
       );
 
 
       /*
-       * Backend dapat mengembalikan
-       * array secara langsung.
+       * CEK HASIL API
        */
 
-      let data =
-        Array.isArray(result)
-          ? result
-          : (
-              result &&
-              Array.isArray(
-                result.data
-              )
-                ? result.data
-                : []
-            );
+      if (
+        !result ||
+        result.sukses !== true
+      ) {
 
-
-      if (!data.length) {
-
-        container.innerHTML = `
+        hasil.innerHTML = `
 
           <div
+            class="admin-message-error"
             style="
+              padding:15px;
               text-align:center;
-              padding:30px;
-              color:#777;
             "
           >
 
-            Tidak ada data absensi.
+            ✕ ${
+              escapeHtml(
+                result &&
+                result.pesan
+                  ? result.pesan
+                  : "Gagal mengambil data rekap."
+              )
+            }
 
           </div>
 
@@ -2886,7 +2917,357 @@ function tampilkanRekap() {
       }
 
 
+      /*
+       * Ambil data.
+       *
+       * Code.gs mengirim:
+       *
+       * {
+       *   sukses: true,
+       *   data: [...]
+       * }
+       */
+
+      let data = [];
+
+
+      if (
+        Array.isArray(
+          result.data
+        )
+      ) {
+
+        data =
+          result.data;
+
+      }
+
+      else if (
+        Array.isArray(
+          result.hasil
+        )
+      ) {
+
+        data =
+          result.hasil;
+
+      }
+
+      else if (
+        Array.isArray(
+          result
+        )
+      ) {
+
+        data =
+          result;
+
+      }
+
+
+      /*
+       * Tidak ada data
+       */
+
+      if (!data.length) {
+
+        hasil.innerHTML = `
+
+          <div
+            style="
+              text-align:center;
+              padding:30px 15px;
+              color:#777;
+            "
+          >
+
+            <div
+              style="
+                font-size:38px;
+                margin-bottom:10px;
+              "
+            >
+              📊
+            </div>
+
+            <strong>
+              Belum ada data absensi
+            </strong>
+
+            <br>
+
+            pada bulan
+            ${escapeHtml(
+              bulan
+            )}
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      /*
+       * Hitung total
+       */
+
+      let totalGuru =
+        data.length;
+
+      let totalHadir = 0;
+
+      let totalTerlambat = 0;
+
+      let totalTidak = 0;
+
+      let totalJP = 0;
+
+
+      data.forEach(
+        function(row) {
+
+          const hadir =
+            Number(
+              row.hadir || 0
+            );
+
+
+          const terlambat =
+            Number(
+              row.terlambat || 0
+            );
+
+
+          const tidak =
+            Number(
+              row.tidak || 0
+            );
+
+
+          const jtm =
+            Number(
+              row.jtm !== undefined
+                ? row.jtm
+                : row.jp || 0
+            ) || 0;
+
+
+          totalHadir +=
+            hadir;
+
+
+          totalTerlambat +=
+            terlambat;
+
+
+          totalTidak +=
+            tidak;
+
+
+          /*
+           * Total JP dihitung dari
+           * hari hadir + terlambat.
+           */
+
+          totalJP +=
+            (
+              hadir +
+              terlambat
+            ) * jtm;
+
+        }
+      );
+
+
+      /*
+       * =====================================================
+       * RINGKASAN
+       * =====================================================
+       */
+
       let html = `
+
+        <div
+          style="
+            display:grid;
+            grid-template-columns:
+              repeat(
+                auto-fit,
+                minmax(
+                  120px,
+                  1fr
+                )
+              );
+            gap:10px;
+            margin-bottom:18px;
+          "
+        >
+
+
+          <div
+            style="
+              background:#e8f5f1;
+              border-radius:12px;
+              padding:14px 8px;
+              text-align:center;
+            "
+          >
+
+            <strong
+              style="
+                display:block;
+                font-size:22px;
+                color:#087f5b;
+              "
+            >
+              ${totalGuru}
+            </strong>
+
+            <span>
+              GURU
+            </span>
+
+          </div>
+
+
+          <div
+            style="
+              background:#e8f5f1;
+              border-radius:12px;
+              padding:14px 8px;
+              text-align:center;
+            "
+          >
+
+            <strong
+              style="
+                display:block;
+                font-size:22px;
+                color:#087f5b;
+              "
+            >
+              ${totalHadir}
+            </strong>
+
+            <span>
+              HADIR
+            </span>
+
+          </div>
+
+
+          <div
+            style="
+              background:#fff3df;
+              border-radius:12px;
+              padding:14px 8px;
+              text-align:center;
+            "
+          >
+
+            <strong
+              style="
+                display:block;
+                font-size:22px;
+                color:#b06b00;
+              "
+            >
+              ${totalTerlambat}
+            </strong>
+
+            <span>
+              TERLAMBAT
+            </span>
+
+          </div>
+
+
+          <div
+            style="
+              background:#ffe8e8;
+              border-radius:12px;
+              padding:14px 8px;
+              text-align:center;
+            "
+          >
+
+            <strong
+              style="
+                display:block;
+                font-size:22px;
+                color:#c62828;
+              "
+            >
+              ${totalTidak}
+            </strong>
+
+            <span>
+              TIDAK HADIR
+            </span>
+
+          </div>
+
+
+          <div
+            style="
+              background:#e8f5f1;
+              border-radius:12px;
+              padding:14px 8px;
+              text-align:center;
+            "
+          >
+
+            <strong
+              style="
+                display:block;
+                font-size:22px;
+                color:#087f5b;
+              "
+            >
+              ${totalJP}
+            </strong>
+
+            <span>
+              TOTAL JP
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+        <div
+          style="
+            margin-bottom:12px;
+            font-weight:bold;
+            color:#087f5b;
+            font-size:17px;
+          "
+        >
+
+          📊 REKAP ABSENSI GURU
+          <br>
+
+          <small
+            style="
+              color:#777;
+              font-weight:normal;
+            "
+          >
+
+            Periode:
+            ${escapeHtml(
+              bulan
+            )}
+
+          </small>
+
+        </div>
+
 
         <div
           style="
@@ -2896,9 +3277,9 @@ function tampilkanRekap() {
         >
 
           <table
+            class="rekap-table"
             style="
               width:100%;
-              border-collapse:collapse;
               min-width:700px;
             "
           >
@@ -2907,97 +3288,222 @@ function tampilkanRekap() {
 
               <tr>
 
-                <th>No</th>
+                <th>
+                  No
+                </th>
 
-                <th>Tanggal</th>
+                <th>
+                  Nama Guru
+                </th>
 
-                <th>Jam</th>
+                <th>
+                  JTM / Minggu
+                </th>
 
-                <th>Nama Guru</th>
+                <th>
+                  Hadir
+                </th>
 
-                <th>Status</th>
+                <th>
+                  Terlambat
+                </th>
 
-                <th>Lokasi</th>
+                <th>
+                  Tidak Hadir
+                </th>
+
+                <th>
+                  Total JP
+                </th>
 
               </tr>
 
             </thead>
+
 
             <tbody>
 
       `;
 
 
+      /*
+       * =====================================================
+       * ISI DATA GURU
+       * =====================================================
+       */
+
       data.forEach(
         function(row, index) {
 
-          const tanggal =
-            row.tanggal ||
-            row.Tanggal ||
-            "-";
-
-
-          const jam =
-            row.jam ||
-            row.Jam ||
-            row.waktu ||
-            "-";
-
-
           const nama =
             row.nama ||
-            row.Nama ||
             "-";
 
 
-          const status =
-            row.status ||
-            row.Status ||
-            "-";
+          const nip =
+            row.nip ||
+            "";
 
 
-          const lokasi =
-            row.lokasi ||
-            row.Lokasi ||
-            "-";
+          const jtm =
+            Number(
+              row.jtm !== undefined
+                ? row.jtm
+                : row.jp || 0
+            ) || 0;
+
+
+          const hadir =
+            Number(
+              row.hadir || 0
+            );
+
+
+          const terlambat =
+            Number(
+              row.terlambat || 0
+            );
+
+
+          const tidak =
+            Number(
+              row.tidak || 0
+            );
+
+
+          const hariDihitung =
+            hadir +
+            terlambat;
+
+
+          const totalGuruJP =
+            hariDihitung *
+            jtm;
 
 
           html += `
 
             <tr>
 
-              <td>
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
                 ${index + 1}
+
               </td>
 
-              <td>
-                ${escapeHtml(
-                  tanggal
-                )}
-              </td>
 
               <td>
-                ${escapeHtml(
-                  jam
-                )}
+
+                <strong>
+                  ${escapeHtml(
+                    nama
+                  )}
+                </strong>
+
+                ${
+                  nip
+                    ? `
+                      <br>
+
+                      <small
+                        style="
+                          color:#777;
+                        "
+                      >
+                        NIP:
+                        ${escapeHtml(
+                          nip
+                        )}
+                      </small>
+                    `
+                    : ""
+                }
+
               </td>
 
-              <td>
-                ${escapeHtml(
-                  nama
-                )}
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
+                <strong>
+                  ${jtm}
+                </strong>
+
               </td>
 
-              <td>
-                ${escapeHtml(
-                  status
-                )}
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
+                <strong
+                  style="
+                    color:#087f5b;
+                  "
+                >
+                  ${hadir}
+                </strong>
+
               </td>
 
-              <td>
-                ${escapeHtml(
-                  lokasi
-                )}
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
+                <strong
+                  style="
+                    color:#b06b00;
+                  "
+                >
+                  ${terlambat}
+                </strong>
+
+              </td>
+
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
+                <strong
+                  style="
+                    color:#c62828;
+                  "
+                >
+                  ${tidak}
+                </strong>
+
+              </td>
+
+
+              <td
+                style="
+                  text-align:center;
+                "
+              >
+
+                <strong
+                  style="
+                    color:#087f5b;
+                  "
+                >
+                  ${totalGuruJP}
+                </strong>
+
               </td>
 
             </tr>
@@ -3019,7 +3525,11 @@ function tampilkanRekap() {
       `;
 
 
-      container.innerHTML =
+      /*
+       * Tampilkan ke halaman
+       */
+
+      hasil.innerHTML =
         html;
 
     }
@@ -3027,7 +3537,6 @@ function tampilkanRekap() {
   );
 
 }
-
 
 /* =====================================================
    EXPORT EXCEL
