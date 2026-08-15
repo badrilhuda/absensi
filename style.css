@@ -46,7 +46,7 @@ button {
 ========================================================== */
 
 .header {
-  min-height: 165px;
+  min-height: 220px;
   padding: 28px 25px;
   display: flex;
   align-items: center;
@@ -157,17 +157,21 @@ button {
 ========================================================== */
 
 .menu-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
+  width: 100%;
 }
 
 .menu-card {
   width: 100%;
+  min-height: 150px;
   border: none;
 
-  display: grid;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   text-align: center;
   padding: 20px;
@@ -186,17 +190,24 @@ button {
   transform: scale(.98);
 }
 
+
+/* ==========================================================
+   ICON MENU
+========================================================== */
+
 .menu-icon {
-  width: 72px;
-  height: 72px;
+  width: 62px;
+  height: 62px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 21px;
-  font-size: 34px;
-  margin-right: 18px;
+  border-radius: 20px;
+
+  font-size: 30px;
+
+  margin: 0 0 10px 0;
 }
 
 .admin-icon {
@@ -211,14 +222,23 @@ button {
   background: #fff0d7;
 }
 
+
+/* ==========================================================
+   TULISAN MENU
+========================================================== */
+
 .menu-text {
   display: flex;
   flex-direction: column;
+  align-items: center;
+
   gap: 5px;
+
+  text-align: center;
 }
 
 .menu-text strong {
-  font-size: 20px;
+  font-size: 18px;
   color: #075c43;
 }
 
@@ -229,20 +249,23 @@ button {
 
 
 /* ==========================================================
-   WAKTU ABSENSI - TENGAH
+   WAKTU ABSENSI
 ========================================================== */
 
 .time-card {
-  margin-top: 22px;
+  margin-top: 0;
+
+  width: 100%;
+  min-height: 150px;
 
   padding: 20px;
 
   background: white;
 
-  border-radius: 19px;
+  border-radius: 23px;
 
   box-shadow:
-    0 4px 15px rgba(0,0,0,.06);
+    0 5px 18px rgba(0,0,0,.07);
 
   display: flex;
 
@@ -255,14 +278,18 @@ button {
   text-align: center;
 
   gap: 7px;
+
+  box-sizing: border-box;
 }
 
 
-/* ICON DI TENGAH */
+/* ==========================================================
+   ICON WAKTU
+========================================================== */
 
 .time-icon {
-  width: 55px;
-  height: 55px;
+  width: 62px;
+  height: 62px;
 
   display: flex;
 
@@ -270,15 +297,21 @@ button {
 
   justify-content: center;
 
-  margin: 0 auto;
+  margin: 0 0 10px 0;
 
   font-size: 34px;
 
   line-height: 1;
+
+  border-radius: 20px;
+
+  background: #e4edff;
 }
 
 
-/* TULISAN DI TENGAH */
+/* ==========================================================
+   INFORMASI WAKTU
+========================================================== */
 
 .time-info {
   display: flex;
@@ -294,15 +327,13 @@ button {
   gap: 4px;
 }
 
-
 .time-info strong {
   color: #333;
 
-  font-size: 15px;
+  font-size: 18px;
 
   font-weight: 800;
 }
-
 
 .time-info span {
   color: #087f5b;
@@ -312,6 +343,75 @@ button {
   font-weight: 700;
 }
 
+
+/* ==========================================================
+   MOBILE
+   2 KOLOM × 2 BARIS
+========================================================== */
+
+@media (max-width: 768px) {
+
+  .menu-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .menu-card,
+  .time-card {
+    min-height: 145px;
+  }
+
+  .menu-icon,
+  .time-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 28px;
+  }
+
+  .menu-text strong,
+  .time-info strong {
+    font-size: 17px;
+  }
+
+}
+
+
+/* ==========================================================
+   HP KECIL
+========================================================== */
+
+@media (max-width: 420px) {
+
+  .menu-list {
+    gap: 12px;
+  }
+
+  .menu-card,
+  .time-card {
+    min-height: 135px;
+    padding: 15px;
+  }
+
+  .menu-icon,
+  .time-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 25px;
+    border-radius: 17px;
+    margin-bottom: 8px;
+  }
+
+  .menu-text strong,
+  .time-info strong {
+    font-size: 15px;
+  }
+
+  .menu-text span,
+  .time-info span {
+    font-size: 13px;
+  }
+
+}
 /* ==========================================================
    STATUS
 ========================================================== */
@@ -1117,7 +1217,7 @@ footer strong {
 @media screen and (max-width: 600px) {
 
   .header {
-    min-height: 115px;
+    min-height: 185px;
     padding: 22px 18px;
   }
 
