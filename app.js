@@ -2446,7 +2446,7 @@ function prosesAbsensiGuru(
         {
 
           action:
-            "absenGuru",
+            "absensi",
 
           kodeQR:
             kodeQR,
@@ -3209,35 +3209,6 @@ function tampilkanRekap() {
             </span>
 
           </div>
-
-
-          <div
-            style="
-              background:#e8f5f1;
-              border-radius:12px;
-              padding:14px 8px;
-              text-align:center;
-            "
-          >
-
-            <strong
-              style="
-                display:block;
-                font-size:22px;
-                color:#087f5b;
-              "
-            >
-              ${totalJP}
-            </strong>
-
-            <span>
-              TOTAL JP
-            </span>
-
-          </div>
-
-
-        </div>
 
 
         <div
