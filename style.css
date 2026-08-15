@@ -1279,3 +1279,297 @@ footer strong {
   }
 
 }
+
+
+/* ==========================================================
+   FINAL OVERRIDE
+   HEADER + MENU HOME SAJA
+   Menyesuaikan gaya Pusat Informasi YPI Badril Huda
+   Tidak mengubah fungsi atau bagian halaman lainnya.
+========================================================== */
+
+/* HEADER */
+.app-header {
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  min-height: 300px !important;
+  padding: 58px 54px 78px !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  background: linear-gradient(135deg, #087f5b 0%, #0b986f 100%) !important;
+  border-radius: 0 0 58px 58px !important;
+  color: #fff !important;
+}
+
+.app-header::before {
+  content: "";
+  position: absolute;
+  width: 285px;
+  height: 285px;
+  right: -70px;
+  top: -125px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  pointer-events: none;
+}
+
+.app-header::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  left: -85px;
+  bottom: -105px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  pointer-events: none;
+}
+
+.app-header .header-content {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+
+.app-header .header-icon {
+  width: 70px !important;
+  height: 70px !important;
+  min-width: 70px !important;
+  margin: 0 0 30px 0 !important;
+  padding: 0 !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.96) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06) !important;
+}
+
+.app-header .header-icon img {
+  width: 58px !important;
+  height: 58px !important;
+  max-width: 58px !important;
+  max-height: 58px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.app-header .header-text {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.app-header .header-text h1 {
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: clamp(32px, 7vw, 43px) !important;
+  line-height: 1.08 !important;
+  font-weight: 800 !important;
+  letter-spacing: .2px !important;
+  text-align: left !important;
+}
+
+.app-header .header-text p {
+  margin: 8px 0 0 !important;
+  color: #fff !important;
+  font-size: clamp(17px, 3.8vw, 21px) !important;
+  line-height: 1.2 !important;
+  text-align: left !important;
+  opacity: .98 !important;
+}
+
+/* HOME: 4 KARTU = 2 KOLOM x 2 BARIS */
+#homePage {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  column-gap: 16px !important;
+  row-gap: 16px !important;
+  align-items: stretch !important;
+}
+
+#homePage .welcome {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+}
+
+#homePage .menu-list {
+  display: contents !important;
+}
+
+#homePage .menu-card,
+#homePage .time-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 130px !important;
+  margin: 0 !important;
+  padding: 20px 12px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #dce5e1 !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.05) !important;
+}
+
+#homePage .menu-card {
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 10px !important;
+}
+
+#homePage .menu-icon {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  margin: 0 !important;
+  border-radius: 17px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+}
+
+#homePage .admin-icon,
+#homePage .guru-icon,
+#homePage .rekap-icon {
+  background: #e5f0ec !important;
+}
+
+#homePage .menu-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  width: 100% !important;
+}
+
+#homePage .menu-text strong {
+  color: #202020 !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  font-weight: 500 !important;
+}
+
+#homePage .menu-text span {
+  display: none !important;
+}
+
+#homePage .time-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 9px !important;
+}
+
+#homePage .time-icon {
+  width: 58px !important;
+  height: 58px !important;
+  margin: 0 !important;
+  border-radius: 17px !important;
+  background: #e5f0ec !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+}
+
+#homePage .time-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+#homePage .time-info strong {
+  color: #202020 !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+#homePage .time-info span {
+  color: #087f5b !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+#homePage .menu-card:active,
+#homePage .time-card:active {
+  transform: scale(.98) !important;
+}
+
+/* MOBILE */
+@media screen and (max-width: 600px) {
+  .app-header {
+    min-height: 250px !important;
+    padding: 42px 30px 64px !important;
+    border-radius: 0 0 42px 42px !important;
+  }
+
+  .app-header .header-icon {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    margin-bottom: 24px !important;
+    border-radius: 17px !important;
+  }
+
+  .app-header .header-icon img {
+    width: 53px !important;
+    height: 53px !important;
+    max-width: 53px !important;
+    max-height: 53px !important;
+  }
+
+  .app-header .header-text h1 {
+    font-size: clamp(28px, 8vw, 36px) !important;
+  }
+
+  .app-header .header-text p {
+    font-size: 17px !important;
+    margin-top: 6px !important;
+  }
+
+  #homePage {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 14px !important;
+    row-gap: 14px !important;
+  }
+
+  #homePage .menu-card,
+  #homePage .time-card {
+    min-height: 130px !important;
+    padding: 17px 8px !important;
+    border-radius: 19px !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .app-header {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+
+  #homePage {
+    column-gap: 10px !important;
+    row-gap: 10px !important;
+  }
+
+  #homePage .menu-card,
+  #homePage .time-card {
+    min-height: 120px !important;
+  }
+}
