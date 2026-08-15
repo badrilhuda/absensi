@@ -1,21 +1,21 @@
-/* ==========================================================
+/* =====================================================
    ABSENSI GURU
    MTs. BADRIL HUDA
    APP.JS
-   ========================================================== */
+===================================================== */
 
 
-/* ==========================================================
+/* =====================================================
    GOOGLE APPS SCRIPT
-   ========================================================== */
+===================================================== */
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT6SI7IbqBM_yTMvF0sY6EdikgAnyCKnD-R8fWOaOvw4_atZeAWSTN9t3sAYJbgsbP/exec";
 
 
-/* ==========================================================
+/* =====================================================
    GLOBAL
-   ========================================================== */
+===================================================== */
 
 let qrScanner = null;
 
@@ -24,12 +24,14 @@ let sedangScan = false;
 let adminSudahLogin = false;
 
 
-/* ==========================================================
+/* =====================================================
    UTILITAS
-   ========================================================== */
+===================================================== */
 
 function el(id) {
+
   return document.getElementById(id);
+
 }
 
 
@@ -45,20 +47,9 @@ function escapeHtml(text) {
 }
 
 
-function escapeJs(text) {
-
-  return String(text ?? "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/\r/g, "")
-    .replace(/\n/g, "\\n");
-
-}
-
-
-/* ==========================================================
+/* =====================================================
    HALAMAN
-   ========================================================== */
+===================================================== */
 
 function sembunyikanSemua() {
 
@@ -73,77 +64,37 @@ function sembunyikanSemua() {
 }
 
 
-/* ==========================================================
-   NAVIGASI HALAMAN
-   HOME / ADMIN / GURU / REKAP
-   ========================================================== */
-
-let sedangNavigasiBack = false;
-
-
-/* ==========================================================
-   SEMBUNYIKAN SEMUA HALAMAN
-   ========================================================== */
-
-function sembunyikanSemua() {
-
-  document
-    .querySelectorAll(".page")
-    .forEach(function(page) {
-
-      page.classList.add("hidden");
-
-    });
-
-}
-
-
-/* ==========================================================
-   TAMPILKAN HOME
-   ========================================================== */
-
-function tampilkanHome() {
+function kembaliHome() {
 
   hentikanScanner();
 
   sembunyikanSemua();
 
-  const page =
-    el("homePage");
-
-  if (page) {
-
-    page.classList.remove("hidden");
-
-  }
+  el("homePage")
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* ==========================================================
-   TAMPILKAN ADMIN
-   ========================================================== */
-
-function tampilkanAdmin() {
+function bukaAdmin() {
 
   hentikanScanner();
 
   sembunyikanSemua();
 
-  const page =
-    el("adminPage");
+  el("adminPage")
+    .classList
+    .remove("hidden");
 
-  if (page) {
-
-    page.classList.remove("hidden");
-
-  }
 
   if (adminSudahLogin) {
 
     tampilkanPanelAdmin();
 
-  } else {
+  }
+
+  else {
 
     tampilkanLoginAdmin();
 
@@ -152,313 +103,35 @@ function tampilkanAdmin() {
 }
 
 
-/* ==========================================================
-   TAMPILKAN GURU
-   ========================================================== */
-
-function tampilkanGuru() {
-
-  hentikanScanner();
-
-  sembunyikanSemua();
-
-  const page =
-    el("guruPage");
-
-  if (page) {
-
-    page.classList.remove("hidden");
-
-  }
-
-}
-
-
-/* ==========================================================
-   TAMPILKAN REKAP
-   ========================================================== */
-
-function tampilkanHalamanRekap() {
-
-  hentikanScanner();
-
-  sembunyikanSemua();
-
-  const page =
-    el("rekapPage");
-
-  if (page) {
-
-    page.classList.remove("hidden");
-
-  }
-
-}
-
-
-/* ==========================================================
-   KEMBALI KE HOME
-   ========================================================== */
-
-function kembaliHome() {
-
-  hentikanScanner();
-
-  /*
-   * Jika sedang berada di:
-   * #admin
-   * #guru
-   * #rekap
-   *
-   * gunakan history.back()
-   * agar tombol Back Android dan tombol
-   * Kembali memiliki perilaku yang sama.
-   */
-
-  if (
-    location.hash === "#admin" ||
-    location.hash === "#guru" ||
-    location.hash === "#rekap"
-  ) {
-
-    history.back();
-
-    return;
-
-  }
-
-  tampilkanHome();
-
-}
-
-
-/* ==========================================================
-   BUKA ADMIN
-   ========================================================== */
-
-function bukaAdmin() {
-
-  hentikanScanner();
-
-  /*
-   * location.hash membuat entry history baru.
-   * Ini yang akan dibaca oleh tombol Back Android.
-   */
-
-  if (location.hash !== "#admin") {
-
-    location.hash = "admin";
-
-  } else {
-
-    tampilkanAdmin();
-
-  }
-
-}
-
-
-/* ==========================================================
-   BUKA GURU
-   ========================================================== */
-
 function bukaGuru() {
 
   hentikanScanner();
 
-  if (location.hash !== "#guru") {
+  sembunyikanSemua();
 
-    location.hash = "guru";
-
-  } else {
-
-    tampilkanGuru();
-
-  }
+  el("guruPage")
+    .classList
+    .remove("hidden");
 
 }
 
-
-/* ==========================================================
-   BUKA REKAP
-   ========================================================== */
 
 function bukaRekap() {
 
   hentikanScanner();
 
-  if (location.hash !== "#rekap") {
+  sembunyikanSemua();
 
-    location.hash = "rekap";
-
-  } else {
-
-    tampilkanHalamanRekap();
-
-  }
+  el("rekapPage")
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* ==========================================================
-   ROUTER HALAMAN
-   ========================================================== */
-
-function jalankanRouter() {
-
-  const halaman =
-    location.hash
-      .replace("#", "")
-      .toLowerCase()
-      .trim();
-
-
-  /* ------------------------------------------
-     HOME
-     ------------------------------------------ */
-
-  if (!halaman) {
-
-    tampilkanHome();
-
-    return;
-
-  }
-
-
-  /* ------------------------------------------
-     ADMIN
-     ------------------------------------------ */
-
-  if (halaman === "admin") {
-
-    tampilkanAdmin();
-
-    return;
-
-  }
-
-
-  /* ------------------------------------------
-     GURU
-     ------------------------------------------ */
-
-  if (halaman === "guru") {
-
-    tampilkanGuru();
-
-    return;
-
-  }
-
-
-  /* ------------------------------------------
-     REKAP
-     ------------------------------------------ */
-
-  if (halaman === "rekap") {
-
-    tampilkanHalamanRekap();
-
-    return;
-
-  }
-
-
-  /* ------------------------------------------
-     HASH TIDAK DIKENAL
-     ------------------------------------------ */
-
-  /*
-   * Jangan menggunakan history.back()
-   * di sini karena bisa menyebabkan Web App
-   * keluar pada Android.
-   */
-
-  history.replaceState(
-    {
-      halaman: "home"
-    },
-    "",
-    location.pathname +
-    location.search
-  );
-
-  tampilkanHome();
-
-}
-
-
-/* ==========================================================
-   HASH CHANGE
-   ========================================================== */
-
-window.addEventListener(
-  "hashchange",
-  function() {
-
-    jalankanRouter();
-
-  }
-);
-
-
-/* ==========================================================
-   POPSTATE
-   ========================================================== */
-
-window.addEventListener(
-  "popstate",
-  function() {
-
-    /*
-     * Saat tombol Back Android ditekan,
-     * jalankan router berdasarkan hash terbaru.
-     */
-
-    jalankanRouter();
-
-  }
-);
-
-
-/* ==========================================================
-   POSISI AWAL APLIKASI
-   ========================================================== */
-
-if (
-  !location.hash
-) {
-
-  history.replaceState(
-    {
-      halaman: "home"
-    },
-    "",
-    location.pathname +
-    location.search
-  );
-
-}
-
-
-/* ==========================================================
-   JALANKAN HALAMAN PERTAMA
-   ========================================================== */
-
-setTimeout(
-  function() {
-
-    jalankanRouter();
-
-  },
-  0
-);
-
-
-/* ==========================================================
+/* =====================================================
    LOGIN ADMIN
-   ========================================================== */
+===================================================== */
 
 function tampilkanLoginAdmin() {
 
@@ -529,9 +202,13 @@ function loginAdmin() {
   if (!pin) {
 
     message.innerHTML = `
+
       <div class="admin-message-error">
+
         PIN Admin belum diisi.
+
       </div>
+
     `;
 
     return;
@@ -540,17 +217,27 @@ function loginAdmin() {
 
 
   message.innerHTML = `
+
     <div class="loading">
+
       ⏳ Memeriksa PIN...
+
     </div>
+
   `;
 
 
   panggilAPI(
+
     {
-      action: "loginAdmin",
+
+      action: "login",
+
       pin: pin
+
     },
+
+
     function(result) {
 
       console.log(
@@ -569,9 +256,13 @@ function loginAdmin() {
 
 
         message.innerHTML = `
+
           <div class="admin-message-success">
+
             ✓ Login berhasil.
+
           </div>
+
         `;
 
 
@@ -582,7 +273,9 @@ function loginAdmin() {
       else {
 
         message.innerHTML = `
+
           <div class="admin-message-error">
+
             ✕ ${
               escapeHtml(
                 result &&
@@ -591,20 +284,23 @@ function loginAdmin() {
                   : "PIN Admin salah."
               )
             }
+
           </div>
+
         `;
 
       }
 
     }
+
   );
 
 }
 
 
-/* ==========================================================
+/* =====================================================
    PANEL ADMIN
-   ========================================================== */
+===================================================== */
 
 function tampilkanPanelAdmin() {
 
@@ -640,9 +336,9 @@ function tampilkanPanelAdmin() {
 }
 
 
-/* ==========================================================
+/* =====================================================
    API JSONP
-   ========================================================== */
+===================================================== */
 
 function panggilAPI(
   parameter,
@@ -670,7 +366,6 @@ function panggilAPI(
       catch(error) {
 
         console.error(
-          "Callback error:",
           error
         );
 
@@ -769,9 +464,9 @@ function panggilAPI(
 }
 
 
-/* ==========================================================
+/* =====================================================
    DATA GURU
-   ========================================================== */
+===================================================== */
 
 function muatDaftarGuru() {
 
@@ -787,16 +482,25 @@ function muatDaftarGuru() {
 
 
   container.innerHTML = `
+
     <div class="loading">
+
       ⏳ Memuat data guru...
+
     </div>
+
   `;
 
 
   panggilAPI(
+
     {
+
       action: "getGuru"
+
     },
+
+
     function(result) {
 
       console.log(
@@ -805,46 +509,18 @@ function muatDaftarGuru() {
       );
 
 
-      let data = [];
-
-
       if (
-        Array.isArray(result)
-      ) {
-
-        data = result;
-
-      }
-
-      else if (
-        result &&
-        Array.isArray(result.data)
-      ) {
-
-        data =
-          result.data;
-
-      }
-
-      else if (
-        result &&
-        Array.isArray(result.hasil)
-      ) {
-
-        data =
-          result.hasil;
-
-      }
-
-
-      if (
-        !Array.isArray(data)
+        !Array.isArray(result)
       ) {
 
         container.innerHTML = `
+
           <div class="admin-message-error">
+
             Data guru tidak dapat dibaca.
+
           </div>
+
         `;
 
         return;
@@ -853,18 +529,19 @@ function muatDaftarGuru() {
 
 
       tampilkanDaftarGuru(
-        data
+        result
       );
 
     }
+
   );
 
 }
 
 
-/* ==========================================================
-   TAMPILKAN DAFTAR GURU
-   ========================================================== */
+/* =====================================================
+   TAMPILKAN GURU
+===================================================== */
 
 function tampilkanDaftarGuru(
   data
@@ -872,13 +549,6 @@ function tampilkanDaftarGuru(
 
   const container =
     el("daftarGuru");
-
-
-  if (!container) {
-
-    return;
-
-  }
 
 
   const total =
@@ -890,7 +560,7 @@ function tampilkanDaftarGuru(
       function(guru) {
 
         return String(
-          guru.aktif || ""
+          guru.aktif
         ).toUpperCase() === "YA";
 
       }
@@ -931,9 +601,13 @@ function tampilkanDaftarGuru(
   if (!data.length) {
 
     container.innerHTML = `
+
       <div class="loading">
+
         Belum ada data guru.
+
       </div>
+
     `;
 
     return;
@@ -949,7 +623,7 @@ function tampilkanDaftarGuru(
 
       const aktif =
         String(
-          guru.aktif || ""
+          guru.aktif
         ).toUpperCase() === "YA";
 
 
@@ -965,27 +639,26 @@ function tampilkanDaftarGuru(
           : "YA";
 
 
-      const jtm =
-        guru.jtm !== undefined
-          ? guru.jtm
-          : guru.jp !== undefined
-            ? guru.jp
-            : 0;
-
-
       html += `
+
         <div class="guru-item">
 
+
           <div class="guru-name">
+
             ${escapeHtml(
-              guru.nama || "-"
+              guru.nama
             )}
+
           </div>
 
+
           <div class="guru-info">
+
             ${escapeHtml(
               guru.jabatan || "Guru"
             )}
+
             ${
               guru.nip
                 ? " • NIP " +
@@ -994,31 +667,83 @@ function tampilkanDaftarGuru(
                   )
                 : ""
             }
+
           </div>
 
-          <div class="guru-info">
-            JTM: ${escapeHtml(jtm)}
+
+          <div class="guru-code">
+
+            ${escapeHtml(
+              guru.kodeQR
+            )}
+
           </div>
+
 
           <div class="guru-status">
+
             ${status}
+
           </div>
 
-          <button
-            type="button"
-            onclick="ubahStatusGuru(
-              '${escapeJs(guru.kodeQR || "")}',
-              '${escapeJs(statusBaru)}'
-            )"
-          >
-            ${
-              aktif
-                ? "Nonaktifkan"
-                : "Aktifkan"
-            }
-          </button>
+
+          <div class="guru-actions">
+
+
+            <!-- QR -->
+
+            <button
+              class="qr-button"
+              onclick="tampilkanQR(
+                '${escapeJs(guru.kodeQR)}',
+                '${escapeJs(guru.nama)}'
+              )"
+            >
+
+              📷 QR
+
+            </button>
+
+
+            <!-- AKTIF / NONAKTIF -->
+
+            <button
+              class="status-button"
+              onclick="ubahStatus(
+                '${escapeJs(guru.kodeQR)}',
+                '${statusBaru}'
+              )"
+            >
+
+              ${
+                aktif
+                  ? "NONAKTIFKAN"
+                  : "AKTIFKAN"
+              }
+
+            </button>
+
+
+            <!-- DELETE -->
+
+            <button
+              class="delete-button"
+              onclick="hapusGuru(
+                '${escapeJs(guru.kodeQR)}',
+                '${escapeJs(guru.nama)}'
+              )"
+            >
+
+              🗑️ DELETE
+
+            </button>
+
+
+          </div>
+
 
         </div>
+
       `;
 
     }
@@ -1031,15 +756,1048 @@ function tampilkanDaftarGuru(
 }
 
 
-/* ==========================================================
-   ... BAGIAN ADMIN / REKAP / DATA GURU ASLI
-   TETAP DIPERTAHANKAN
-   ========================================================== */
+/* =====================================================
+   ESCAPE JAVASCRIPT
+===================================================== */
+
+function escapeJs(text) {
+
+  return String(
+    text ?? ""
+  )
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    )
+    .replace(
+      /\r/g,
+      ""
+    )
+    .replace(
+      /\n/g,
+      "\\n"
+    );
+
+}
 
 
-/* ==========================================================
+/* =====================================================
+   TAMBAH GURU
+===================================================== */
+
+function simpanGuru() {
+
+  const nip =
+    el("guruNip")
+      .value
+      .trim();
+
+
+  const nama =
+    el("guruNama")
+      .value
+      .trim();
+
+
+  const jabatan =
+    el("guruJabatan")
+      .value
+      .trim();
+
+
+  const jp =
+    el("guruJP")
+      .value
+      .trim();
+
+
+  const message =
+    el("tambahGuruMessage");
+
+
+  if (!nama) {
+
+    message.innerHTML = `
+
+      <div class="admin-message-error">
+
+        Nama guru wajib diisi.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if (jp === "") {
+
+    message.innerHTML = `
+
+      <div class="admin-message-error">
+
+        JP / Hari wajib diisi.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if (
+    Number(jp) < 0
+  ) {
+
+    message.innerHTML = `
+
+      <div class="admin-message-error">
+
+        JP tidak boleh kurang dari 0.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  message.innerHTML = `
+
+    <div class="loading">
+
+      ⏳ Menyimpan guru...
+
+    </div>
+
+  `;
+
+
+  panggilAPI(
+
+    {
+
+      action: "tambahGuru",
+
+      nip: nip,
+
+      nama: nama,
+
+      jabatan: jabatan,
+
+      jp: jp
+
+    },
+
+
+    function(result) {
+
+      console.log(
+        "HASIL TAMBAH GURU:",
+        result
+      );
+
+
+      if (
+        result &&
+        result.sukses === true
+      ) {
+
+        message.innerHTML = `
+
+          <div class="admin-message-success">
+
+            ✓ Guru berhasil ditambahkan.
+
+            <br><br>
+
+            <strong>
+
+              ${escapeHtml(
+                result.nama
+              )}
+
+            </strong>
+
+            <br>
+
+            JP:
+            ${escapeHtml(
+              result.jp
+            )}
+            JP
+
+            <br><br>
+
+            Kode QR:
+
+            <strong>
+
+              ${escapeHtml(
+                result.kodeQR
+              )}
+
+            </strong>
+
+          </div>
+
+        `;
+
+
+        el("guruNip").value =
+          "";
+
+        el("guruNama").value =
+          "";
+
+        el("guruJabatan").value =
+          "";
+
+        el("guruJP").value =
+          "";
+
+
+        muatDaftarGuru();
+
+
+        setTimeout(
+          function() {
+
+            tampilkanQR(
+              result.kodeQR,
+              result.nama
+            );
+
+          },
+          300
+        );
+
+      }
+
+      else {
+
+        message.innerHTML = `
+
+          <div class="admin-message-error">
+
+            ✕ ${
+              escapeHtml(
+                result &&
+                result.pesan
+                  ? result.pesan
+                  : "Gagal menambahkan guru."
+              )
+            }
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   HAPUS GURU
+===================================================== */
+
+function hapusGuru(
+  kodeQR,
+  nama
+) {
+
+  kodeQR =
+    String(
+      kodeQR || ""
+    ).trim();
+
+
+  nama =
+    String(
+      nama || ""
+    ).trim();
+
+
+  if (!kodeQR) {
+
+    alert(
+      "Kode QR guru tidak ditemukan."
+    );
+
+    return;
+
+  }
+
+
+  const yakin =
+    confirm(
+
+      "⚠️ HAPUS DATA GURU?\n\n" +
+
+      "Nama: " +
+      nama +
+
+      "\n\n" +
+
+      "Data guru akan dihapus dari daftar guru.\n\n" +
+
+      "Tindakan ini tidak dapat dibatalkan."
+
+    );
+
+
+  if (!yakin) {
+
+    return;
+
+  }
+
+
+  const container =
+    el("daftarGuru");
+
+
+  if (container) {
+
+    container.innerHTML = `
+
+      <div class="loading">
+
+        ⏳ Menghapus data
+
+        ${escapeHtml(
+          nama
+        )}
+
+        ...
+
+      </div>
+
+    `;
+
+  }
+
+
+  panggilAPI(
+
+    {
+
+      action:
+        "deleteGuru",
+
+      kodeQR:
+        kodeQR
+
+    },
+
+
+    function(result) {
+
+      console.log(
+        "HASIL DELETE GURU:",
+        result
+      );
+
+
+      if (
+        result &&
+        result.sukses === true
+      ) {
+
+        alert(
+          "✓ Data guru berhasil dihapus."
+        );
+
+
+        muatDaftarGuru();
+
+      }
+
+      else {
+
+        alert(
+
+          result &&
+          result.pesan
+
+            ? result.pesan
+
+            : "Gagal menghapus data guru."
+
+        );
+
+
+        muatDaftarGuru();
+
+      }
+
+    }
+
+  );
+
+}
+/* =====================================================
+   UBAH STATUS GURU
+===================================================== */
+
+function ubahStatus(
+  kodeQR,
+  status
+) {
+
+  kodeQR =
+    String(
+      kodeQR || ""
+    ).trim();
+
+
+  status =
+    String(
+      status || ""
+    ).trim();
+
+
+  if (!kodeQR) {
+
+    alert(
+      "Kode QR tidak ditemukan."
+    );
+
+    return;
+
+  }
+
+
+  panggilAPI(
+
+    {
+
+      action:
+        "ubahStatusGuru",
+
+      kodeQR:
+        kodeQR,
+
+      aktif:
+        status
+
+    },
+
+
+    function(result) {
+
+      console.log(
+        "HASIL UBAH STATUS:",
+        result
+      );
+
+
+      if (
+        result &&
+        result.sukses === true
+      ) {
+
+        alert(
+          "✓ Status guru berhasil diubah."
+        );
+
+
+        muatDaftarGuru();
+
+      }
+
+      else {
+
+        alert(
+
+          result &&
+          result.pesan
+
+            ? result.pesan
+
+            : "Gagal mengubah status guru."
+
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   TAMPILKAN QR CODE
+===================================================== */
+
+function tampilkanQR(
+  kodeQR,
+  nama
+) {
+
+  kodeQR =
+    String(
+      kodeQR || ""
+    ).trim();
+
+
+  nama =
+    String(
+      nama || ""
+    ).trim();
+
+
+  if (!kodeQR) {
+
+    alert(
+      "Kode QR tidak ditemukan."
+    );
+
+    return;
+
+  }
+
+
+  const modal =
+    el("qrModal");
+
+
+  const qrContainer =
+    el("qrCodeContainer");
+
+
+  const qrNama =
+    el("qrNama");
+
+
+  const qrKode =
+    el("qrKode");
+
+
+  if (!modal || !qrContainer) {
+
+    alert(
+      "Container QR Code tidak ditemukan di index.html."
+    );
+
+    return;
+
+  }
+
+
+  qrContainer.innerHTML =
+    "";
+
+
+  if (qrNama) {
+
+    qrNama.textContent =
+      nama;
+
+  }
+
+
+  if (qrKode) {
+
+    qrKode.textContent =
+      kodeQR;
+
+  }
+
+
+  try {
+
+    if (
+      typeof QRCode ===
+      "undefined"
+    ) {
+
+      throw new Error(
+        "Library QRCode belum tersedia."
+      );
+
+    }
+
+
+    new QRCode(
+
+      qrContainer,
+
+      {
+
+        text:
+          kodeQR,
+
+        width:
+          250,
+
+        height:
+          250,
+
+        colorDark:
+          "#000000",
+
+        colorLight:
+          "#ffffff",
+
+        correctLevel:
+          QRCode.CorrectLevel.H
+
+      }
+
+    );
+
+
+    modal.classList.remove(
+      "hidden"
+    );
+
+
+    modal.style.display =
+      "flex";
+
+  }
+
+
+  catch(error) {
+
+    console.error(
+      "QR CODE:",
+      error
+    );
+
+
+    qrContainer.innerHTML = `
+
+      <div
+        style="
+          padding:20px;
+          color:#dc3545;
+          text-align:center;
+        "
+      >
+
+        QR Code tidak dapat dibuat.
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message
+        )}
+
+      </div>
+
+    `;
+
+
+    modal.classList.remove(
+      "hidden"
+    );
+
+
+    modal.style.display =
+      "flex";
+
+  }
+
+}
+
+
+/* =====================================================
+   TUTUP MODAL QR
+===================================================== */
+
+function tutupQR() {
+
+  const modal =
+    el("qrModal");
+
+
+  if (!modal) {
+
+    return;
+
+  }
+
+
+  modal.classList.add(
+    "hidden"
+  );
+
+
+  modal.style.display =
+    "none";
+
+
+  const container =
+    el("qrCodeContainer");
+
+
+  if (container) {
+
+    container.innerHTML =
+      "";
+
+  }
+
+}
+
+
+/* =====================================================
+   CETAK QR
+===================================================== */
+
+function cetakQR() {
+
+  const container =
+    el("qrCodeContainer");
+
+
+  const namaEl =
+    el("qrNama");
+
+
+  const kodeEl =
+    el("qrKode");
+
+
+  if (!container) {
+
+    alert(
+      "QR Code tidak ditemukan."
+    );
+
+    return;
+
+  }
+
+
+  const gambar =
+    container.querySelector(
+      "img"
+    );
+
+
+  const canvas =
+    container.querySelector(
+      "canvas"
+    );
+
+
+  let sumberQR =
+    "";
+
+
+  if (gambar) {
+
+    sumberQR =
+      gambar.src;
+
+  }
+
+  else if (canvas) {
+
+    sumberQR =
+      canvas.toDataURL(
+        "image/png"
+      );
+
+  }
+
+
+  if (!sumberQR) {
+
+    alert(
+      "QR Code belum selesai dibuat."
+    );
+
+    return;
+
+  }
+
+
+  const nama =
+    namaEl
+      ? namaEl.textContent
+      : "";
+
+
+  const kode =
+    kodeEl
+      ? kodeEl.textContent
+      : "";
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=600,height=700"
+    );
+
+
+  if (!printWindow) {
+
+    alert(
+      "Popup diblokir browser. Izinkan popup untuk mencetak QR."
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <meta charset="UTF-8">
+
+      <title>
+        QR Code ${escapeHtml(nama)}
+      </title>
+
+
+      <style>
+
+        * {
+          box-sizing:border-box;
+        }
+
+
+        body {
+
+          margin:0;
+
+          padding:30px;
+
+          font-family:
+            Arial,
+            sans-serif;
+
+          text-align:center;
+
+          background:#ffffff;
+
+          color:#000000;
+
+        }
+
+
+        .card {
+
+          width:100%;
+
+          max-width:500px;
+
+          margin:auto;
+
+          padding:30px;
+
+          border:2px solid #222;
+
+          border-radius:15px;
+
+        }
+
+
+        h1 {
+
+          margin:0 0 10px;
+
+          font-size:25px;
+
+        }
+
+
+        h2 {
+
+          margin:5px 0 20px;
+
+          font-size:20px;
+
+        }
+
+
+        img {
+
+          width:300px;
+
+          height:300px;
+
+          max-width:100%;
+
+        }
+
+
+        .kode {
+
+          margin-top:20px;
+
+          font-size:18px;
+
+          font-weight:bold;
+
+          letter-spacing:2px;
+
+        }
+
+
+        .petunjuk {
+
+          margin-top:20px;
+
+          font-size:13px;
+
+          color:#555;
+
+        }
+
+
+        @media print {
+
+          body {
+
+            padding:0;
+
+          }
+
+
+          .card {
+
+            border:none;
+
+          }
+
+        }
+
+      </style>
+
+    </head>
+
+
+    <body>
+
+      <div class="card">
+
+        <h1>
+          ABSENSI GURU
+        </h1>
+
+
+        <h2>
+          ${escapeHtml(nama)}
+        </h2>
+
+
+        <img
+          src="${sumberQR}"
+        >
+
+
+        <div class="kode">
+
+          ${escapeHtml(kode)}
+
+        </div>
+
+
+        <div class="petunjuk">
+
+          Gunakan QR Code ini
+          untuk melakukan absensi guru.
+
+        </div>
+
+      </div>
+
+
+      <script>
+
+        window.onload =
+          function() {
+
+            setTimeout(
+              function() {
+
+                window.print();
+
+              },
+              500
+            );
+
+          };
+
+      <\/script>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  printWindow.document.close();
+
+}
+
+
+/* =====================================================
+   TUTUP QR JIKA KLIK AREA LUAR
+===================================================== */
+
+document.addEventListener(
+  "click",
+  function(event) {
+
+    const modal =
+      el("qrModal");
+
+
+    if (!modal) {
+
+      return;
+
+    }
+
+
+    if (
+      event.target ===
+      modal
+    ) {
+
+      tutupQR();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
    SCANNER QR
-   ========================================================== */
+===================================================== */
 
 async function mulaiScan() {
 
@@ -1057,11 +1815,14 @@ async function mulaiScan() {
   const reader =
     el("qr-reader");
 
+
   const scannerContent =
     el("scannerContent");
 
+
   const batal =
     el("batalScanButton");
+
 
   const hasil =
     el("hasilAbsensi");
@@ -1072,12 +1833,6 @@ async function mulaiScan() {
     hasil.classList.add(
       "hidden"
     );
-
-    hasil.style.background =
-      "";
-
-    hasil.style.color =
-      "";
 
   }
 
@@ -1117,7 +1872,7 @@ async function mulaiScan() {
     ) {
 
       throw new Error(
-        "Scanner QR belum dimuat."
+        "Library scanner QR belum dimuat."
       );
 
     }
@@ -1175,7 +1930,7 @@ async function mulaiScan() {
 
       {
 
-        fps: 10,
+        fps:10,
 
         qrbox:
           function(
@@ -1183,28 +1938,31 @@ async function mulaiScan() {
             height
           ) {
 
-            const size =
+            const ukuran =
               Math.floor(
+
                 Math.min(
                   width,
                   height
                 ) * 0.72
+
               );
 
 
             return {
 
               width:
-                size,
+                ukuran,
 
               height:
-                size
+                ukuran
 
             };
 
           },
 
-        aspectRatio: 1
+        aspectRatio:
+          1
 
       },
 
@@ -1234,7 +1992,7 @@ async function mulaiScan() {
 
       function(errorMessage) {
 
-        // Error pembacaan QR biasa
+        // Error pembacaan QR
         // tidak perlu ditampilkan.
 
       }
@@ -1247,7 +2005,7 @@ async function mulaiScan() {
   catch(error) {
 
     console.error(
-      "KAMERA:",
+      "SCANNER ERROR:",
       error
     );
 
@@ -1292,9 +2050,9 @@ async function mulaiScan() {
 }
 
 
-/* ==========================================================
+/* =====================================================
    HENTIKAN SCANNER
-   ========================================================== */
+===================================================== */
 
 async function hentikanScanner() {
 
@@ -1348,9 +2106,9 @@ async function hentikanScanner() {
 }
 
 
-/* ==========================================================
+/* =====================================================
    BATAL SCAN
-   ========================================================== */
+===================================================== */
 
 function batalScan() {
 
@@ -1360,8 +2118,10 @@ function batalScan() {
   const reader =
     el("qr-reader");
 
+
   const batal =
     el("batalScanButton");
+
 
   const scannerContent =
     el("scannerContent");
@@ -1396,29 +2156,33 @@ function batalScan() {
 }
 
 
-/* ==========================================================
+/* =====================================================
    GPS ABSENSI GURU
-   ========================================================== */
+===================================================== */
 
 const LOKASI_SEKOLAH_LAT =
   -7.757670;
 
+
 const LOKASI_SEKOLAH_LNG =
   113.704187;
+
 
 const RADIUS_GPS =
   20;
 
+
 const BATAS_MAKSIMAL_GPS =
   40;
+
 
 const AKURASI_MAKSIMAL_GPS =
   30;
 
 
-/* ==========================================================
+/* =====================================================
    HITUNG JARAK GPS
-   ========================================================== */
+===================================================== */
 
 function hitungJarakGPS(
   lat1,
@@ -1444,28 +2208,36 @@ function hitungJarakGPS(
 
 
   const a =
+
     Math.sin(
       dLat / 2
     ) *
     Math.sin(
       dLat / 2
-    ) +
+    )
+
+    +
 
     Math.cos(
       lat1 *
       Math.PI /
       180
-    ) *
+    )
+
+    *
 
     Math.cos(
       lat2 *
       Math.PI /
       180
-    ) *
+    )
+
+    *
 
     Math.sin(
       dLon / 2
-    ) *
+    )
+    *
     Math.sin(
       dLon / 2
     );
@@ -1474,10 +2246,13 @@ function hitungJarakGPS(
   const c =
     2 *
     Math.atan2(
+
       Math.sqrt(a),
+
       Math.sqrt(
         1 - a
       )
+
     );
 
 
@@ -1486,9 +2261,9 @@ function hitungJarakGPS(
 }
 
 
-/* ==========================================================
-   AMBIL LOKASI GPS UNTUK ABSENSI
-   ========================================================== */
+/* =====================================================
+   AMBIL LOKASI GPS
+===================================================== */
 
 function ambilLokasiUntukAbsensi(
   callback
@@ -1500,8 +2275,7 @@ function ambilLokasiUntukAbsensi(
 
     callback({
 
-      sukses:
-        false,
+      sukses:false,
 
       pesan:
         "Browser tidak mendukung GPS."
@@ -1519,20 +2293,33 @@ function ambilLokasiUntukAbsensi(
 
   if (hasil) {
 
+    hasil.classList
+      .remove("hidden");
+
+
     hasil.innerHTML = `
 
       <div class="result-icon">
+
         📍
+
       </div>
 
+
       <h2>
-        MENGAMBIL LOKASI
+
+        MENGAMBIL LOKASI GPS
+
       </h2>
+
 
       <div class="result-info">
 
         <span>
-          Mohon tunggu, sedang memeriksa GPS...
+
+          Mohon tunggu,
+          sedang memeriksa lokasi...
+
         </span>
 
       </div>
@@ -1565,25 +2352,26 @@ function ambilLokasiUntukAbsensi(
 
 
       if (
-
         !Number.isFinite(
           latitude
-        ) ||
+        )
+
+        ||
 
         !Number.isFinite(
           longitude
-        ) ||
+        )
+
+        ||
 
         !Number.isFinite(
           accuracy
         )
-
       ) {
 
         callback({
 
-          sukses:
-            false,
+          sukses:false,
 
           pesan:
             "Data GPS tidak valid."
@@ -1611,8 +2399,7 @@ function ambilLokasiUntukAbsensi(
 
       callback({
 
-        sukses:
-          true,
+        sukses:true,
 
         latitude:
           latitude,
@@ -1643,9 +2430,10 @@ function ambilLokasiUntukAbsensi(
       ) {
 
         pesan =
-          "Izin lokasi ditolak. Silakan aktifkan izin lokasi untuk browser.";
+          "Izin lokasi ditolak. Silakan aktifkan izin lokasi pada browser.";
 
       }
+
 
       else if (
         error &&
@@ -1656,6 +2444,7 @@ function ambilLokasiUntukAbsensi(
           "Lokasi GPS tidak tersedia. Pastikan GPS/Lokasi HP aktif.";
 
       }
+
 
       else if (
         error &&
@@ -1670,8 +2459,7 @@ function ambilLokasiUntukAbsensi(
 
       callback({
 
-        sukses:
-          false,
+        sukses:false,
 
         pesan:
           pesan
@@ -1699,9 +2487,9 @@ function ambilLokasiUntukAbsensi(
 }
 
 
-/* ==========================================================
-   PROSES QR + GPS
-   ========================================================== */
+/* =====================================================
+   PROSES KODE QR + GPS
+===================================================== */
 
 function prosesKodeQR(
   kodeQR
@@ -1728,8 +2516,7 @@ function prosesKodeQR(
 
     tampilkanHasilAbsensi({
 
-      sukses:
-        false,
+      sukses:false,
 
       pesan:
         "Kode QR tidak ditemukan."
@@ -1746,27 +2533,28 @@ function prosesKodeQR(
     .remove("hidden");
 
 
-  hasil.style.background =
-    "";
-
-  hasil.style.color =
-    "";
-
-
   hasil.innerHTML = `
 
     <div class="result-icon">
-      ⏳
+
+      📍
+
     </div>
 
+
     <h2>
-      MEMERIKSA ABSENSI
+
+      MEMERIKSA LOKASI
+
     </h2>
+
 
     <div class="result-info">
 
       <span>
-        Menyiapkan pemeriksaan lokasi...
+
+        Menyiapkan pemeriksaan GPS...
+
       </span>
 
     </div>
@@ -1785,8 +2573,9 @@ function prosesKodeQR(
 
         tampilkanHasilAbsensi({
 
-          sukses:
-            false,
+          sukses:false,
+
+          gpsTidakValid:true,
 
           pesan:
             lokasi &&
@@ -1817,9 +2606,9 @@ function prosesKodeQR(
         lokasi.jarak;
 
 
-      /* ------------------------------------------
-         CEK AKURASI GPS
-         ------------------------------------------ */
+      /* =========================================
+         CEK AKURASI
+      ========================================= */
 
       if (
         accuracy >
@@ -1828,57 +2617,22 @@ function prosesKodeQR(
 
         tampilkanHasilAbsensi({
 
-          sukses:
-            false,
+          sukses:false,
 
-          gpsTidakValid:
-            true,
+          gpsTidakValid:true,
 
           pesan:
-            "Akurasi GPS saat ini sekitar " +
+
+            "Akurasi GPS sekitar " +
+
             Math.round(
               accuracy
             ) +
-            " meter. Maksimal yang diterima " +
+
+            " meter. Maksimal " +
+
             AKURASI_MAKSIMAL_GPS +
-            " meter. Silakan perbarui lokasi dan coba lagi."
 
-        });
-
-        return;
-
-      }
-
-
-      /* ------------------------------------------
-         CEK BATAS MAKSIMAL 40 METER
-         ------------------------------------------ */
-
-      if (
-        jarak >
-        BATAS_MAKSIMAL_GPS
-      ) {
-
-        tampilkanHasilAbsensi({
-
-          sukses:
-            false,
-
-          diluarRadius:
-            true,
-
-          jarak:
-            Math.round(
-              jarak
-            ),
-
-          pesan:
-            "Anda berada sekitar " +
-            Math.round(
-              jarak
-            ) +
-            " meter dari sekolah. Absensi hanya diperbolehkan sampai batas maksimal " +
-            BATAS_MAKSIMAL_GPS +
             " meter."
 
         });
@@ -1888,15 +2642,52 @@ function prosesKodeQR(
       }
 
 
-      /* ------------------------------------------
-         STATUS LOKASI
-         ------------------------------------------ */
+      /* =========================================
+         CEK BATAS 40 METER
+      ========================================= */
+
+      if (
+        jarak >
+        BATAS_MAKSIMAL_GPS
+      ) {
+
+        tampilkanHasilAbsensi({
+
+          sukses:false,
+
+          diluarRadius:true,
+
+          jarak:
+            jarak,
+
+          pesan:
+
+            "Anda berada sekitar " +
+
+            Math.round(
+              jarak
+            ) +
+
+            " meter dari sekolah. " +
+
+            "Batas maksimal absensi adalah " +
+
+            BATAS_MAKSIMAL_GPS +
+
+            " meter."
+
+        });
+
+        return;
+
+      }
+
 
       const zona =
         jarak <=
         RADIUS_GPS
 
-          ? "Dalam radius normal"
+          ? "Dalam radius normal 20 meter"
 
           : "Zona toleransi 20–40 meter";
 
@@ -1904,35 +2695,54 @@ function prosesKodeQR(
       hasil.innerHTML = `
 
         <div class="result-icon">
+
           📍
+
         </div>
 
+
         <h2>
+
           LOKASI SESUAI
+
         </h2>
+
 
         <div class="result-info">
 
           <span>
+
             Akurasi GPS:
             ${Math.round(
               accuracy
             )} meter
+
           </span>
 
+
           <span>
-            Jarak sekolah:
+
+            Jarak:
             ${Math.round(
               jarak
             )} meter
+
           </span>
 
-          <span>
-            ${zona}
-          </span>
 
           <span>
+
+            ${escapeHtml(
+              zona
+            )}
+
+          </span>
+
+
+          <span>
+
             ⏳ Menyimpan absensi...
+
           </span>
 
         </div>
@@ -1940,9 +2750,9 @@ function prosesKodeQR(
       `;
 
 
-      /* ------------------------------------------
-         KIRIM KE SERVER
-         ------------------------------------------ */
+      /* =========================================
+         KIRIM KE APPS SCRIPT
+      ========================================= */
 
       panggilAPI(
 
@@ -1990,11 +2800,9 @@ function prosesKodeQR(
   );
 
 }
-
-
-/* ==========================================================
-   HASIL ABSENSI
-   ========================================================== */
+/* =====================================================
+   TAMPILKAN HASIL ABSENSI
+===================================================== */
 
 function tampilkanHasilAbsensi(
   result
@@ -2011,172 +2819,143 @@ function tampilkanHasilAbsensi(
   }
 
 
-  hasil
-    .classList
-    .remove("hidden");
+  if (
+    !result
+  ) {
+
+    hasil.innerHTML = `
+
+      <div class="result-icon">
+
+        ❌
+
+      </div>
 
 
-  /*
-   * ABSENSI BERHASIL
-   */
+      <h2>
+
+        GAGAL
+
+      </h2>
+
+
+      <div class="result-info">
+
+        <span>
+
+          Tidak ada respons dari server.
+
+        </span>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
 
   if (
-    result &&
     result.sukses === true
   ) {
 
-    const status =
-      String(
-        result.status || "HADIR"
-      )
-      .toUpperCase();
-
-
-    const terlambat =
-      status === "TERLAMBAT";
-
-
     hasil.innerHTML = `
 
-      <div class="result-icon">
-        ${terlambat ? "⚠️" : "✅"}
-      </div>
+      <div class="result-success">
 
-      <h2>
-        ${terlambat
-          ? "ABSENSI TERLAMBAT"
-          : "ABSENSI BERHASIL"
-        }
-      </h2>
+        <div class="result-icon">
 
-      <div class="result-info">
+          ✓
 
-        <span>
-          ${escapeHtml(
-            result.nama || "-"
-          )}
-        </span>
-
-        <span>
-          ${escapeHtml(
-            result.jam || ""
-          )}
-        </span>
-
-        <span>
-          ${escapeHtml(
-            result.pesan || ""
-          )}
-        </span>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+        </div>
 
 
-  /*
-   * ABSENSI SUDAH ADA
-   */
+        <h2>
 
-  if (
-    result &&
-    result.sudahAbsen
-  ) {
+          ABSENSI BERHASIL
 
-    hasil.innerHTML = `
+        </h2>
 
-      <div class="result-icon">
-        ℹ️
-      </div>
 
-      <h2>
-        SUDAH ABSEN
-      </h2>
+        <div class="result-info">
 
-      <div class="result-info">
+          ${
+            result.nama
+              ? `
+                <span>
+                  <strong>
+                    ${escapeHtml(
+                      result.nama
+                    )}
+                  </strong>
+                </span>
+              `
+              : ""
+          }
 
-        <span>
-          ${escapeHtml(
-            result.nama || "-"
-          )}
-        </span>
 
-        <span>
+          ${
+            result.jabatan
+              ? `
+                <span>
+                  ${escapeHtml(
+                    result.jabatan
+                  )}
+                </span>
+              `
+              : ""
+          }
+
+
           ${
             result.jam
-              ? "Jam: " +
-                escapeHtml(
-                  result.jam
-                )
+              ? `
+                <span>
+                  Jam:
+                  ${escapeHtml(
+                    result.jam
+                  )}
+                </span>
+              `
               : ""
           }
-        </span>
-
-        <span>
-          ${escapeHtml(
-            result.pesan ||
-            "Guru sudah melakukan absensi hari ini."
-          )}
-        </span>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
 
 
-  /*
-   * DILUAR RADIUS
-   */
-
-  if (
-    result &&
-    (
-      result.diluarRadius ||
-      result.diLuarRadius ||
-      result.jarakTerlaluJauh
-    )
-  ) {
-
-    hasil.innerHTML = `
-
-      <div class="result-icon">
-        📍
-      </div>
-
-      <h2>
-        DI LUAR AREA ABSENSI
-      </h2>
-
-      <div class="result-info">
-
-        <span>
           ${
-            result.jarak !== undefined
-              ? "Jarak: " +
-                Math.round(
-                  Number(
-                    result.jarak
-                  )
-                ) +
-                " meter"
+            result.tanggal
+              ? `
+                <span>
+                  Tanggal:
+                  ${escapeHtml(
+                    result.tanggal
+                  )}
+                </span>
+              `
               : ""
           }
-        </span>
 
-        <span>
-          ${escapeHtml(
-            result.pesan ||
-            "Anda berada di luar batas absensi."
-          )}
-        </span>
+
+          ${
+            Number.isFinite(
+              Number(
+                result.jarak
+              )
+            )
+              ? `
+                <span>
+                  Jarak:
+                  ${Math.round(
+                    Number(
+                      result.jarak
+                    )
+                  )} meter
+                </span>
+              `
+              : ""
+          }
+
+        </div>
 
       </div>
 
@@ -2187,70 +2966,140 @@ function tampilkanHasilAbsensi(
   }
 
 
-  /*
-   * GPS TIDAK VALID
-   */
+  let icon =
+    "❌";
+
+
+  let judul =
+    "ABSENSI GAGAL";
+
 
   if (
-    result &&
-    (
-      result.gpsTidakValid ||
-      result.lokasiTidakValid
-    )
+    result.diluarRadius ===
+    true
   ) {
 
-    hasil.innerHTML = `
+    icon =
+      "📍";
 
-      <div class="result-icon">
-        📍
-      </div>
-
-      <h2>
-        GPS TIDAK VALID
-      </h2>
-
-      <div class="result-info">
-
-        <span>
-          ${escapeHtml(
-            result.pesan ||
-            "Lokasi GPS tidak valid."
-          )}
-        </span>
-
-      </div>
-
-    `;
-
-    return;
+    judul =
+      "DI LUAR RADIUS";
 
   }
 
 
-  /*
-   * ERROR UMUM
-   */
+  if (
+    result.gpsTidakValid ===
+    true
+  ) {
+
+    icon =
+      "⚠️";
+
+    judul =
+      "GPS TIDAK VALID";
+
+  }
+
 
   hasil.innerHTML = `
 
-    <div class="result-icon">
-      ❌
-    </div>
+    <div class="result-error">
 
-    <h2>
-      ABSENSI GAGAL
-    </h2>
+      <div class="result-icon">
 
-    <div class="result-info">
+        ${icon}
 
-      <span>
-        ${escapeHtml(
-          result &&
-          result.pesan
-            ? result.pesan
-            : "Absensi gagal."
-        )}
-      </span>
+      </div>
+
+
+      <h2>
+
+        ${judul}
+
+      </h2>
+
+
+      <div class="result-info">
+
+        <span>
+
+          ${
+            result.pesan
+              ? escapeHtml(
+                  result.pesan
+                )
+              : "Absensi tidak dapat diproses."
+          }
+
+        </span>
+
+
+        ${
+          Number.isFinite(
+            Number(
+              result.jarak
+            )
+          )
+            ? `
+
+              <span>
+
+                Jarak dari sekolah:
+
+                ${Math.round(
+                  Number(
+                    result.jarak
+                  )
+                )}
+
+                meter
+
+              </span>
+
+            `
+            : ""
+        }
+
+
+        ${
+          Number.isFinite(
+            Number(
+              result.accuracy
+            )
+          )
+            ? `
+
+              <span>
+
+                Akurasi GPS:
+
+                ${Math.round(
+                  Number(
+                    result.accuracy
+                  )
+                )}
+
+                meter
+
+              </span>
+
+            `
+            : ""
+        }
+
+      </div>
+
+
+      <button
+        type="button"
+        onclick="kembaliScan()"
+        class="btn-primary"
+      >
+
+        🔄 Coba Lagi
+
+      </button>
 
     </div>
 
@@ -2259,7 +3108,850 @@ function tampilkanHasilAbsensi(
 }
 
 
-/* ==========================================================
-   FUNGSI LAIN DI APP.JS ANDA
-   TETAP SEPERTI VERSI ASLI
-   ========================================================== */
+/* =====================================================
+   ERROR SCANNER
+===================================================== */
+
+function tampilErrorScanner(
+  pesan
+) {
+
+  const hasil =
+    el("hasilAbsensi");
+
+
+  if (!hasil) {
+
+    alert(
+      pesan
+    );
+
+    return;
+
+  }
+
+
+  hasil.classList
+    .remove("hidden");
+
+
+  hasil.innerHTML = `
+
+    <div class="result-error">
+
+      <div class="result-icon">
+
+        ❌
+
+      </div>
+
+
+      <h2>
+
+        SCANNER TIDAK DAPAT DIGUNAKAN
+
+      </h2>
+
+
+      <div class="result-info">
+
+        <span>
+
+          ${escapeHtml(
+            pesan ||
+            "Terjadi kesalahan pada kamera."
+          )}
+
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        onclick="mulaiScan()"
+        class="btn-primary"
+      >
+
+        🔄 Coba Lagi
+
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   KEMBALI SCAN
+===================================================== */
+
+function kembaliScan() {
+
+  const hasil =
+    el("hasilAbsensi");
+
+
+  if (hasil) {
+
+    hasil.classList.add(
+      "hidden"
+    );
+
+    hasil.innerHTML =
+      "";
+
+  }
+
+
+  const reader =
+    el("qr-reader");
+
+
+  const scannerContent =
+    el("scannerContent");
+
+
+  const batal =
+    el("batalScanButton");
+
+
+  if (reader) {
+
+    reader
+      .classList
+      .add("hidden");
+
+  }
+
+
+  if (batal) {
+
+    batal
+      .classList
+      .add("hidden");
+
+  }
+
+
+  if (scannerContent) {
+
+    scannerContent
+      .classList
+      .remove("hidden");
+
+  }
+
+
+  mulaiScan();
+
+}
+
+
+/* =====================================================
+   REKAP ABSENSI
+===================================================== */
+
+function muatRekap() {
+
+  const container =
+    el("rekapContainer");
+
+
+  if (!container) {
+
+    return;
+
+  }
+
+
+  container.innerHTML = `
+
+    <div class="loading">
+
+      ⏳ Memuat rekap absensi...
+
+    </div>
+
+  `;
+
+
+  panggilAPI(
+
+    {
+
+      action:
+        "getRekap"
+
+    },
+
+
+    function(result) {
+
+      console.log(
+        "DATA REKAP:",
+        result
+      );
+
+
+      if (
+        !Array.isArray(result)
+      ) {
+
+        container.innerHTML = `
+
+          <div class="admin-message-error">
+
+            Data rekap tidak tersedia.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      tampilkanRekap(
+        result
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   TAMPILKAN REKAP
+===================================================== */
+
+function tampilkanRekap(
+  data
+) {
+
+  const container =
+    el("rekapContainer");
+
+
+  if (!data.length) {
+
+    container.innerHTML = `
+
+      <div class="loading">
+
+        Belum ada data absensi.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let html = `
+
+    <div
+      class="table-wrapper"
+      style="overflow-x:auto;"
+    >
+
+      <table
+        class="rekap-table"
+      >
+
+        <thead>
+
+          <tr>
+
+            <th>
+              No
+            </th>
+
+            <th>
+              Tanggal
+            </th>
+
+            <th>
+              Jam
+            </th>
+
+            <th>
+              NIP
+            </th>
+
+            <th>
+              Nama
+            </th>
+
+            <th>
+              Jabatan
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+  `;
+
+
+  data.forEach(
+    function(row, index) {
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${index + 1}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.tanggal ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.jam ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.nip ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.nama ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.jabatan ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.status ||
+              ""
+            )}
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  html += `
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+
+  container.innerHTML =
+    html;
+
+}
+
+
+/* =====================================================
+   EXPORT EXCEL
+===================================================== */
+
+function exportExcel() {
+
+  panggilAPI(
+
+    {
+
+      action:
+        "getRekap"
+
+    },
+
+
+    function(result) {
+
+      if (
+        !Array.isArray(result) ||
+        result.length === 0
+      ) {
+
+        alert(
+          "Tidak ada data untuk diekspor."
+        );
+
+        return;
+
+      }
+
+
+      let csv =
+        "";
+
+
+      csv +=
+        "No,Tanggal,Jam,NIP,Nama,Jabatan,Status\n";
+
+
+      result.forEach(
+        function(row, index) {
+
+          csv += [
+
+            index + 1,
+
+            row.tanggal ||
+              "",
+
+            row.jam ||
+              "",
+
+            row.nip ||
+              "",
+
+            row.nama ||
+              "",
+
+            row.jabatan ||
+              "",
+
+            row.status ||
+              ""
+
+          ]
+            .map(
+              function(value) {
+
+                return '"' +
+                  String(
+                    value
+                  )
+                  .replace(
+                    /"/g,
+                    '""'
+                  ) +
+                  '"';
+
+              }
+            )
+            .join(",") +
+
+            "\n";
+
+        }
+      );
+
+
+      const blob =
+        new Blob(
+          [csv],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        "rekap-absensi-guru.csv";
+
+
+      document.body
+        .appendChild(
+          link
+        );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   CETAK REKAP
+===================================================== */
+
+function cetakRekap() {
+
+  const table =
+    document.querySelector(
+      ".rekap-table"
+    );
+
+
+  if (!table) {
+
+    alert(
+      "Data rekap belum tersedia."
+    );
+
+    return;
+
+  }
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=1000,height=700"
+    );
+
+
+  if (!printWindow) {
+
+    alert(
+      "Popup diblokir browser."
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <meta charset="UTF-8">
+
+      <title>
+        Rekap Absensi Guru
+      </title>
+
+
+      <style>
+
+        body {
+
+          font-family:
+            Arial,
+            sans-serif;
+
+          padding:20px;
+
+        }
+
+
+        h1 {
+
+          text-align:center;
+
+          margin-bottom:5px;
+
+        }
+
+
+        p {
+
+          text-align:center;
+
+          margin-top:0;
+
+        }
+
+
+        table {
+
+          width:100%;
+
+          border-collapse:
+            collapse;
+
+          margin-top:20px;
+
+        }
+
+
+        th,
+        td {
+
+          border:
+            1px solid #000;
+
+          padding:8px;
+
+          font-size:12px;
+
+        }
+
+
+        th {
+
+          font-weight:bold;
+
+          text-align:center;
+
+        }
+
+
+        @media print {
+
+          @page {
+
+            size:
+              landscape;
+
+            margin:
+              10mm;
+
+          }
+
+        }
+
+      </style>
+
+    </head>
+
+
+    <body>
+
+      <h1>
+
+        REKAP ABSENSI GURU
+
+      </h1>
+
+
+      <p>
+
+        MTs. BADRIL HUDA
+
+      </p>
+
+
+      ${table.outerHTML}
+
+
+      <script>
+
+        window.onload =
+          function() {
+
+            setTimeout(
+              function() {
+
+                window.print();
+
+              },
+              500
+            );
+
+          };
+
+      <\/script>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  printWindow.document.close();
+
+}
+
+
+/* =====================================================
+   LOGOUT ADMIN
+===================================================== */
+
+function logoutAdmin() {
+
+  hentikanScanner();
+
+
+  adminSudahLogin =
+    false;
+
+
+  const loginBox =
+    el("adminLoginBox");
+
+
+  const panel =
+    el("adminPanel");
+
+
+  if (panel) {
+
+    panel.style.display =
+      "none";
+
+  }
+
+
+  if (loginBox) {
+
+    loginBox.style.display =
+      "block";
+
+  }
+
+
+  if (el("adminPin")) {
+
+    el("adminPin").value =
+      "";
+
+  }
+
+
+  kembaliHome();
+
+}
+
+
+/* =====================================================
+   EVENT DOM READY
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    console.log(
+      "APP.JS aktif."
+    );
+
+
+    /* -----------------------------------------------
+       TOMBOL HOME
+    ----------------------------------------------- */
+
+    const homeButtons =
+      document.querySelectorAll(
+        "[data-page='home']"
+      );
+
+
+    homeButtons.forEach(
+      function(button) {
+
+        button.addEventListener(
+          "click",
+          kembaliHome
+        );
+
+      }
+    );
+
+
+    /* -----------------------------------------------
+       ENTER PADA PIN ADMIN
+    ----------------------------------------------- */
+
+    const pin =
+      el("adminPin");
+
+
+    if (pin) {
+
+      pin.addEventListener(
+        "keydown",
+        function(event) {
+
+          if (
+            event.key ===
+            "Enter"
+          ) {
+
+            loginAdmin();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* -----------------------------------------------
+       TUTUP QR DENGAN ESC
+    ----------------------------------------------- */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          tutupQR();
+
+        }
+
+      }
+    );
+
+
+  }
+);
