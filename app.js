@@ -1925,6 +1925,121 @@ function tampilkanQR(
    BUAT QR CODE
 ===================================================== */
 
+/* =====================================================
+   LOAD LIBRARY QR CODE OTOMATIS
+   Tidak perlu menambahkan library ke index.html
+===================================================== */
+
+function loadQRCodeLibrary(callback) {
+
+  // Kalau sudah tersedia, langsung gunakan
+  if (
+    typeof QRCode !== "undefined"
+  ) {
+
+    callback(true);
+
+    return;
+
+  }
+
+
+  // Cek apakah script sedang dalam proses dimuat
+  const scriptLama =
+    document.getElementById(
+      "qrCodeLibraryScript"
+    );
+
+
+  if (scriptLama) {
+
+    scriptLama.addEventListener(
+      "load",
+      function() {
+
+        callback(
+          typeof QRCode !==
+          "undefined"
+        );
+
+      }
+    );
+
+
+    scriptLama.addEventListener(
+      "error",
+      function() {
+
+        callback(false);
+
+      }
+    );
+
+
+    return;
+
+  }
+
+
+  // Buat script library QRCode
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.id =
+    "qrCodeLibraryScript";
+
+
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+
+
+  script.async =
+    true;
+
+
+  script.onload =
+    function() {
+
+      console.log(
+        "Library QRCode berhasil dimuat."
+      );
+
+
+      callback(
+        typeof QRCode !==
+        "undefined"
+      );
+
+    };
+
+
+  script.onerror =
+    function() {
+
+      console.error(
+        "Library QRCode gagal dimuat."
+      );
+
+
+      callback(false);
+
+    };
+
+
+  document.head.appendChild(
+    script
+  );
+
+}
+
+
+/* =====================================================
+   BUAT QR CODE GURU
+===================================================== */
+
 function buatQRGuru(
   container,
   kodeQR
@@ -1937,124 +2052,156 @@ function buatQRGuru(
   }
 
 
-  container.innerHTML =
-    "";
+  container.innerHTML = `
+
+    <div
+      style="
+        color:#777;
+        font-size:14px;
+      "
+    >
+
+      ⏳ Membuat QR Code...
+
+    </div>
+
+  `;
 
 
   /*
-   * Pastikan library QRCode tersedia.
+   * Load library QR secara otomatis.
    */
 
-  if (
-    typeof QRCode ===
-    "undefined"
-  ) {
+  loadQRCodeLibrary(
 
-    container.innerHTML = `
+    function(berhasil) {
 
-      <div
-        style="
-          padding:20px;
-          color:#c62828;
-          font-size:14px;
-          line-height:1.5;
-        "
-      >
+      if (!berhasil) {
 
-        <strong>
-          Library QR Code belum tersedia.
-        </strong>
+        container.innerHTML = `
 
-        <br><br>
+          <div
+            style="
+              padding:20px;
+              color:#c62828;
+              font-size:14px;
+              line-height:1.5;
+            "
+          >
 
-        Kode QR:
+            <strong>
+              QR Code gagal dimuat.
+            </strong>
 
-        <strong>
-          ${escapeHtml(
-            kodeQR
-          )}
-        </strong>
+            <br><br>
 
-      </div>
+            Pastikan perangkat
+            terhubung ke internet.
 
-    `;
+            <br><br>
 
-    console.error(
-      "QRCode library tidak ditemukan."
-    );
+            Kode QR:
 
-    return;
+            <strong>
+              ${escapeHtml(
+                kodeQR
+              )}
+            </strong>
 
-  }
+          </div>
 
+        `;
 
-  try {
-
-    new QRCode(
-
-      container,
-
-      {
-
-        text:
-          kodeQR,
-
-        width:
-          250,
-
-        height:
-          250,
-
-        colorDark:
-          "#000000",
-
-        colorLight:
-          "#ffffff",
-
-        correctLevel:
-          QRCode.CorrectLevel.H
+        return;
 
       }
 
-    );
 
-  }
+      /*
+       * Bersihkan container
+       */
 
-  catch(error) {
-
-    console.error(
-      "Gagal membuat QR Code:",
-      error
-    );
+      container.innerHTML =
+        "";
 
 
-    container.innerHTML = `
+      try {
 
-      <div
-        style="
-          padding:20px;
-          color:#c62828;
-          font-size:14px;
-        "
-      >
+        new QRCode(
 
-        Gagal membuat QR Code.
+          container,
 
-        <br><br>
+          {
 
-        ${escapeHtml(
-          error.message
-        )}
+            text:
+              String(
+                kodeQR
+              ),
 
-      </div>
+            width:
+              250,
 
-    `;
+            height:
+              250,
 
-  }
+            colorDark:
+              "#000000",
+
+            colorLight:
+              "#ffffff",
+
+            correctLevel:
+              QRCode.CorrectLevel.H
+
+          }
+
+        );
+
+
+        console.log(
+          "QR berhasil dibuat:",
+          kodeQR
+        );
+
+      }
+
+      catch(error) {
+
+        console.error(
+          "Error membuat QR:",
+          error
+        );
+
+
+        container.innerHTML = `
+
+          <div
+            style="
+              padding:20px;
+              color:#c62828;
+              font-size:14px;
+            "
+          >
+
+            Gagal membuat QR Code.
+
+            <br><br>
+
+            ${escapeHtml(
+              error.message
+            )}
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+  );
 
 }
-
-
 /* =====================================================
    TUTUP QR
    VERSI BARU
