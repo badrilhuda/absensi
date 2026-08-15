@@ -758,7 +758,7 @@ function tampilkanDaftarGuru(
          
            <button
              class="delete-button"
-             onclick="hapusGuru(
+             onclick="deleteGuru(
                '${escapeJs(guru.kodeQR)}'
              )">
          
@@ -1096,7 +1096,7 @@ function ubahStatus(
    HAPUS GURU
 ===================================================== */
 
-function hapusGuru(
+function deleteGuru(
   kodeQR
 ) {
 
@@ -1141,7 +1141,7 @@ function hapusGuru(
 
     {
       action:
-        "hapusGuru",
+        "deleteGuru",
 
       kodeQR:
         kodeQR
