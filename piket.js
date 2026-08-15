@@ -593,7 +593,7 @@ function tampilkanGuru(
       ) {
 
         status =
-          "Tidak bisa absen hari ini";
+          "Tidak ada jadwal piket hari ini";
 
         statusClass =
           "status-disabled";
@@ -775,7 +775,7 @@ function mulaiGPS() {
 
 
   tampilkanStatusGPS(
-    "⏳ Mengambil lokasi GPS...",
+    "⏳ Mencari lokasi GPS...",
     ""
   );
 
@@ -841,7 +841,7 @@ function perbaruiLokasi() {
 
 
   tampilkanStatusGPS(
-    "⏳ Mengambil lokasi GPS...",
+    "⏳ Mencari lokasi GPS...",
     ""
   );
 
