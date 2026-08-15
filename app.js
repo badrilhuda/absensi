@@ -231,7 +231,7 @@ function loginAdmin() {
 
     {
 
-      action: "login",
+      action: "loginAdmin",
 
       pin: pin
 
