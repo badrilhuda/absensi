@@ -226,49 +226,15 @@ button {
 
 
 /* ==========================================================
-   WELCOME - PERKECIL JARAK KE MENU
-========================================================== */
-
-#homePage .welcome {
-  text-align: center;
-
-  /* sebelumnya terlalu besar */
-  padding: 5px 10px 8px;
-
-  margin: 0;
-}
-
-#homePage .welcome-icon {
-  font-size: 40px;
-}
-
-#homePage .welcome h1 {
-  margin: 0 0 3px;
-
-  color: #075c43;
-
-  font-size: 30px;
-}
-
-#homePage .welcome p {
-  margin: 0;
-
-  color: #777;
-
-  font-size: 17px;
-}
-
-
-/* ==========================================================
-   HOME GRID
+   HOME MENU
+   2 x 2 SEMUA PERANGKAT
+   ICON DI SAMPING - TEKS DI SEBELAHNYA
 ========================================================== */
 
 #homePage {
-
   display: grid;
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 15px;
 
@@ -276,10 +242,18 @@ button {
 }
 
 
-/* Welcome tetap satu baris penuh */
+/* ==========================================================
+   WELCOME
+========================================================== */
 
 #homePage .welcome {
   grid-column: 1 / -1;
+
+  text-align: center;
+
+  padding: 5px 10px 8px;
+
+  margin: 0;
 }
 
 
@@ -294,7 +268,6 @@ button {
 
 /* ==========================================================
    MENU CARD
-   PERSEGI PANJANG MENYAMPING
 ========================================================== */
 
 #homePage .menu-card {
@@ -313,7 +286,7 @@ button {
 
   align-items: center;
 
-  justify-content: center;
+  justify-content: flex-start;
 
   text-align: left;
 
@@ -326,11 +299,13 @@ button {
   box-shadow:
     0 5px 18px rgba(0,0,0,.07);
 
+  box-sizing: border-box;
+
+  gap: 14px;
+
   transition:
     transform .15s,
     box-shadow .15s;
-
-  box-sizing: border-box;
 }
 
 
@@ -351,6 +326,8 @@ button {
 
   min-width: 58px;
 
+  flex-shrink: 0;
+
   display: flex;
 
   align-items: center;
@@ -361,7 +338,7 @@ button {
 
   font-size: 28px;
 
-  margin: 0 14px 0 0;
+  margin: 0;
 }
 
 
@@ -397,18 +374,20 @@ button {
   text-align: left;
 
   gap: 4px;
+
+  min-width: 0;
 }
 
 
 #homePage .menu-text strong {
 
-  font-size: 19px;
+  font-size: 18px;
+
+  line-height: 1.1;
 
   color: #075c43;
 
   font-weight: 800;
-
-  line-height: 1.1;
 }
 
 
@@ -420,13 +399,14 @@ button {
 
   line-height: 1.25;
 
-  max-width: 110px;
+  max-width: 120px;
+
+  text-align: left;
 }
 
 
 /* ==========================================================
    WAKTU ABSENSI
-   SAMA SEPERTI MENU CARD
 ========================================================== */
 
 #homePage .time-card {
@@ -437,7 +417,7 @@ button {
 
   min-height: 125px;
 
-  margin-top: 0;
+  margin: 0;
 
   padding: 18px;
 
@@ -454,7 +434,7 @@ button {
 
   align-items: center;
 
-  justify-content: center;
+  justify-content: flex-start;
 
   text-align: left;
 
@@ -475,6 +455,8 @@ button {
   height: 58px;
 
   min-width: 58px;
+
+  flex-shrink: 0;
 
   display: flex;
 
@@ -511,6 +493,8 @@ button {
   text-align: left;
 
   gap: 4px;
+
+  min-width: 0;
 }
 
 
@@ -522,7 +506,7 @@ button {
 
   font-weight: 800;
 
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 
@@ -533,6 +517,8 @@ button {
   font-size: 14px;
 
   font-weight: 700;
+
+  line-height: 1.2;
 }
 
 
@@ -552,151 +538,6 @@ button {
 
   font-size: 13px;
 }
-
-
-/* ==========================================================
-   MOBILE
-   2 × 2
-========================================================== */
-
-@media (max-width: 768px) {
-
-  #homePage {
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 12px;
-  }
-
-
-  /* Menu tetap horizontal */
-
-  #homePage .menu-card,
-  #homePage .time-card {
-
-    min-height: 125px;
-
-    padding: 14px;
-  }
-
-
-  #homePage .menu-icon,
-  #homePage .time-icon {
-
-    width: 52px;
-
-    height: 52px;
-
-    min-width: 52px;
-
-    font-size: 25px;
-
-    border-radius: 16px;
-  }
-
-
-  #homePage .menu-icon {
-    margin-right: 10px;
-  }
-
-
-  #homePage .menu-text strong,
-  #homePage .time-info strong {
-
-    font-size: 16px;
-  }
-
-
-  #homePage .menu-text span {
-
-    font-size: 12px;
-
-    max-width: 90px;
-  }
-
-
-  #homePage .time-info span {
-
-    font-size: 13px;
-  }
-
-
-  /* Welcome lebih dekat ke menu */
-
-  #homePage .welcome {
-
-    padding:
-      0 10px 5px;
-  }
-
-}
-
-
-/* ==========================================================
-   HP KECIL
-========================================================== */
-
-@media (max-width: 420px) {
-
-  #homePage {
-
-    gap: 10px;
-  }
-
-
-  #homePage .menu-card,
-  #homePage .time-card {
-
-    min-height: 115px;
-
-    padding: 11px;
-  }
-
-
-  #homePage .menu-icon,
-  #homePage .time-icon {
-
-    width: 46px;
-
-    height: 46px;
-
-    min-width: 46px;
-
-    font-size: 22px;
-
-    border-radius: 14px;
-  }
-
-
-  #homePage .menu-icon {
-
-    margin-right: 8px;
-  }
-
-
-  #homePage .menu-text strong,
-  #homePage .time-info strong {
-
-    font-size: 14px;
-  }
-
-
-  #homePage .menu-text span {
-
-    font-size: 11px;
-
-    max-width: 80px;
-  }
-
-
-  #homePage .time-info span {
-
-    font-size: 12px;
-  }
-
-}
-
 
 /* ==========================================================
    STATUS
