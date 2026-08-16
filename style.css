@@ -558,6 +558,12 @@ button {
     white-space: nowrap;
   }
 
+     #homePage .system-status {
+    margin-top: 75px !important;
+  }
+
+}
+
 /* =====================================================
    STATUS
 ===================================================== */
@@ -585,36 +591,6 @@ button {
 
   background: #18ad72;
 }
-
-   /* =====================================================
-   FOOTER MOBILE
-===================================================== */
-
-@media screen and (max-width: 600px) {
-
-  /* Status Online */
-  #homePage .system-status {
-    grid-column: 1 / -1;
-
-    margin-top: 18px !important;
-    margin-bottom: 0 !important;
-
-    text-align: center;
-  }
-
-  /* Footer */
-  #homePage .footer {
-    grid-column: 1 / -1;
-
-    margin-top: 25px !important;
-
-    text-align: center;
-
-    width: 100%;
-  }
-
-}
-
 
 /* =====================================================
    PAGE TITLE
