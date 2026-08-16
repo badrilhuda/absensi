@@ -1657,3 +1657,21 @@ footer strong {
   }
 
 }
+
+@media (max-width: 599px) {
+
+  .menu-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 18px !important;
+  }
+
+  .menu-text strong {
+    font-size: 14px !important;
+  }
+
+  .menu-text span {
+    font-size: 12px !important;
+  }
+
+}
