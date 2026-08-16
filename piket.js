@@ -58,21 +58,37 @@ let watchID =
   null;
 
 // ============================================================
-// SAAT HALAMAN SELESAI DIMUAT
+// INISIALISASI PIKET
 // ============================================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
+function mulaiAplikasiPiket() {
 
-    tampilkanTanggal();
+  tampilkanTanggal();
 
-    mulaiGPS();
+  mulaiGPS();
 
-    muatPiket();
+  muatPiket();
 
-  }
-);
+}
+
+
+// Jalankan saat DOM siap.
+// Jika DOMContentLoaded sudah terlewat,
+// jalankan langsung.
+if (
+  document.readyState === "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    mulaiAplikasiPiket
+  );
+
+} else {
+
+  mulaiAplikasiPiket();
+
+}
 
 
 // ============================================================
@@ -760,6 +776,9 @@ function hitungJarak(
 // MULAI GPS OTOMATIS
 // ============================================================
 
+let watchID = null;
+
+
 function mulaiGPS() {
 
   if (!navigator.geolocation) {
@@ -773,7 +792,7 @@ function mulaiGPS() {
   }
 
 
-  // Jangan membuat watch GPS lebih dari satu
+  // Jangan menjalankan GPS watcher dua kali
   if (watchID !== null) {
 
     return;
@@ -782,13 +801,13 @@ function mulaiGPS() {
 
 
   tampilkanStatusGPS(
-    "⏳ Mengambil lokasi GPS...",
+    "⏳ Mencari lokasi GPS...",
     ""
   );
 
 
   // ==========================================================
-  // GPS BERJALAN TERUS-MENERUS
+  // GPS BERJALAN OTOMATIS
   // ==========================================================
 
   watchID =
@@ -796,8 +815,6 @@ function mulaiGPS() {
 
       function(position) {
 
-        // Setiap GPS mendapatkan lokasi baru,
-        // langsung proses dan perbarui status.
         prosesLokasi(
           position
         );
@@ -815,61 +832,14 @@ function mulaiGPS() {
 
 
       {
+        enableHighAccuracy: true,
 
-        // Gunakan GPS dengan akurasi tinggi
-        enableHighAccuracy:
-          true,
+        timeout: 20000,
 
-        // Tunggu maksimal 20 detik
-        timeout:
-          20000,
-
-        // Jangan gunakan lokasi lama
-        maximumAge:
-          0
-
+        maximumAge: 0
       }
 
     );
-
-}
-
-  // ----------------------------------------------------------
-  // Ambil lokasi awal dengan cepat
-  // ----------------------------------------------------------
-
-  navigator.geolocation.getCurrentPosition(
-
-    function(position) {
-
-      prosesLokasi(
-        position
-      );
-
-    },
-
-    function(error) {
-
-      prosesErrorGPS(
-        error
-      );
-
-    },
-
-    {
-
-      enableHighAccuracy:
-        false,
-
-      timeout:
-        10000,
-
-      maximumAge:
-        10000
-
-    }
-
-  );
 
 }
 
