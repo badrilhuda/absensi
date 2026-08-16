@@ -374,6 +374,10 @@ button {
   #homePage .menu-card,
   #homePage .time-card {
     margin: 0 !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    box-sizing: border-box !important;
   }
 
 }
@@ -406,7 +410,7 @@ button {
   display: inline-block;
 
   margin-right: 7px;
-   margin-right: 50px;
+   margin-top: 50px;
 
   border-radius: 50%;
 
