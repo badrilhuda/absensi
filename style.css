@@ -1138,64 +1138,427 @@ footer strong {
 }
 
 
-/* =====================================================
-   TABLET / HP
-   2 x 2
-===================================================== */
+/* ==========================================================
+   PERBAIKAN TAMPILAN HP
+   MENU CARD HORIZONTAL 2 KOLOM
+   ========================================================== */
 
-@media (max-width: 900px) {
+@media screen and (max-width: 600px) {
+
+  /* -----------------------------------------
+     HALAMAN HOME
+     ----------------------------------------- */
 
   #homePage {
+    display: grid !important;
+
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(2, minmax(0, 1fr)) !important;
+
+    column-gap: 12px !important;
+
+    row-gap: 12px !important;
+
+    padding:
+      14px 14px 25px !important;
+  }
+
+
+  /* -----------------------------------------
+     SELAMAT DATANG
+     JARAK KE MENU DIPERDEK
+     ----------------------------------------- */
+
+  #homePage .welcome {
+
+    grid-column:
+      1 / -1 !important;
+
+    padding:
+      10px 5px 2px !important;
+
+    margin:
+      0 !important;
+  }
+
+
+  #homePage .welcome-icon {
+    display: none !important;
+  }
+
+
+  #homePage .welcome h1 {
+
+    margin:
+      0 0 2px !important;
+
+    font-size:
+      27px !important;
+
+    line-height:
+      1.1 !important;
+  }
+
+
+  #homePage .welcome p {
+
+    margin:
+      0 !important;
+
+    font-size:
+      15px !important;
+
+    line-height:
+      1.2 !important;
+  }
+
+
+  /* -----------------------------------------
+     SEMUA MENU CARD
+     ----------------------------------------- */
+
+  #homePage .menu-card,
+  #homePage .time-card {
+
+    width:
+      100% !important;
+
+    min-width:
+      0 !important;
+
+    height:
+      118px !important;
+
+    min-height:
+      118px !important;
+
+    max-height:
+      118px !important;
+
+    padding:
+      15px !important;
+
+    border-radius:
+      22px !important;
+
+    box-sizing:
+      border-box !important;
+
+    display:
+      flex !important;
+
+    align-items:
+      center !important;
+
+    overflow:
+      hidden !important;
+  }
+
+
+  /* -----------------------------------------
+     ICON MENU
+     ----------------------------------------- */
+
+  #homePage .menu-icon {
+
+    width:
+      50px !important;
+
+    height:
+      50px !important;
+
+    min-width:
+      50px !important;
+
+    margin-right:
+      12px !important;
+
+    border-radius:
+      18px !important;
+
+    font-size:
+      22px !important;
+
+    flex-shrink:
+      0 !important;
+  }
+
+
+  /* -----------------------------------------
+     TEKS MENU
+     ----------------------------------------- */
+
+  #homePage .menu-text {
+
+    min-width:
+      0 !important;
+
+    gap:
+      4px !important;
+  }
+
+
+  #homePage .menu-text strong {
+
+    display:
+      block !important;
+
+    font-size:
+      16px !important;
+
+    line-height:
+      1.15 !important;
+
+    white-space:
+      nowrap !important;
+  }
+
+
+  #homePage .menu-text span {
+
+    display:
+      block !important;
+
+    font-size:
+      12px !important;
+
+    line-height:
+      1.3 !important;
+  }
+
+
+  /* -----------------------------------------
+     WAKTU ABSENSI
+     ----------------------------------------- */
+
+  #homePage .time-card {
+
+    padding:
+      15px !important;
+  }
+
+
+  #homePage .time-icon {
+
+    width:
+      50px !important;
+
+    height:
+      50px !important;
+
+    min-width:
+      50px !important;
+
+    display:
+      flex !important;
+
+    align-items:
+      center !important;
+
+    justify-content:
+      center !important;
+
+    font-size:
+      22px !important;
+
+    margin-right:
+      12px !important;
+  }
+
+
+  #homePage .time-info {
+
+    min-width:
+      0 !important;
+  }
+
+
+  #homePage .time-info strong {
+
+    display:
+      block !important;
+
+    font-size:
+      14px !important;
+
+    line-height:
+      1.2 !important;
+
+    white-space:
+      nowrap !important;
+  }
+
+
+  #homePage .time-info span {
+
+    display:
+      block !important;
+
+    margin-top:
+      4px !important;
+
+    font-size:
+      16px !important;
+
+    font-weight:
+      800 !important;
+
+    line-height:
+      1.2 !important;
+
+    white-space:
+      nowrap !important;
+  }
+
+
+  /* -----------------------------------------
+     STATUS ONLINE
+     ----------------------------------------- */
+
+  #homePage .system-status {
+
+    grid-column:
+      1 / -1 !important;
+
+    margin-top:
+      2px !important;
+
+    padding-top:
+      0 !important;
   }
 
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ==========================================================
+   HP KECIL
+   ========================================================== */
 
-@media (max-width: 420px) {
+@media screen and (max-width: 380px) {
 
-  .header {
-    min-height: 115px;
+  #homePage {
+
+    column-gap:
+      9px !important;
+
+    row-gap:
+      9px !important;
 
     padding:
-      22px 18px;
+      10px 10px 20px !important;
   }
 
 
-  .header-icon {
-    width: 58px;
-    height: 58px;
+  #homePage .welcome {
 
-    font-size: 30px;
-  }
-
-
-  .header-title {
-    font-size: 23px;
-  }
-
-
-  .page {
     padding:
-      23px 16px 30px;
+      8px 3px 1px !important;
   }
 
 
-  .welcome h1 {
-    font-size: 27px;
+  #homePage .welcome h1 {
+
+    font-size:
+      24px !important;
   }
 
 
-  .menu-icon {
-    width: 52px;
-    height: 52px;
+  #homePage .welcome p {
+
+    font-size:
+      14px !important;
   }
 
+
+  #homePage .menu-card,
+  #homePage .time-card {
+
+    height:
+      108px !important;
+
+    min-height:
+      108px !important;
+
+    max-height:
+      108px !important;
+
+    padding:
+      11px !important;
+
+    border-radius:
+      19px !important;
+  }
+
+
+  #homePage .menu-icon {
+
+    width:
+      43px !important;
+
+    height:
+      43px !important;
+
+    min-width:
+      43px !important;
+
+    margin-right:
+      9px !important;
+
+    border-radius:
+      15px !important;
+
+    font-size:
+      19px !important;
+  }
+
+
+  #homePage .menu-text strong {
+
+    font-size:
+      14px !important;
+  }
+
+
+  #homePage .menu-text span {
+
+    font-size:
+      10px !important;
+  }
+
+
+  #homePage .time-icon {
+
+    width:
+      43px !important;
+
+    height:
+      43px !important;
+
+    min-width:
+      43px !important;
+
+    margin-right:
+      9px !important;
+
+    font-size:
+      19px !important;
+  }
+
+
+  #homePage .time-info strong {
+
+    font-size:
+      11px !important;
+  }
+
+
+  #homePage .time-info span {
+
+    font-size:
+      13px !important;
+  }
+
+}
 
   /* ==========================================================
      TOMBOL REKAP - SATU BARIS
