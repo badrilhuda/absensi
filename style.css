@@ -381,9 +381,24 @@ button {
   }
 
 }
-  #homePage .time-card span {
+  #homePage .time-card {
+    width: 100% !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+
+    flex: none !important;
+    box-sizing: border-box !important;
+  }
+  #homePage .time-card {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #homePage .time-info span {
     font-size: 12px !important;
-    line-height: 1.2 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
   }
 
 }
@@ -410,7 +425,6 @@ button {
   display: inline-block;
 
   margin-right: 7px;
-   margin-top: 50px;
 
   border-radius: 50%;
 
