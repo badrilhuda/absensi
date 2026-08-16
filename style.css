@@ -353,13 +353,13 @@ button {
 
     width: 100% !important;
 
-    height: 105px !important;
-    min-height: 105px !important;
-    max-height: 105px !important;
+    height: 70px !important;
+    min-height: 70px !important;
+    max-height: 70px !important;
 
-    padding: 14px 16px !important;
+    padding: 10px 14px !important;
 
-    border-radius: 22px !important;
+    border-radius: 19px !important;
 
     box-sizing: border-box !important;
 
