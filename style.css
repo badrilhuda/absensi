@@ -258,135 +258,126 @@ button {
 
 
 /* ==========================================================
-   HOME MENU
-   GAYA SEPERTI PUSAT INFORMASI YPI BADRIL HUDA
+   PERBAIKAN HOME MENU
+   SEMUA MENU 2 x 2 DENGAN UKURAN SAMA
 ========================================================== */
 
-#homePage {
-  width: 100%;
+#homePage .menu-list {
+  display: grid !important;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+  grid-template-rows: repeat(2, auto) !important;
+
+  gap: 14px !important;
+
+  width: 100% !important;
+
+  align-items: stretch !important;
 }
 
 
 /* ==========================================================
-   MENU LIST
-   2 KOLOM SEMUA PERANGKAT
+   SEMUA KARTU MENU
 ========================================================== */
 
-#homePage .menu-list {
+#homePage .menu-list .menu-card,
+#homePage .menu-list .time-card {
 
-  display: grid;
+  width: 100% !important;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0 !important;
 
-  gap: 14px;
+  height: 145px !important;
 
-  width: 100%;
+  min-height: 145px !important;
+
+  max-height: 145px !important;
+
+  margin: 0 !important;
+
+  box-sizing: border-box !important;
+
+  grid-column: auto !important;
+
+  grid-row: auto !important;
+
+  align-self: stretch !important;
+
+  justify-self: stretch !important;
 }
 
 
 /* ==========================================================
    MENU CARD
+   ICON DI ATAS
 ========================================================== */
 
-#homePage .menu-card {
+#homePage .menu-list .menu-card {
 
-  width: 100%;
+  display: flex !important;
 
-  min-width: 0;
+  flex-direction: column !important;
 
-  min-height: 145px;
+  align-items: center !important;
 
-  padding: 18px 10px;
+  justify-content: center !important;
 
-  border: 1px solid #e0e5e2;
+  text-align: center !important;
 
-  border-radius: 22px;
+  gap: 9px !important;
 
-  background: #ffffff;
-
-  box-shadow:
-    0 5px 16px rgba(0,0,0,.055);
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  text-align: center;
-
-  gap: 9px;
-
-  box-sizing: border-box;
-
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease;
-}
-
-
-#homePage .menu-card:active {
-
-  transform: scale(.98);
-
+  padding: 15px 10px !important;
 }
 
 
 /* ==========================================================
-   ICON
+   TIME CARD
+   SAMA PERSIS DENGAN MENU CARD
 ========================================================== */
 
-#homePage .menu-icon {
+#homePage .menu-list .time-card {
 
-  width: 62px;
+  display: flex !important;
 
-  height: 62px;
+  flex-direction: column !important;
 
-  min-width: 62px;
+  align-items: center !important;
 
-  border-radius: 17px;
+  justify-content: center !important;
 
-  margin: 0;
+  text-align: center !important;
 
-  display: flex;
+  gap: 9px !important;
 
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 29px;
-
-  line-height: 1;
-
-  background: #e5f1ec;
-
+  padding: 15px 10px !important;
 }
 
 
 /* ==========================================================
-   WARNA ICON MASING-MASING
+   ICON MENU
 ========================================================== */
 
-#homePage .admin-icon {
+#homePage .menu-list .menu-icon,
+#homePage .menu-list .time-icon {
 
-  background: #e5edff;
+  width: 62px !important;
 
-}
+  height: 62px !important;
 
+  min-width: 62px !important;
 
-#homePage .guru-icon {
+  flex-shrink: 0 !important;
 
-  background: #dcf3e9;
+  margin: 0 !important;
 
-}
+  border-radius: 17px !important;
 
+  display: flex !important;
 
-#homePage .rekap-icon {
+  align-items: center !important;
 
-  background: #fff0d8;
-
+  justify-content: center !important;
 }
 
 
@@ -394,171 +385,23 @@ button {
    TEKS MENU
 ========================================================== */
 
-#homePage .menu-text {
+#homePage .menu-list .menu-text,
+#homePage .menu-list .time-info {
 
-  display: flex;
+  display: flex !important;
 
-  flex-direction: column;
+  flex-direction: column !important;
 
-  align-items: center;
+  align-items: center !important;
 
-  justify-content: center;
+  justify-content: center !important;
 
-  text-align: center;
+  text-align: center !important;
 
-  gap: 3px;
+  gap: 3px !important;
 
-  width: 100%;
+  width: 100% !important;
 }
-
-
-#homePage .menu-text strong {
-
-  color: #075c43;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  line-height: 1.15;
-
-  letter-spacing: -.2px;
-}
-
-
-#homePage .menu-text span {
-
-  color: #777;
-
-  font-size: 13px;
-
-  font-weight: 400;
-
-  line-height: 1.25;
-
-  max-width: 140px;
-
-}
-
-
-/* ==========================================================
-   WAKTU ABSENSI
-   DIBUAT MENYATU DENGAN GRID MENU
-========================================================== */
-
-#homePage .time-card {
-
-  width: 100%;
-
-  min-width: 0;
-
-  min-height: 145px;
-
-  padding: 18px 10px;
-
-  margin: 0;
-
-  border: 1px solid #e0e5e2;
-
-  border-radius: 22px;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 5px 16px rgba(0,0,0,.055);
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  text-align: center;
-
-  gap: 9px;
-
-  box-sizing: border-box;
-}
-
-
-/* ==========================================================
-   ICON WAKTU
-========================================================== */
-
-#homePage .time-icon {
-
-  width: 62px;
-
-  height: 62px;
-
-  min-width: 62px;
-
-  margin: 0;
-
-  border-radius: 17px;
-
-  background: #e5edff;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 29px;
-
-  line-height: 1;
-}
-
-
-/* ==========================================================
-   TEKS WAKTU
-========================================================== */
-
-#homePage .time-info {
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  text-align: center;
-
-  gap: 3px;
-
-  width: 100%;
-}
-
-
-#homePage .time-info strong {
-
-  color: #222;
-
-  font-size: 16px;
-
-  font-weight: 800;
-
-  line-height: 1.15;
-
-}
-
-
-#homePage .time-info span {
-
-  color: #087f5b;
-
-  font-size: 14px;
-
-  font-weight: 700;
-
-  line-height: 1.2;
-}
-
 
 /* ==========================================================
    STATUS ONLINE
