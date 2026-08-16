@@ -258,11 +258,29 @@ button {
 
 
 /* ==========================================================
+   HOME MENU
+   GAYA SEPERTI PUSAT INFORMASI YPI BADRIL HUDA
+========================================================== */
+
+#homePage {
+  width: 100%;
+}
+
+
+/* ==========================================================
    MENU LIST
+   2 KOLOM SEMUA PERANGKAT
 ========================================================== */
 
 #homePage .menu-list {
-  display: contents;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+
+  width: 100%;
 }
 
 
@@ -276,57 +294,61 @@ button {
 
   min-width: 0;
 
-  min-height: 125px;
+  min-height: 145px;
 
-  border: none;
+  padding: 18px 10px;
+
+  border: 1px solid #e0e5e2;
+
+  border-radius: 22px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 16px rgba(0,0,0,.055);
 
   display: flex;
 
-  flex-direction: row;
+  flex-direction: column;
 
   align-items: center;
 
-  justify-content: flex-start;
+  justify-content: center;
 
-  text-align: left;
+  text-align: center;
 
-  padding: 18px;
-
-  background: white;
-
-  border-radius: 23px;
-
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.07);
+  gap: 9px;
 
   box-sizing: border-box;
 
-  gap: 14px;
-
   transition:
-    transform .15s,
-    box-shadow .15s;
+    transform .15s ease,
+    box-shadow .15s ease;
 }
 
 
 #homePage .menu-card:active {
+
   transform: scale(.98);
+
 }
 
 
 /* ==========================================================
-   ICON MENU
+   ICON
 ========================================================== */
 
 #homePage .menu-icon {
 
-  width: 58px;
+  width: 62px;
 
-  height: 58px;
+  height: 62px;
 
-  min-width: 58px;
+  min-width: 62px;
 
-  flex-shrink: 0;
+  border-radius: 17px;
+
+  margin: 0;
 
   display: flex;
 
@@ -334,26 +356,37 @@ button {
 
   justify-content: center;
 
-  border-radius: 18px;
+  font-size: 29px;
 
-  font-size: 28px;
+  line-height: 1;
 
-  margin: 0;
+  background: #e5f1ec;
+
 }
 
 
-/* WARNA ICON */
+/* ==========================================================
+   WARNA ICON MASING-MASING
+========================================================== */
 
 #homePage .admin-icon {
-  background: #e4edff;
+
+  background: #e5edff;
+
 }
+
 
 #homePage .guru-icon {
-  background: #dcf5ea;
+
+  background: #dcf3e9;
+
 }
 
+
 #homePage .rekap-icon {
-  background: #fff0d7;
+
+  background: #fff0d8;
+
 }
 
 
@@ -367,46 +400,50 @@ button {
 
   flex-direction: column;
 
-  align-items: flex-start;
+  align-items: center;
 
   justify-content: center;
 
-  text-align: left;
+  text-align: center;
 
-  gap: 4px;
+  gap: 3px;
 
-  min-width: 0;
+  width: 100%;
 }
 
 
 #homePage .menu-text strong {
 
-  font-size: 18px;
-
-  line-height: 1.1;
-
   color: #075c43;
 
+  font-size: 17px;
+
   font-weight: 800;
+
+  line-height: 1.15;
+
+  letter-spacing: -.2px;
 }
 
 
 #homePage .menu-text span {
 
-  color: #888;
+  color: #777;
 
   font-size: 13px;
 
+  font-weight: 400;
+
   line-height: 1.25;
 
-  max-width: 120px;
+  max-width: 140px;
 
-  text-align: left;
 }
 
 
 /* ==========================================================
    WAKTU ABSENSI
+   DIBUAT MENYATU DENGAN GRID MENU
 ========================================================== */
 
 #homePage .time-card {
@@ -415,30 +452,32 @@ button {
 
   min-width: 0;
 
-  min-height: 125px;
+  min-height: 145px;
+
+  padding: 18px 10px;
 
   margin: 0;
 
-  padding: 18px;
+  border: 1px solid #e0e5e2;
 
-  background: white;
+  border-radius: 22px;
 
-  border-radius: 23px;
+  background: #ffffff;
 
   box-shadow:
-    0 5px 18px rgba(0,0,0,.07);
+    0 5px 16px rgba(0,0,0,.055);
 
   display: flex;
 
-  flex-direction: row;
+  flex-direction: column;
 
   align-items: center;
 
-  justify-content: flex-start;
+  justify-content: center;
 
-  text-align: left;
+  text-align: center;
 
-  gap: 14px;
+  gap: 9px;
 
   box-sizing: border-box;
 }
@@ -450,13 +489,17 @@ button {
 
 #homePage .time-icon {
 
-  width: 58px;
+  width: 62px;
 
-  height: 58px;
+  height: 62px;
 
-  min-width: 58px;
+  min-width: 62px;
 
-  flex-shrink: 0;
+  margin: 0;
+
+  border-radius: 17px;
+
+  background: #e5edff;
 
   display: flex;
 
@@ -464,13 +507,7 @@ button {
 
   justify-content: center;
 
-  margin: 0;
-
-  border-radius: 18px;
-
-  background: #e4edff;
-
-  font-size: 30px;
+  font-size: 29px;
 
   line-height: 1;
 }
@@ -486,27 +523,28 @@ button {
 
   flex-direction: column;
 
-  align-items: flex-start;
+  align-items: center;
 
   justify-content: center;
 
-  text-align: left;
+  text-align: center;
 
-  gap: 4px;
+  gap: 3px;
 
-  min-width: 0;
+  width: 100%;
 }
 
 
 #homePage .time-info strong {
 
-  color: #333;
+  color: #222;
 
-  font-size: 17px;
+  font-size: 16px;
 
   font-weight: 800;
 
-  line-height: 1.1;
+  line-height: 1.15;
+
 }
 
 
