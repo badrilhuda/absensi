@@ -558,41 +558,6 @@ button {
     white-space: nowrap;
   }
 
-
-  /* =====================================================
-     STATUS
-  ===================================================== */
-
-  #homePage .system-status {
-
-    grid-column: 1 / -1;
-
-    text-align: center;
-
-    color: #777;
-
-    margin-top: 5px;
-
-    font-size: 12px;
-  }
-
-
-  #homePage .status-dot {
-
-    width: 8px;
-    height: 8px;
-
-    display: inline-block;
-
-    margin-right: 5px;
-
-    border-radius: 50%;
-
-    background: #18ad72;
-  }
-
-}
-
 /* =====================================================
    STATUS
 ===================================================== */
@@ -619,6 +584,35 @@ button {
   border-radius: 50%;
 
   background: #18ad72;
+}
+
+   /* =====================================================
+   FOOTER MOBILE
+===================================================== */
+
+@media screen and (max-width: 600px) {
+
+  /* Status Online */
+  #homePage .system-status {
+    grid-column: 1 / -1;
+
+    margin-top: 18px !important;
+    margin-bottom: 0 !important;
+
+    text-align: center;
+  }
+
+  /* Footer */
+  #homePage .footer {
+    grid-column: 1 / -1;
+
+    margin-top: 25px !important;
+
+    text-align: center;
+
+    width: 100%;
+  }
+
 }
 
 
@@ -1397,137 +1391,6 @@ footer strong {
 
     padding-top:
       0 !important;
-  }
-
-}
-
-
-/* ==========================================================
-   HP KECIL
-   ========================================================== */
-
-@media screen and (max-width: 380px) {
-
-  #homePage {
-
-    column-gap:
-      9px !important;
-
-    row-gap:
-      9px !important;
-
-    padding:
-      10px 10px 20px !important;
-  }
-
-
-  #homePage .welcome {
-
-    padding:
-      8px 3px 1px !important;
-  }
-
-
-  #homePage .welcome h1 {
-
-    font-size:
-      24px !important;
-  }
-
-
-  #homePage .welcome p {
-
-    font-size:
-      14px !important;
-  }
-
-
-  #homePage .menu-card,
-  #homePage .time-card {
-
-    height:
-      108px !important;
-
-    min-height:
-      108px !important;
-
-    max-height:
-      108px !important;
-
-    padding:
-      11px !important;
-
-    border-radius:
-      19px !important;
-  }
-
-
-  #homePage .menu-icon {
-
-    width:
-      43px !important;
-
-    height:
-      43px !important;
-
-    min-width:
-      43px !important;
-
-    margin-right:
-      9px !important;
-
-    border-radius:
-      15px !important;
-
-    font-size:
-      19px !important;
-  }
-
-
-  #homePage .menu-text strong {
-
-    font-size:
-      14px !important;
-  }
-
-
-  #homePage .menu-text span {
-
-    font-size:
-      10px !important;
-  }
-
-
-  #homePage .time-icon {
-
-    width:
-      43px !important;
-
-    height:
-      43px !important;
-
-    min-width:
-      43px !important;
-
-    margin-right:
-      9px !important;
-
-    font-size:
-      19px !important;
-  }
-
-
-  #homePage .time-info strong {
-
-    font-size:
-      11px !important;
-  }
-
-
-  #homePage .time-info span {
-
-    font-size:
-      13px !important;
   }
 
 }
