@@ -346,6 +346,50 @@ button {
   font-weight: bold;
 }
 
+@media screen and (max-width: 600px) {
+
+  /* HOME HP */
+  #homePage {
+    display: grid !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    /* Jarak horizontal dan vertikal */
+    column-gap: 12px !important;
+    row-gap: 12px !important;
+
+    /* Jangan merenggangkan isi grid */
+    align-content: start !important;
+    align-items: start !important;
+
+    /* Hilangkan tinggi minimum yang membuat ruang kosong */
+    min-height: 0 !important;
+    height: auto !important;
+
+    padding-bottom: 20px !important;
+  }
+
+
+  /* CARD */
+  #homePage .menu-card,
+  #homePage .time-card {
+
+    width: 100% !important;
+
+    height: 88px !important;
+    min-height: 88px !important;
+    max-height: 88px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+  }
+
+}
+
 /* =====================================================
    STATUS
 ===================================================== */
