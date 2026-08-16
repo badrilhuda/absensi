@@ -346,46 +346,249 @@ button {
   font-weight: bold;
 }
 
+/* =====================================================
+   HOME GRID - HP
+===================================================== */
+
 @media screen and (max-width: 600px) {
 
-  /* HOME HP */
   #homePage {
-    display: grid !important;
+    display: grid;
 
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
-    /* Jarak horizontal dan vertikal */
-    column-gap: 12px !important;
-    row-gap: 12px !important;
+    column-gap: 12px;
+    row-gap: 8px;
 
-    /* Jangan merenggangkan isi grid */
-    align-content: start !important;
-    align-items: start !important;
+    align-content: start;
+    align-items: start;
 
-    /* Hilangkan tinggi minimum yang membuat ruang kosong */
-    min-height: 0 !important;
-    height: auto !important;
+    min-height: 0;
+    height: auto;
 
-    padding-bottom: 20px !important;
+    padding-bottom: 20px;
   }
 
 
-  /* CARD */
+  /* =====================================================
+     WELCOME
+  ===================================================== */
+
+  #homePage .welcome {
+    grid-column: 1 / -1;
+  }
+
+
+  /* =====================================================
+     MENU CARD
+     PENDEK DAN MEMANJANG
+  ===================================================== */
+
   #homePage .menu-card,
   #homePage .time-card {
 
-    width: 100% !important;
+    width: 100%;
+    min-width: 0;
 
-    height: 88px !important;
-    min-height: 88px !important;
-    max-height: 88px !important;
+    height: 88px;
+    min-height: 88px;
+    max-height: 88px;
 
-    margin: 0 !important;
+    margin: 0;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    display: flex !important;
-    align-items: center !important;
+    display: flex;
+    align-items: center;
+  }
+
+
+  /* =====================================================
+     MENU CARD
+  ===================================================== */
+
+  #homePage .menu-card {
+
+    padding: 12px 14px;
+
+    border: none;
+
+    text-align: left;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+      0 5px 18px rgba(0,0,0,.07);
+
+    transition:
+      transform .15s,
+      box-shadow .15s;
+  }
+
+
+  #homePage .menu-card:active {
+    transform: scale(.98);
+  }
+
+
+  /* =====================================================
+     ICON
+  ===================================================== */
+
+  #homePage .menu-icon {
+
+    width: 45px;
+    height: 45px;
+
+    min-width: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    font-size: 20px;
+
+    margin-right: 10px;
+  }
+
+
+  /* =====================================================
+     TEKS MENU
+  ===================================================== */
+
+  #homePage .menu-text {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+
+  #homePage .menu-text strong {
+
+    font-size: 15px;
+
+    line-height: 1.15;
+
+    color: #075c43;
+
+    white-space: nowrap;
+  }
+
+
+  #homePage .menu-text span {
+
+    color: #888;
+
+    font-size: 11px;
+
+    line-height: 1.25;
+  }
+
+
+  /* =====================================================
+     WAKTU ABSENSI
+  ===================================================== */
+
+  #homePage .time-card {
+
+    padding: 12px 14px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+      0 4px 15px rgba(0,0,0,.06);
+  }
+
+
+  #homePage .time-icon {
+
+    font-size: 18px;
+
+    margin-right: 10px;
+
+    min-width: 24px;
+  }
+
+
+  #homePage .time-card div:last-child {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+
+  #homePage .time-card strong {
+
+    font-size: 12px;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+  }
+
+
+  #homePage .time-card span {
+
+    color: #087f5b;
+
+    font-size: 11px;
+
+    line-height: 1.1;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+  }
+
+
+  /* =====================================================
+     STATUS
+  ===================================================== */
+
+  #homePage .system-status {
+
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    color: #777;
+
+    margin-top: 5px;
+
+    font-size: 12px;
+  }
+
+
+  #homePage .status-dot {
+
+    width: 8px;
+    height: 8px;
+
+    display: inline-block;
+
+    margin-right: 5px;
+
+    border-radius: 50%;
+
+    background: #18ad72;
   }
 
 }
@@ -470,7 +673,6 @@ button {
   box-shadow:
     0 4px 14px rgba(0,0,0,.07);
 }
-
 
 /* =====================================================
    LOGIN ADMIN
