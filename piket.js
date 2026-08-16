@@ -54,6 +54,8 @@ const AKURASI_MAKSIMAL =
 let lokasiSekarang =
   null;
 
+let watchID =
+  null;
 
 // ============================================================
 // SAAT HALAMAN SELESAI DIMUAT
@@ -755,14 +757,12 @@ function hitungJarak(
 
 
 // ============================================================
-// MULAI GPS
+// MULAI GPS OTOMATIS
 // ============================================================
 
 function mulaiGPS() {
 
-  if (
-    !navigator.geolocation
-  ) {
+  if (!navigator.geolocation) {
 
     tampilkanStatusGPS(
       "❌ Browser tidak mendukung GPS.",
@@ -770,15 +770,69 @@ function mulaiGPS() {
     );
 
     return;
+  }
+
+
+  // Jangan membuat watch GPS lebih dari satu
+  if (watchID !== null) {
+
+    return;
 
   }
 
 
   tampilkanStatusGPS(
-    "⏳ Mencari lokasi GPS...",
+    "⏳ Mengambil lokasi GPS...",
     ""
   );
 
+
+  // ==========================================================
+  // GPS BERJALAN TERUS-MENERUS
+  // ==========================================================
+
+  watchID =
+    navigator.geolocation.watchPosition(
+
+      function(position) {
+
+        // Setiap GPS mendapatkan lokasi baru,
+        // langsung proses dan perbarui status.
+        prosesLokasi(
+          position
+        );
+
+      },
+
+
+      function(error) {
+
+        prosesErrorGPS(
+          error
+        );
+
+      },
+
+
+      {
+
+        // Gunakan GPS dengan akurasi tinggi
+        enableHighAccuracy:
+          true,
+
+        // Tunggu maksimal 20 detik
+        timeout:
+          20000,
+
+        // Jangan gunakan lokasi lama
+        maximumAge:
+          0
+
+      }
+
+    );
+
+}
 
   // ----------------------------------------------------------
   // Ambil lokasi awal dengan cepat
