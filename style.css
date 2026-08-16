@@ -377,6 +377,12 @@ button {
   }
 
 }
+  #homePage .time-card span {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+
+}
 
 /* =====================================================
    STATUS
@@ -400,6 +406,7 @@ button {
   display: inline-block;
 
   margin-right: 7px;
+   margin-right: 50px;
 
   border-radius: 50%;
 
