@@ -253,8 +253,8 @@ button {
 
 
 .menu-icon {
-  width: 72px;
-  height: 72px;
+  width: 52px;
+  height: 52px;
 
   display: flex;
   align-items: center;
@@ -262,7 +262,7 @@ button {
 
   border-radius: 21px;
 
-  font-size: 34px;
+  font-size: 24px;
 
   margin-right: 18px;
 }
@@ -291,14 +291,14 @@ button {
 
 
 .menu-text strong {
-  font-size: 20px;
+  font-size: 16px;
   color: #075c43;
 }
 
 
 .menu-text span {
   color: #888;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 
@@ -324,7 +324,7 @@ button {
 
 
 .time-icon {
-  font-size: 30px;
+  font-size: 18px;
   margin-right: 15px;
 }
 
@@ -337,7 +337,7 @@ button {
 
 
 .time-card strong {
-  font-size: 15px;
+  font-size: 12px;
 }
 
 
@@ -1184,8 +1184,8 @@ footer strong {
 
 
   .menu-icon {
-    width: 63px;
-    height: 63px;
+    width: 52px;
+    height: 52px;
   }
 
 
