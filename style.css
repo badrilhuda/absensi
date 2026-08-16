@@ -346,20 +346,19 @@ button {
   font-weight: bold;
 }
 
+/* ==========================================================
+   JARAK MENU HP SAJA
+   ADMIN-GURU ↔ REKAP-WAKTU ABSENSI
+   ========================================================== */
+
 @media screen and (max-width: 600px) {
 
   #homePage {
-    row-gap: 10px !important;
-    align-content: start !important;
-  }
-
-  #homePage .menu-card,
-  #homePage .time-card {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    row-gap: 8px !important;
   }
 
 }
+@media screen and (max-width: 600px) {
 
   #homePage .menu-card,
   #homePage .time-card {
