@@ -356,7 +356,7 @@ button {
 
     /* Jarak horizontal dan vertikal */
     column-gap: 12px !important;
-    row-gap: 8px !important;
+    row-gap: 12px !important;
 
     /* Jangan merenggangkan isi grid */
     align-content: start !important;
@@ -374,10 +374,6 @@ button {
   #homePage .menu-card,
   #homePage .time-card {
     margin: 0 !important;
-    height: 80px !important;
-    min-height: 80px !important;
-    max-height: 80px !important;
-    box-sizing: border-box !important;
   }
 
 }
