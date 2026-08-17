@@ -3319,63 +3319,142 @@ function tampilkanRekap() {
 
 function exportExcel() {
 
-  const tanggal =
-    el("filterTanggal")
-      ? el("filterTanggal").value
-      : "";
+  const bulanEl = el("bulanRekap");
 
+  if (!bulanEl) {
+    alert("Kolom pilihan bulan tidak ditemukan.");
+    return;
+  }
+
+  const bulan =
+    String(bulanEl.value || "").trim();
+
+  if (!bulan) {
+    alert("Silakan pilih bulan terlebih dahulu.");
+    return;
+  }
 
   panggilAPI(
-
     {
-
-      action:
-        "getRekap",
-
-      tanggal:
-        tanggal
-
+      action: "rekap",
+      bulan: bulan
     },
 
     function(result) {
 
-      const data =
-        Array.isArray(result)
-          ? result
-          : (
-              result &&
-              Array.isArray(
-                result.data
-              )
-                ? result.data
-                : []
-            );
+      console.log(
+        "DATA EXPORT EXCEL:",
+        result
+      );
 
+      if (
+        !result ||
+        result.sukses !== true
+      ) {
+        alert(
+          result && result.pesan
+            ? result.pesan
+            : "Gagal mengambil data rekap."
+        );
+        return;
+      }
+
+      let data = [];
+
+      if (
+        Array.isArray(result.data)
+      ) {
+        data = result.data;
+      }
+      else if (
+        Array.isArray(result.hasil)
+      ) {
+        data = result.hasil;
+      }
+      else if (
+        Array.isArray(result)
+      ) {
+        data = result;
+      }
 
       if (!data.length) {
 
         alert(
-          "Tidak ada data untuk diekspor."
+          "Tidak ada data absensi untuk bulan " +
+          bulan +
+          "."
         );
 
         return;
-
       }
 
-
       /*
-       * Jika SheetJS tersedia,
-       * gunakan XLSX.
+       * ==========================================
+       * EXPORT XLSX
+       * ==========================================
        */
 
       if (
-        typeof XLSX !==
-        "undefined"
+        typeof XLSX !== "undefined"
       ) {
+
+        const exportData =
+          data.map(
+            function(row, index) {
+
+              return {
+
+                "No":
+                  index + 1,
+
+                "Nama Guru":
+                  row.nama ||
+                  row.Nama ||
+                  "-",
+
+                "NIP":
+                  row.nip ||
+                  row.NIP ||
+                  "",
+
+                "JTM/Minggu":
+                  Number(
+                    row.jp !== undefined
+                      ? row.jp
+                      : row.jtm !== undefined
+                        ? row.jtm
+                        : 0
+                  ) || 0,
+
+                "Hadir":
+                  Number(
+                    row.hadir || 0
+                  ),
+
+                "Terlambat":
+                  Number(
+                    row.terlambat || 0
+                  ),
+
+                "Tidak":
+                  Number(
+                    row.tidak || 0
+                  ),
+
+                "Total JP":
+                  Number(
+                    row.totalJP || 0
+                  )
+
+              };
+
+            }
+          );
+
 
         const worksheet =
           XLSX.utils.json_to_sheet(
-            data
+            exportData
           );
 
 
@@ -3386,29 +3465,29 @@ function exportExcel() {
         XLSX.utils.book_append_sheet(
           workbook,
           worksheet,
-          "Absensi"
+          "Rekap Absensi"
         );
 
 
         XLSX.writeFile(
           workbook,
-          "Rekap_Absensi_Guru.xlsx"
+          "Rekap_Absensi_Guru_" +
+          bulan +
+          ".xlsx"
         );
 
         return;
-
       }
 
 
       /*
-       * Fallback CSV.
+       * ==========================================
+       * FALLBACK CSV
+       * ==========================================
        */
 
       const keys =
-        Object.keys(
-          data[0]
-        );
-
+        Object.keys(data[0]);
 
       let csv =
         keys.join(",") +
@@ -3425,8 +3504,7 @@ function exportExcel() {
 
                   return '"' +
                     String(
-                      row[key] ??
-                      ""
+                      row[key] ?? ""
                     )
                       .replace(
                         /"/g,
@@ -3465,12 +3543,12 @@ function exportExcel() {
         );
 
 
-      a.href =
-        url;
-
+      a.href = url;
 
       a.download =
-        "Rekap_Absensi_Guru.csv";
+        "Rekap_Absensi_Guru_" +
+        bulan +
+        ".csv";
 
 
       document.body.appendChild(
@@ -3480,20 +3558,15 @@ function exportExcel() {
 
       a.click();
 
-
       a.remove();
-
 
       URL.revokeObjectURL(
         url
       );
 
     }
-
   );
-
 }
-
 
 /* =====================================================
    EXPORT PDF
@@ -3501,52 +3574,105 @@ function exportExcel() {
 
 function exportPDF() {
 
-  const tanggal =
-    el("filterTanggal")
-      ? el("filterTanggal").value
-      : "";
+  const bulanEl =
+    el("bulanRekap");
+
+  if (!bulanEl) {
+    alert(
+      "Kolom pilihan bulan tidak ditemukan."
+    );
+    return;
+  }
+
+
+  const bulan =
+    String(
+      bulanEl.value || ""
+    ).trim();
+
+
+  if (!bulan) {
+    alert(
+      "Silakan pilih bulan terlebih dahulu."
+    );
+    return;
+  }
 
 
   panggilAPI(
-
     {
-
-      action:
-        "getRekap",
-
-      tanggal:
-        tanggal
-
+      action: "rekap",
+      bulan: bulan
     },
 
     function(result) {
 
-      const data =
+      console.log(
+        "DATA EXPORT PDF:",
+        result
+      );
+
+
+      if (
+        !result ||
+        result.sukses !== true
+      ) {
+
+        alert(
+          result && result.pesan
+            ? result.pesan
+            : "Gagal mengambil data rekap."
+        );
+
+        return;
+      }
+
+
+      let data = [];
+
+
+      if (
+        Array.isArray(result.data)
+      ) {
+
+        data =
+          result.data;
+
+      }
+      else if (
+        Array.isArray(result.hasil)
+      ) {
+
+        data =
+          result.hasil;
+
+      }
+      else if (
         Array.isArray(result)
-          ? result
-          : (
-              result &&
-              Array.isArray(
-                result.data
-              )
-                ? result.data
-                : []
-            );
+      ) {
+
+        data =
+          result;
+
+      }
 
 
       if (!data.length) {
 
         alert(
-          "Tidak ada data untuk diekspor."
+          "Tidak ada data absensi untuk bulan " +
+          bulan +
+          "."
         );
 
         return;
-
       }
 
 
       /*
-       * Gunakan jsPDF apabila tersedia.
+       * ==========================================
+       * jsPDF
+       * ==========================================
        */
 
       if (
@@ -3578,6 +3704,18 @@ function exportPDF() {
         );
 
 
+        doc.setFontSize(
+          10
+        );
+
+
+        doc.text(
+          "Bulan: " + bulan,
+          14,
+          21
+        );
+
+
         const body =
           data.map(
             function(row, index) {
@@ -3586,26 +3724,37 @@ function exportPDF() {
 
                 index + 1,
 
-                row.tanggal ||
-                row.Tanggal ||
-                "",
-
-                row.jam ||
-                row.Jam ||
-                row.waktu ||
-                "",
-
                 row.nama ||
                 row.Nama ||
+                "-",
+
+                row.nip ||
+                row.NIP ||
                 "",
 
-                row.status ||
-                row.Status ||
-                "",
+                Number(
+                  row.jp !== undefined
+                    ? row.jp
+                    : row.jtm !== undefined
+                      ? row.jtm
+                      : 0
+                ) || 0,
 
-                row.lokasi ||
-                row.Lokasi ||
-                ""
+                Number(
+                  row.hadir || 0
+                ),
+
+                Number(
+                  row.terlambat || 0
+                ),
+
+                Number(
+                  row.tidak || 0
+                ),
+
+                Number(
+                  row.totalJP || 0
+                )
 
               ];
 
@@ -3623,16 +3772,13 @@ function exportPDF() {
             head: [[
 
               "No",
-
-              "Tanggal",
-
-              "Jam",
-
               "Nama Guru",
-
-              "Status",
-
-              "Lokasi"
+              "NIP",
+              "JTM/Minggu",
+              "Hadir",
+              "Terlambat",
+              "Tidak",
+              "Total JP"
 
             ]],
 
@@ -3640,7 +3786,11 @@ function exportPDF() {
               body,
 
             startY:
-              22
+              27,
+
+            styles: {
+              fontSize: 9
+            }
 
           });
 
@@ -3648,18 +3798,20 @@ function exportPDF() {
 
 
         doc.save(
-          "Rekap_Absensi_Guru.pdf"
+          "Rekap_Absensi_Guru_" +
+          bulan +
+          ".pdf"
         );
 
 
         return;
-
       }
 
 
       /*
-       * Jika jsPDF belum tersedia,
-       * tampilkan versi cetak browser.
+       * ==========================================
+       * FALLBACK CETAK
+       * ==========================================
        */
 
       cetakRekap(
@@ -3667,11 +3819,8 @@ function exportPDF() {
       );
 
     }
-
   );
-
 }
-
 
 /* =====================================================
    CETAK REKAP
