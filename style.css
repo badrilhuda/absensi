@@ -558,8 +558,16 @@ button {
     white-space: nowrap;
   }
 
-     #homePage .system-status {
-    margin-top: 75px !important;
+  #homePage .system-status {
+
+    grid-column:
+      1 / -1 !important;
+
+    margin-top:
+      75px !important;
+
+    padding-top:
+      0 !important;
   }
 
 }
