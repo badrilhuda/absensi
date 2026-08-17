@@ -3315,272 +3315,20 @@ function tampilkanRekap() {
 
 /* =====================================================
    EXPORT EXCEL
+   FORMAT SAMA DENGAN REKAP DI HALAMAN
 ===================================================== */
 
 function exportExcel() {
-
-  const bulanEl = el("bulanRekap");
-
-  if (!bulanEl) {
-    alert("Kolom pilihan bulan tidak ditemukan.");
-    return;
-  }
-
-  const bulan =
-    String(bulanEl.value || "").trim();
-
-  if (!bulan) {
-    alert("Silakan pilih bulan terlebih dahulu.");
-    return;
-  }
-
-  panggilAPI(
-    {
-      action: "rekap",
-      bulan: bulan
-    },
-
-    function(result) {
-
-      console.log(
-        "DATA EXPORT EXCEL:",
-        result
-      );
-
-      if (
-        !result ||
-        result.sukses !== true
-      ) {
-        alert(
-          result && result.pesan
-            ? result.pesan
-            : "Gagal mengambil data rekap."
-        );
-        return;
-      }
-
-      let data = [];
-
-      if (
-        Array.isArray(result.data)
-      ) {
-        data = result.data;
-      }
-      else if (
-        Array.isArray(result.hasil)
-      ) {
-        data = result.hasil;
-      }
-      else if (
-        Array.isArray(result)
-      ) {
-        data = result;
-      }
-
-      if (!data.length) {
-
-        alert(
-          "Tidak ada data absensi untuk bulan " +
-          bulan +
-          "."
-        );
-
-        return;
-      }
-
-      /*
-       * ==========================================
-       * EXPORT XLSX
-       * ==========================================
-       */
-
-      if (
-        typeof XLSX !== "undefined"
-      ) {
-
-        const exportData =
-          data.map(
-            function(row, index) {
-
-              return {
-
-                "No":
-                  index + 1,
-
-                "Nama Guru":
-                  row.nama ||
-                  row.Nama ||
-                  "-",
-
-                "NIP":
-                  row.nip ||
-                  row.NIP ||
-                  "",
-
-                "JTM/Minggu":
-                  Number(
-                    row.jp !== undefined
-                      ? row.jp
-                      : row.jtm !== undefined
-                        ? row.jtm
-                        : 0
-                  ) || 0,
-
-                "Hadir":
-                  Number(
-                    row.hadir || 0
-                  ),
-
-                "Terlambat":
-                  Number(
-                    row.terlambat || 0
-                  ),
-
-                "Tidak":
-                  Number(
-                    row.tidak || 0
-                  ),
-
-                "Total JP":
-                  Number(
-                    row.totalJP || 0
-                  )
-
-              };
-
-            }
-          );
-
-
-        const worksheet =
-          XLSX.utils.json_to_sheet(
-            exportData
-          );
-
-
-        const workbook =
-          XLSX.utils.book_new();
-
-
-        XLSX.utils.book_append_sheet(
-          workbook,
-          worksheet,
-          "Rekap Absensi"
-        );
-
-
-        XLSX.writeFile(
-          workbook,
-          "Rekap_Absensi_Guru_" +
-          bulan +
-          ".xlsx"
-        );
-
-        return;
-      }
-
-
-      /*
-       * ==========================================
-       * FALLBACK CSV
-       * ==========================================
-       */
-
-      const keys =
-        Object.keys(data[0]);
-
-      let csv =
-        keys.join(",") +
-        "\n";
-
-
-      data.forEach(
-        function(row) {
-
-          csv +=
-            keys
-              .map(
-                function(key) {
-
-                  return '"' +
-                    String(
-                      row[key] ?? ""
-                    )
-                      .replace(
-                        /"/g,
-                        '""'
-                      ) +
-                    '"';
-
-                }
-              )
-              .join(",") +
-            "\n";
-
-        }
-      );
-
-
-      const blob =
-        new Blob(
-          [csv],
-          {
-            type:
-              "text/csv;charset=utf-8;"
-          }
-        );
-
-
-      const url =
-        URL.createObjectURL(
-          blob
-        );
-
-
-      const a =
-        document.createElement(
-          "a"
-        );
-
-
-      a.href = url;
-
-      a.download =
-        "Rekap_Absensi_Guru_" +
-        bulan +
-        ".csv";
-
-
-      document.body.appendChild(
-        a
-      );
-
-
-      a.click();
-
-      a.remove();
-
-      URL.revokeObjectURL(
-        url
-      );
-
-    }
-  );
-}
-
-/* =====================================================
-   EXPORT PDF
-===================================================== */
-
-function exportPDF() {
 
   const bulanEl =
     el("bulanRekap");
 
   if (!bulanEl) {
+
     alert(
       "Kolom pilihan bulan tidak ditemukan."
     );
+
     return;
   }
 
@@ -3592,14 +3340,17 @@ function exportPDF() {
 
 
   if (!bulan) {
+
     alert(
       "Silakan pilih bulan terlebih dahulu."
     );
+
     return;
   }
 
 
   panggilAPI(
+
     {
       action: "rekap",
       bulan: bulan
@@ -3608,7 +3359,7 @@ function exportPDF() {
     function(result) {
 
       console.log(
-        "DATA EXPORT PDF:",
+        "DATA EXPORT:",
         result
       );
 
@@ -3632,21 +3383,27 @@ function exportPDF() {
 
 
       if (
-        Array.isArray(result.data)
+        Array.isArray(
+          result.data
+        )
       ) {
 
         data =
           result.data;
 
       }
+
       else if (
-        Array.isArray(result.hasil)
+        Array.isArray(
+          result.hasil
+        )
       ) {
 
         data =
           result.hasil;
 
       }
+
       else if (
         Array.isArray(result)
       ) {
@@ -3670,9 +3427,542 @@ function exportPDF() {
 
 
       /*
-       * ==========================================
-       * jsPDF
-       * ==========================================
+       * ==================================================
+       * BENTUK DATA EXPORT
+       * ==================================================
+       */
+
+      const exportData =
+        data.map(
+          function(row, index) {
+
+            const jp =
+              Number(
+                row.jp !== undefined
+                  ? row.jp
+                  : row.jtm !== undefined
+                    ? row.jtm
+                    : 0
+              ) || 0;
+
+
+            const hadir =
+              Number(
+                row.hadir || 0
+              );
+
+
+            const terlambat =
+              Number(
+                row.terlambat || 0
+              );
+
+
+            const tidak =
+              Number(
+                row.tidak || 0
+              );
+
+
+            const hariDihitung =
+              hadir +
+              terlambat;
+
+
+            const totalJTM =
+              row.totalJP !== undefined
+                ? Number(
+                    row.totalJP || 0
+                  )
+                : hariDihitung * jp;
+
+
+            return {
+
+              "No":
+                index + 1,
+
+              "Nama Guru":
+                row.nama ||
+                row.Nama ||
+                "-",
+
+              "JTM/Minggu":
+                jp,
+
+              "Hadir":
+                hadir,
+
+              "Terlambat":
+                terlambat,
+
+              "Tidak Hadir":
+                tidak,
+
+              "Total JTM":
+                totalJTM
+
+            };
+
+          }
+        );
+
+
+      /*
+       * ==================================================
+       * TOTAL
+       * ==================================================
+       */
+
+      let totalHadir = 0;
+      let totalTerlambat = 0;
+      let totalTidak = 0;
+      let totalJTM = 0;
+
+
+      exportData.forEach(
+        function(row) {
+
+          totalHadir +=
+            Number(
+              row["Hadir"] || 0
+            );
+
+          totalTerlambat +=
+            Number(
+              row["Terlambat"] || 0
+            );
+
+          totalTidak +=
+            Number(
+              row["Tidak Hadir"] || 0
+            );
+
+          totalJTM +=
+            Number(
+              row["Total JTM"] || 0
+            );
+
+        }
+      );
+
+
+      exportData.push({
+
+        "No":
+          "",
+
+        "Nama Guru":
+          "TOTAL",
+
+        "JTM/Minggu":
+          "",
+
+        "Hadir":
+          totalHadir,
+
+        "Terlambat":
+          totalTerlambat,
+
+        "Tidak Hadir":
+          totalTidak,
+
+        "Total JTM":
+          totalJTM
+
+      });
+
+
+      /*
+       * ==================================================
+       * EXPORT XLSX
+       * ==================================================
+       */
+
+      if (
+        typeof XLSX !==
+        "undefined"
+      ) {
+
+        const worksheet =
+          XLSX.utils.json_to_sheet(
+            exportData
+          );
+
+
+        const workbook =
+          XLSX.utils.book_new();
+
+
+        XLSX.utils.book_append_sheet(
+          workbook,
+          worksheet,
+          "Rekap Absensi"
+        );
+
+
+        XLSX.writeFile(
+
+          workbook,
+
+          "Rekap_Absensi_Guru_" +
+          bulan +
+          ".xlsx"
+
+        );
+
+
+        return;
+      }
+
+
+      /*
+       * ==================================================
+       * FALLBACK CSV
+       * ==================================================
+       */
+
+      const keys =
+        Object.keys(
+          exportData[0]
+        );
+
+
+      let csv =
+        keys.join(",") +
+        "\n";
+
+
+      exportData.forEach(
+        function(row) {
+
+          csv +=
+
+            keys
+              .map(
+                function(key) {
+
+                  return '"' +
+                    String(
+                      row[key] ??
+                      ""
+                    )
+                      .replace(
+                        /"/g,
+                        '""'
+                      ) +
+                    '"';
+
+                }
+              )
+              .join(",") +
+
+            "\n";
+
+        }
+      );
+
+
+      const blob =
+        new Blob(
+
+          [csv],
+
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const a =
+        document.createElement(
+          "a"
+        );
+
+
+      a.href =
+        url;
+
+
+      a.download =
+        "Rekap_Absensi_Guru_" +
+        bulan +
+        ".csv";
+
+
+      document.body.appendChild(
+        a
+      );
+
+
+      a.click();
+
+
+      a.remove();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   EXPORT PDF
+   FORMAT SAMA DENGAN REKAP
+===================================================== */
+
+function exportPDF() {
+
+  const bulanEl =
+    el("bulanRekap");
+
+
+  if (!bulanEl) {
+
+    alert(
+      "Kolom pilihan bulan tidak ditemukan."
+    );
+
+    return;
+  }
+
+
+  const bulan =
+    String(
+      bulanEl.value || ""
+    ).trim();
+
+
+  if (!bulan) {
+
+    alert(
+      "Silakan pilih bulan terlebih dahulu."
+    );
+
+    return;
+  }
+
+
+  panggilAPI(
+
+    {
+      action: "rekap",
+      bulan: bulan
+    },
+
+    function(result) {
+
+      if (
+        !result ||
+        result.sukses !== true
+      ) {
+
+        alert(
+          result && result.pesan
+            ? result.pesan
+            : "Gagal mengambil data rekap."
+        );
+
+        return;
+      }
+
+
+      let data = [];
+
+
+      if (
+        Array.isArray(
+          result.data
+        )
+      ) {
+
+        data =
+          result.data;
+
+      }
+
+      else if (
+        Array.isArray(
+          result.hasil
+        )
+      ) {
+
+        data =
+          result.hasil;
+
+      }
+
+      else if (
+        Array.isArray(result)
+      ) {
+
+        data =
+          result;
+
+      }
+
+
+      if (!data.length) {
+
+        alert(
+          "Tidak ada data absensi untuk bulan " +
+          bulan +
+          "."
+        );
+
+        return;
+      }
+
+
+      /*
+       * ==================================================
+       * BUAT DATA PDF
+       * ==================================================
+       */
+
+      const body =
+        data.map(
+          function(row, index) {
+
+            const jp =
+              Number(
+                row.jp !== undefined
+                  ? row.jp
+                  : row.jtm !== undefined
+                    ? row.jtm
+                    : 0
+              ) || 0;
+
+
+            const hadir =
+              Number(
+                row.hadir || 0
+              );
+
+
+            const terlambat =
+              Number(
+                row.terlambat || 0
+              );
+
+
+            const tidak =
+              Number(
+                row.tidak || 0
+              );
+
+
+            const totalJTM =
+              row.totalJP !== undefined
+                ? Number(
+                    row.totalJP || 0
+                  )
+                : (
+                    hadir +
+                    terlambat
+                  ) * jp;
+
+
+            return [
+
+              index + 1,
+
+              row.nama ||
+              row.Nama ||
+              "-",
+
+              jp,
+
+              hadir,
+
+              terlambat,
+
+              tidak,
+
+              totalJTM
+
+            ];
+
+          }
+        );
+
+
+      /*
+       * ==================================================
+       * TOTAL
+       * ==================================================
+       */
+
+      let totalHadir = 0;
+      let totalTerlambat = 0;
+      let totalTidak = 0;
+      let totalJTM = 0;
+
+
+      body.forEach(
+        function(row) {
+
+          totalHadir +=
+            Number(
+              row[3] || 0
+            );
+
+          totalTerlambat +=
+            Number(
+              row[4] || 0
+            );
+
+          totalTidak +=
+            Number(
+              row[5] || 0
+            );
+
+          totalJTM +=
+            Number(
+              row[6] || 0
+            );
+
+        }
+      );
+
+
+      body.push([
+
+        "",
+
+        "TOTAL",
+
+        "",
+
+        totalHadir,
+
+        totalTerlambat,
+
+        totalTidak,
+
+        totalJTM
+
+      ]);
+
+
+      /*
+       * ==================================================
+       * GUNAKAN jsPDF
+       * ==================================================
        */
 
       if (
@@ -3712,54 +4002,8 @@ function exportPDF() {
         doc.text(
           "Bulan: " + bulan,
           14,
-          21
+          22
         );
-
-
-        const body =
-          data.map(
-            function(row, index) {
-
-              return [
-
-                index + 1,
-
-                row.nama ||
-                row.Nama ||
-                "-",
-
-                row.nip ||
-                row.NIP ||
-                "",
-
-                Number(
-                  row.jp !== undefined
-                    ? row.jp
-                    : row.jtm !== undefined
-                      ? row.jtm
-                      : 0
-                ) || 0,
-
-                Number(
-                  row.hadir || 0
-                ),
-
-                Number(
-                  row.terlambat || 0
-                ),
-
-                Number(
-                  row.tidak || 0
-                ),
-
-                Number(
-                  row.totalJP || 0
-                )
-
-              ];
-
-            }
-          );
 
 
         if (
@@ -3772,13 +4016,18 @@ function exportPDF() {
             head: [[
 
               "No",
+
               "Nama Guru",
-              "NIP",
+
               "JTM/Minggu",
+
               "Hadir",
+
               "Terlambat",
-              "Tidak",
-              "Total JP"
+
+              "Tidak Hadir",
+
+              "Total JTM"
 
             ]],
 
@@ -3786,10 +4035,25 @@ function exportPDF() {
               body,
 
             startY:
-              27,
+              28,
 
             styles: {
-              fontSize: 9
+
+              fontSize:
+                9,
+
+              halign:
+                "center"
+
+            },
+
+            columnStyles: {
+
+              1: {
+                halign:
+                  "left"
+              }
+
             }
 
           });
@@ -3798,9 +4062,11 @@ function exportPDF() {
 
 
         doc.save(
+
           "Rekap_Absensi_Guru_" +
           bulan +
           ".pdf"
+
         );
 
 
@@ -3809,25 +4075,30 @@ function exportPDF() {
 
 
       /*
-       * ==========================================
-       * FALLBACK CETAK
-       * ==========================================
+       * Jika jsPDF tidak tersedia,
+       * gunakan cetakRekap().
        */
 
       cetakRekap(
-        data
+        data,
+        bulan
       );
 
     }
+
   );
+
 }
+
 
 /* =====================================================
    CETAK REKAP
+   FORMAT SAMA DENGAN EXPORT
 ===================================================== */
 
 function cetakRekap(
-  data
+  data,
+  bulan
 ) {
 
   const win =
@@ -3844,15 +4115,72 @@ function cetakRekap(
     );
 
     return;
-
   }
 
 
   let rows = "";
 
 
+  let totalHadir = 0;
+  let totalTerlambat = 0;
+  let totalTidak = 0;
+  let totalJTM = 0;
+
+
   data.forEach(
     function(row, index) {
+
+      const jp =
+        Number(
+          row.jp !== undefined
+            ? row.jp
+            : row.jtm !== undefined
+              ? row.jtm
+              : 0
+        ) || 0;
+
+
+      const hadir =
+        Number(
+          row.hadir || 0
+        );
+
+
+      const terlambat =
+        Number(
+          row.terlambat || 0
+        );
+
+
+      const tidak =
+        Number(
+          row.tidak || 0
+        );
+
+
+      const total =
+        row.totalJP !== undefined
+          ? Number(
+              row.totalJP || 0
+            )
+          : (
+              hadir +
+              terlambat
+            ) * jp;
+
+
+      totalHadir +=
+        hadir;
+
+      totalTerlambat +=
+        terlambat;
+
+      totalTidak +=
+        tidak;
+
+      totalJTM +=
+        total;
+
 
       rows += `
 
@@ -3864,23 +4192,6 @@ function cetakRekap(
 
           <td>
             ${escapeHtml(
-              row.tanggal ||
-              row.Tanggal ||
-              "-"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.jam ||
-              row.Jam ||
-              row.waktu ||
-              "-"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
               row.nama ||
               row.Nama ||
               "-"
@@ -3888,19 +4199,23 @@ function cetakRekap(
           </td>
 
           <td>
-            ${escapeHtml(
-              row.status ||
-              row.Status ||
-              "-"
-            )}
+            ${jp}
           </td>
 
           <td>
-            ${escapeHtml(
-              row.lokasi ||
-              row.Lokasi ||
-              "-"
-            )}
+            ${hadir}
+          </td>
+
+          <td>
+            ${terlambat}
+          </td>
+
+          <td>
+            ${tidak}
+          </td>
+
+          <td>
+            ${total}
           </td>
 
         </tr>
@@ -3909,6 +4224,39 @@ function cetakRekap(
 
     }
   );
+
+
+  rows += `
+
+    <tr class="total">
+
+      <td></td>
+
+      <td>
+        TOTAL
+      </td>
+
+      <td></td>
+
+      <td>
+        ${totalHadir}
+      </td>
+
+      <td>
+        ${totalTerlambat}
+      </td>
+
+      <td>
+        ${totalTidak}
+      </td>
+
+      <td>
+        ${totalJTM}
+      </td>
+
+    </tr>
+
+  `;
 
 
   win.document.write(`
@@ -3925,44 +4273,115 @@ function cetakRekap(
         Rekap Absensi Guru
       </title>
 
+
       <style>
 
         body {
 
-          font-family:Arial,sans-serif;
+          font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
 
-          padding:20px;
+          margin:
+            25px;
+
+        }
+
+
+        h1 {
+
+          text-align:
+            center;
+
+          margin:
+            0 0 5px;
+
+          font-size:
+            22px;
 
         }
 
-        h2 {
 
-          text-align:center;
+        .bulan {
+
+          text-align:
+            center;
+
+          margin-bottom:
+            20px;
+
+          color:
+            #555;
 
         }
+
 
         table {
 
-          width:100%;
+          width:
+            100%;
 
-          border-collapse:collapse;
+          border-collapse:
+            collapse;
 
         }
+
+
+        th {
+
+          background:
+            #eeeeee;
+
+          font-weight:
+            bold;
+
+        }
+
 
         th,
         td {
 
-          border:1px solid #333;
+          border:
+            1px solid #333;
 
-          padding:7px;
+          padding:
+            8px;
 
-          font-size:12px;
+          text-align:
+            center;
 
         }
 
-        th {
 
-          background:#eee;
+        th:nth-child(2),
+        td:nth-child(2) {
+
+          text-align:
+            left;
+
+        }
+
+
+        .total {
+
+          font-weight:
+            bold;
+
+          background:
+            #f2f8f6;
+
+        }
+
+
+        @media print {
+
+          body {
+
+            margin:
+              10px;
+
+          }
 
         }
 
@@ -3970,11 +4389,23 @@ function cetakRekap(
 
     </head>
 
+
     <body>
 
-      <h2>
+      <h1>
         REKAP ABSENSI GURU
-      </h2>
+      </h1>
+
+
+      <div class="bulan">
+
+        Bulan:
+        ${escapeHtml(
+          bulan || ""
+        )}
+
+      </div>
+
 
       <table>
 
@@ -3982,21 +4413,38 @@ function cetakRekap(
 
           <tr>
 
-            <th>No</th>
+            <th>
+              No
+            </th>
 
-            <th>Tanggal</th>
+            <th>
+              Nama Guru
+            </th>
 
-            <th>Jam</th>
+            <th>
+              JTM/Minggu
+            </th>
 
-            <th>Nama Guru</th>
+            <th>
+              Hadir
+            </th>
 
-            <th>Status</th>
+            <th>
+              Terlambat
+            </th>
 
-            <th>Lokasi</th>
+            <th>
+              Tidak Hadir
+            </th>
+
+            <th>
+              Total JTM
+            </th>
 
           </tr>
 
         </thead>
+
 
         <tbody>
 
@@ -4012,14 +4460,7 @@ function cetakRekap(
         window.onload =
           function() {
 
-            setTimeout(
-              function() {
-
-                window.print();
-
-              },
-              500
-            );
+            window.print();
 
           };
 
